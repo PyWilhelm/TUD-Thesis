@@ -1,0 +1,80 @@
+\section{Experimental Setup}
+\label{sec:5}
+In this section, we discuss how to design the framework for discovering related articles in the corpus. As described in section \ref{sec:3}, each article contains semantic data including title, summary and content, together with meta-data, which consists of category, keywords, release date and the number of words in the texts. The purpose of this section is to evaluate how the methods which are mentioned in section \ref{sec:2} work in effectiveness and efficiency together with different semantic data. Then the assessment of filtering method which reduces the number of candidates with combining the meta-data is analyzed. In other words, this section focuses on finding the answer of question 1 and 2.
+
+In section \ref{sec:5.1} the theoretical feasibility and challenge is discussed. In section \ref{sec:5.2} we discuss the design of experiments according to the application scenarios and depict the architecture of the framework. Furthermore, the setup of experiments is described, including the setup of dataset given to experimenting and the setup of alternative models. 
+
+\subsection{Theoretical Feasibility and Challenge}
+
+
+
+\subsection{Architecture of Framework and Experiments Design}
+\label{sec:5.1}
+We design two experiments to evaluate the performance of the framework. The purpose of the experiment 1 is to evaluate the effectiveness, i.e. how well the framework predicts related articles. The entire corpus is separated randomly into a smaller and a larger dataset. The larger dataset is used for training unsupervised models. The smaller one is used for evaluating the unsupervised models and then the suitable models are selected as the features of supervised models. 
+
+\subsection{Dataset}
+
+The elementary structure and information is described in section \ref{sec:3.1}. Now we generate the dataset as the input of the framework. Articles, which have no related articles or no \textit{title}, or whose content is less than 1000 characters, are filtered. Furthermore, articles which belong to a weak category \footnote{Weak category: the amount of articles in this category is fewer than $1\%$ of the corpus size} or which were released before 2009 are removed from the corpus. We have $75908$ articles in $7$ categories. The category distribution is drawn in table \ref{tab:cate_dist_new} and the release date distribution is in table \ref{tab:release_dist_new}
+
+\begin{table}[!htb]
+\centering
+\begin{tabular}{lrr}
+\hline
+\textbf{category} &   \textbf{quantity} &   \textbf{proportion (\%)} \\
+\hline
+Politik      &      26071 &            34.35 \\
+Wirtschaft   &      12531 &            16.51 \\
+Kultur       &       8584 &            11.31 \\
+Gesellschaft &       7646 &            10.07 \\
+Wissen       &       5273 &             6.95 \\
+Sport        &       4993 &             6.58 \\
+Digital      &       3887 &             5.12 \\
+Reisen       &       2199 &             2.90 \\
+Karriere     &       2169 &             2.86 \\
+Studium      &       1570 &             2.07 \\
+Lebensart    &        985 &             1.30 \\
+\hline
+\textbf{total}        &      75908 &           100.00 \\
+\hline
+\end{tabular}
+\caption{Category distribution of \textit{ZEIT} corpus after filtering unsatisfied articles}
+\label{tab:cate_dist_new}
+\end{table}
+\begin{table}[!htb]
+\centering
+\begin{tabular}{rrr}
+\hline
+\textbf{year} &   \textbf{quantity} &   \textbf{proportion (\%)} \\
+\hline
+2009 & 12628 &            16.64 \\
+2010 & 14716 &            19.39 \\
+2011 & 13970 &            18.40 \\
+2012 & 14583 &            19.21 \\
+2013 & 14941 &            19.68 \\
+2014 &  5070 &             6.68 \\
+\hline
+\textbf{total} & 75908 &           100.00 \\
+\hline
+\end{tabular}
+\caption{Release date distribution of \textit{ZEIT} corpus after filtering unsatisfied articles}
+\label{tab:release_dist_new}
+\end{table}
+
+\begin{description}
+\item[Experiment 1] $2000$ articles are selected randomly from the corpus as the test dataset, and the others are as the history data which is utilized to build unsupervised models. After that, the scores of relatedness of the tested articles are as the training dataset of supervised models. The supervised models will be trained by these data in the cross-validation way. 
+\item[Experiment 2] The articles in corpus are sorted by the \textit{release date}, so that the real-world scenario can be simulated. The articles, which were published before 2013, are as the training data to initialize unsupervised models. There are two phases to deal with each target article, that are predicting related articles from the historical corpus and updating the model incrementally. Then the supervised methods make use of the scores from the unsupervised methods to compute the integrated scores and discover the related articles for each target article. 
+\end{description}
+
+\subsection{Preprocessing Methods}
+
+The original content of articles is in the hypertext markup language format (HTML). The first common phase of preprocessing is to remove all markups and make the content case insensitive, in order to make the content in the simple text format. The second common phase, denoted as \textbf{\textit{split2word}}, is to split the content, also inclusive the title and the summary, into a sequence of tokens. The next two phases are optional and need evaluating. One is to filter out the stopwords, denoted as \textbf{\textit{stopword}}, which are most common words in a language, such as pronouns and prepositions. After removing the stopwords, the last phase \textbf{\textit{stem}} is to replace works by the stem thereof. For example, ``book'' is the stem of ``books'', ``booking'' and ``bookful'' and ``beauti'' is the stem of ``beauty'', ``beautiful'' and ``beautifully''. The advantage of stemming is to reduce the vocabulary size and furthermore decrease computational complexity and avoid overfitting of building semantic models. 
+
+\subsection{Features}
+
+\subsubsection{Meta-data}
+
+\subsubsection{Semantic Features}
+
+\subsection{Supervised Methods}
+
+

@@ -1,0 +1,70 @@
+\documentclass[article,type=msc,colorback,accentcolor=tud9c, 11pt]{tudthesis}
+\usepackage{setspace}
+\usepackage{multirow}
+\usepackage[normalem]{ulem}
+\useunder{\uline}{\ul}{}
+\usepackage{fancyhdr}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{longtable}
+\usepackage{enumerate}
+\usepackage[figuresright]{rotating}
+\usepackage{adjustbox}
+\usepackage{array}
+\newcolumntype{R}[2]{%
+    >{\adjustbox{angle=#1,lap=\width-(#2)}\bgroup}%
+    l%
+    <{\egroup}%
+}
+\newcommand*\rot{\multicolumn{1}{R{45}{1em}}}
+\hypersetup{
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=black
+}
+\numberwithin{equation}{section}
+
+
+\setstretch{1.3}
+
+\newcommand{\getmydate}{%
+  \ifcase\month%
+    \or Januar\or Februar\or M\"arz%
+    \or April\or Mai\or Juni\or Juli%
+    \or August\or September\or Oktober%
+    \or November\or Dezember%
+  \fi\ \number\year%
+}
+
+\renewcommand*\contentsname{Table of Content}
+
+\begin{document}
+  \thesistitle{Related Articles Discovery in Large Corpora}%
+    {}
+  \author{Ziyang Li}
+  \birthplace{Tianjin, China}
+  \referee{Prof. Dr. Iryna Gurevych}{Nils Reimers}
+  \department{Fachbereich Informatik}
+  \group{Ubiquitous Knowledge Processing}
+  \dateofexam{\today}{\today}
+  \makethesistitle
+  \affidavit{Ziyang Li}
+  
+  \tableofcontents
+  
+  \clearpage
+  \input{table/a_avg_size_by_hops}
+  \input{table/a_cate_dist_related}
+  \input{table/a_keywords_dist_related}
+  \input{table/a_release_dist_related}
+  \input{table/size_vocabulary}
+  
+  \medskip
+\addcontentsline{toc}{section}{Bibliography}
+
+\bibliographystyle{apalike}
+\bibliography{cites}
+\end{document}

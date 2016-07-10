@@ -1,0 +1,15 @@
+\begin{table}[!htb]
+    \centering
+\begin{tabular}{|l|rrr|rrr|rrr|}
+\hline
+               &       all &     min 5 &   reduction &         all &      min 5 &   reduction &         all &      min 5 &   reduction \\
+\hline
+ split2word    & 852 & 215 &       74.71 & 12973 & 1062 &       91.81 & 33899 &  928 &       97.26 \\
+ stem          & 610 & 154 &       74.78 & 10664 & 1014 &       90.49 & 31886 & 1017 &       96.81 \\
+ stopword      & 852 & 215 &       74.73 & 17059 &  626 &       96.33 & 26628 &  128 &       99.52 \\
+ stem+stopword & 610 & 154 &       74.79 & 14373 &  760 &       94.71 & 26218 &  148 &       99.44 \\
+\hline
+\end{tabular}
+    \caption{Distribution of related articles (hop-3) grouped by the differential of release date}
+    \label{tab:release_dist_related}
+\end{table}
