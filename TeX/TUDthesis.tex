@@ -9,10 +9,6 @@
 \usepackage{float}
 \usepackage{longtable}
 \usepackage{enumerate}
-\renewenvironment{description}[1][0pt]
-  {\list{}{\labelwidth=0pt \leftmargin=#1
-   \let\makelabel\descriptionlabel}}
-  {\endlist}
 
 \usepackage[figuresright]{rotating}
 \usepackage{adjustbox}
@@ -22,6 +18,11 @@
     l%
     <{\egroup}%
 }
+
+\usepackage{enumitem}
+\setlist[description]{leftmargin=1.5cm,labelindent=0.5cm}
+
+
 \newcommand*\rot{\multicolumn{1}{R{45}{1em}}}
 \hypersetup{
     colorlinks,
@@ -31,7 +32,6 @@
     urlcolor=black
 }
 \numberwithin{equation}{section}
-
 
 \setstretch{1.3}
 
