@@ -2,9 +2,10 @@
 \label{sec:4}
 In this section, we discuss how to design the framework for discovering related articles in the corpus. As described in section \ref{sec:3}, each article contains semantic data including title, summary and content, together with meta-data, which consists of category, keywords, release date and the number of words in the texts. The purpose of this section is to evaluate how the methods which are mentioned in section \ref{sec:2} work in effectiveness and efficiency together with different semantic data. Then the assessment of filtering method which reduces the number of candidates with combining the meta-data is analyzed. In other words, this section focuses on finding the answer of question 1 and 2.
 
-In section \ref{sec:4.1} the theoretical feasibility and challenge is discussed. In section \ref{sec:4.2} we discuss the design of experiments according to the application scenarios and depict the architecture of the framework. Furthermore, the setup of experiments is described, including the setup of dataset given to experimenting and the setup of alternative models. 
+In section \ref{sec:4.1} the theoretical feasibility and challenge is discussed. In section \ref{sec:4.2} we discuss the design of experiments according to the application scenarios and depict the architecture of the framework. Furthermore, the setup of experiments is described in section \ref{sec:4.3}, including the setup of dataset given to experimenting and the setup of alternative models. 
 
 \subsection{Theoretical Feasibility and Challenge}
+\label{sec:4.1}
 
 All STS methods and VSM models which are introduced in section \ref{sec:2}, are usually applied for computing the semantic similarity between texts. However, our goal is to find related articles for given target articles. Foremost, the difference between the term \textit{similarity} and \textit{relatedness} must be understood. The terms \textit{similarity} and \textit{relatedness} are two separate concepts\cite{pedersen2007measures}. \textit{Similarity} is the measure which indicates how a text looks like another text semantically, while relatedness is a more general concept, which contain multiple notions, such as causal relationship, temporal relationship and the relationship shared the identical event or background. We illustrate the difference with two examples. 
 
@@ -18,11 +19,19 @@ From the two examples, we can draw a conclusion, that computing relatedness is m
 Certainly, discovery related articles using similarity methods leads to bias. It means, that the framework prefers predicting related articles only with specific characteristics and consequently some articles will never be assigned, e.g. articles which have the identical background with the target. The bias and error analysis are discussed in section \ref{sec:5}. 
 
 \subsection{Architecture of Framework and Experiments Design}
-\label{sec:4.1}
+\label{sec:4.2}
 
 The high-level architecture of the framework was already depicted in figure \ref{fig:highlevel}. In this section, we explain how the framework predicts related articles and improves itself. 
 
-The framework consists of four phases of preprocessing, model building, similarity computing and model updating. 
+The framework consists of four phases of preprocessing, model building, similarity computing and model updating. The architecture of the framework is illustrated in figure \ref{fig:unsupervised}. 
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.7\textwidth]{fig/unsupervise}
+    \caption{The architecture of the framework to discover related articles.}
+    \label{fig:unsupervised}
+\end{figure}
+
 
 \subsubsection{Preprocessing}
 The original data of title, summary and content is stored in the strings in HTML format. After all markups are removed and all characters are converted to small case, preprocessing separates the strings into the respective sequences of tokens. Four common methods are explained as follows:
@@ -36,24 +45,23 @@ The original data of title, summary and content is stored in the strings in HTML
 
 Preprocessing contains a sub-component, called n-gram processing. In our case, unigram, bigram and trigram are applied. In total, we have $4 \times 3 = 12$ alternative preprocessing methods. After preprocessing, the strings are represented as the respective sequences which the semantic models are able to deal with directly. 
 
-\subsubsection{model building}
-The component of model building is meaningful exclusive for VSM models. The approaches are quite different according to different models. The detailed methods are described in the following list respectively.
+\subsubsection{Model Building and Similarity Computing}
+The component of model building is meaningful exclusive for VSMs. The approaches are quite different according to different models.  The detailed methods are described in the following list respectively.
 
 \begin{description}
-\item[BoW]
-\item[tfidf]
-\item[LSI]
-\item[LDA]
+\item[BoW] BoW is the simplest and most basic model in VSMs. Each document is represented as a vector in which the weight of each dimension is the occurrence frequency of the respective term. In order to reduce the dimension of vectors, the terms which occur in the corpus at least $k$ times (in our case $k=5$) remain in the vocabulary. The BoW vector of a given document is independent of the rest corpus, so long as the vocabulary is constant. 
+\item[tfidf] Tfidf is the model based on BoW, but the vector is relevant to the corpus. The tool to build tfidf model and the following models is \textit{gensim}\footnote{gensim is a NLP tool, which focuses on topic modeling and retrieving semantically similar documents\cite{rehurek_lrec}. Offical website:  https://radimrehurek.com/gensim/}.
+\item[LSI and LDA] We build the models LSI and LDA based on tfidf. Both models are capable to reduce the dimension of vectors from the vocabulary size to the number of topics. It is therefore necessary to determine the optimal number of topics, in order to make balance between the precision and computational performance. 
 \end{description}
 
+In VSMs, each document is transformed as a vector and the semantic similarity to other documents is the \textit{cosine} similarity between the vector of the target document and the vector of candidate documents. The articles in the historic corpus which are the most \textbf{two} similar to the given target article are predicted as the related articles. 
 
-\begin{figure}[!htb]
-    \centering
-    \includegraphics[width=0.7\textwidth]{fig/unsupervised}
-    \caption{Caption}
-    \label{fig:unsupervised}
-\end{figure}
+\subsection{Model Updating}
 
+In the application scenario of reality, once the related articles are selected for a given article, the recent article should be stored in the historic corpus as the candidate articles for future articles. The characteristics (e.g. topic distribution, new popular words) of the corpus is rearranged over time. Therefore the models need updating incrementally, in order to be able to reflect the attributes of the corpus in time. However, it is costly for computational time and power to update models. In our case, it is also one research task, to find trade-off between delay of updating and cost of time.
+
+\subsection{Experiment Description}
+\label{sec:4.3}
 
 
 \subsection{Dataset}
@@ -108,10 +116,6 @@ Lebensart    &        985 &             1.30 \\
 \item[Experiment 1] $2000$ articles are selected randomly from the corpus as the test dataset, and the others are as the history data which is utilized to build unsupervised models. After that, the scores of relatedness of the tested articles are as the training dataset of supervised models. The supervised models will be trained by these data in the cross-validation way. 
 \item[Experiment 2] The articles in corpus are sorted by the \textit{release date}, so that the real-world scenario can be simulated. The articles, which were published before 2013, are as the training data to initialize unsupervised models. There are two phases to deal with each target article, that are predicting related articles from the historical corpus and updating the model incrementally. Then the supervised methods make use of the scores from the unsupervised methods to compute the integrated scores and discover the related articles for each target article. 
 \end{description}
-
-\subsection{Preprocessing Methods}
-
-The original content of articles is in the hypertext markup language format (HTML). The first common phase of preprocessing is to remove all markups and make the content case insensitive, in order to make the content in the simple text format. The second common phase, denoted as \textbf{\textit{split2word}}, is to split the content, also inclusive the title and the summary, into a sequence of tokens. The next two phases are optional and need evaluating. One is to filter out the stopwords, denoted as \textbf{\textit{stopword}}, which are most common words in a language, such as pronouns and prepositions. After removing the stopwords, the last phase \textbf{\textit{stem}} is to replace works by the stem thereof. For example, ``book'' is the stem of ``books'', ``booking'' and ``bookful'' and ``beauti'' is the stem of ``beauty'', ``beautiful'' and ``beautifully''. The advantage of stemming is to reduce the vocabulary size and furthermore decrease computational complexity and avoid overfitting of building semantic models. 
 
 \subsection{Features}
 
