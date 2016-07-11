@@ -2,7 +2,7 @@
 \label{sec:4}
 In this section, we discuss how to design the framework for discovering related articles in the corpus. As described in section \ref{sec:3}, each article contains semantic data including title, summary and content, together with meta-data, which consists of category, keywords, release date and the number of words in the texts. The purpose of this section is to evaluate how the methods which are mentioned in section \ref{sec:2} work in effectiveness and efficiency together with different semantic data. Then the assessment of filtering method which reduces the number of candidates with combining the meta-data is analyzed. In other words, this section focuses on finding the answer of question 1 and 2.
 
-In section \ref{sec:4.1} the theoretical feasibility and challenge is discussed. In section \ref{sec:4.2} we discuss the design of experiments according to the application scenarios and depict the architecture of the framework. Furthermore, the setup of experiments is described in section \ref{sec:4.3}, including the setup of dataset given to experimenting and the setup of alternative models. 
+In section \ref{sec:4.1} the theoretical feasibility and challenge is discussed. The definition of terms and notations which are used in the rest sections is brought forwards in section \ref{sec:4.2}. In section \ref{sec:4.3} we discuss the design of experiments according to the application scenarios and depict the architecture of the framework. Furthermore, the setup of experiments is described in section \ref{sec:4.4}, including the setup of dataset given to experimenting and the setup of alternative models. 
 
 \subsection{Theoretical Feasibility and Challenge}
 \label{sec:4.1}
@@ -16,10 +16,27 @@ All STS methods and VSM models which are introduced in section \ref{sec:2}, are 
 
 From the two examples, we can draw a conclusion, that computing relatedness is much more complicated than computing similarity, because the machine must understand exactly how humankind understands the identities and the differences between two articles as well as the significant degree thereof. However, \textit{similar} documents and \textit{related} documents have a non-negligible intersection normally. Our task is derived from a scenario of reality that two related articles need to be assigned for every current article. Therefore, it is unnecessary to find all possible related articles but it is acceptable to find only a subset of them. From this goal, a way from computing \textit{similarity} to getting \textit{related} articles is feasible. 
 
-Certainly, discovery related articles using similarity methods leads to bias. It means, that the framework prefers predicting related articles only with specific characteristics and consequently some articles will never be assigned, e.g. articles which have the identical background with the target. The bias and error analysis are discussed in section \ref{sec:5}. 
+Certainly, discovery related articles using similarity methods leads to bias. It means, that the framework prefers predicting related articles only with specific characteristics and consequently some articles will never be assigned, e.g. articles which have the identical background with the target. The bias and error analysis are discussed in section \ref{sec:5}.
+
+\subsection{Definition and Notions}
+\label{sec:4.2}
+
+In the following sections, a series of concepts is mentioned frequently. In order to avoid ambiguity and misapprehension, the definition and interpretation of these terms are given in the following table.
+
+\begin{description}[1cm]
+\item[article] an instance of a piece of news or report, which contains the complete information or rather texts of title, summary and content as well as meta-data 
+\item[document] a specific component of an article; any of title, summary or content in string format; refers to the text of content without any explicit declaration 
+\item[candidate] all articles of the historic corpus,  
+\item[term]  
+\item[token]
+
+\label{tab:def_terms}
+\end{description}
+
+
 
 \subsection{Architecture of Framework and Experiments Design}
-\label{sec:4.2}
+\label{sec:4.3}
 
 The high-level architecture of the framework was already depicted in figure \ref{fig:highlevel}. In this section, we explain how the framework predicts related articles and improves itself. 
 
@@ -50,19 +67,21 @@ The component of model building is meaningful exclusive for VSMs. The approaches
 
 \begin{description}
 \item[BoW] BoW is the simplest and most basic model in VSMs. Each document is represented as a vector in which the weight of each dimension is the occurrence frequency of the respective term. In order to reduce the dimension of vectors, the terms which occur in the corpus at least $k$ times (in our case $k=5$) remain in the vocabulary. The BoW vector of a given document is independent of the rest corpus, so long as the vocabulary is constant. 
-\item[tfidf] Tfidf is the model based on BoW, but the vector is relevant to the corpus. The tool to build tfidf model and the following models is \textit{gensim}\footnote{gensim is a NLP tool, which focuses on topic modeling and retrieving semantically similar documents\cite{rehurek_lrec}. Offical website:  https://radimrehurek.com/gensim/}.
+\item[tfidf] Tfidf is the model based on BoW, but the vector is relevant to the corpus. The tool to build tfidf model and the following models is \textit{gensim}\footnote{gensim is a NLP tool, which focuses on topic modeling and retrieving semantically similar documents \cite{rehurek_lrec}. Offical website:  https://radimrehurek.com/gensim/}.
 \item[LSI and LDA] We build the models LSI and LDA based on tfidf. Both models are capable to reduce the dimension of vectors from the vocabulary size to the number of topics. It is therefore necessary to determine the optimal number of topics, in order to make balance between the precision and computational performance. 
 \end{description}
 
 In VSMs, each document is transformed as a vector and the semantic similarity to other documents is the \textit{cosine} similarity between the vector of the target document and the vector of candidate documents. The articles in the historic corpus which are the most \textbf{two} similar to the given target article are predicted as the related articles. 
 
-\subsection{Model Updating}
+\subsubsection{Model Updating}
 
 In the application scenario of reality, once the related articles are selected for a given article, the recent article should be stored in the historic corpus as the candidate articles for future articles. The characteristics (e.g. topic distribution, new popular words) of the corpus is rearranged over time. Therefore the models need updating incrementally, in order to be able to reflect the attributes of the corpus in time. However, it is costly for computational time and power to update models. In our case, it is also one research task, to find trade-off between delay of updating and cost of time.
 
 \subsection{Experiment Description}
-\label{sec:4.3}
+\label{sec:4.4}
 
+1. 选择最好的pp+model 
+2. 随着文章的增加，对性能的影响
 
 \subsection{Dataset}
 
