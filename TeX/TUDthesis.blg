@@ -1,0 +1,52 @@
+This is BibTeX, Version 0.99c (TeX Live 2009/Debian)
+The top-level auxiliary file: TUDthesis.aux
+The style file: apalike.bst
+Database file #1: cites.bib
+Warning--empty journal in Agirre2009ta
+Warning--empty journal in bar2013composite
+Warning--empty journal in Blei:2008wy
+Warning--empty journal in Blei:2003
+Warning--empty journal in Deerwester1990vi
+Warning--empty journal in wise1993string
+You've used 17 entries,
+            1935 wiz_defined-function locations,
+            574 strings with 6748 characters,
+and the built_in function-call counts, 7148 in all, are:
+= -- 702
+> -- 299
+< -- 16
++ -- 104
+- -- 100
+* -- 570
+:= -- 1209
+add.period$ -- 50
+call.type$ -- 17
+change.case$ -- 135
+chr.to.int$ -- 17
+cite$ -- 23
+duplicate$ -- 299
+empty$ -- 487
+format.name$ -- 131
+if$ -- 1431
+int.to.chr$ -- 1
+int.to.str$ -- 0
+missing$ -- 17
+newline$ -- 84
+num.names$ -- 51
+pop$ -- 144
+preamble$ -- 1
+purify$ -- 135
+quote$ -- 0
+skip$ -- 239
+stack$ -- 0
+substring$ -- 441
+swap$ -- 60
+text.length$ -- 7
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 102
+warning$ -- 6
+while$ -- 58
+width$ -- 0
+write$ -- 212
+(There were 6 warnings)
