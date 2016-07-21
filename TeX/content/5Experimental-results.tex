@@ -38,55 +38,12 @@ As described in section \ref{sec:3.3}, the effectiveness metrics include \textit
 \subsubsection{Model Selection}
 
 
-
-\begin{table}[]
-\centering
-\begin{tabular}{lllrl}
-\hline
-source & n-gram & model & \multicolumn{1}{l}{precision} & nDCG \\ \hline
-\multirow{13}{*}{Content} & \multirow{5}{*}{unigram} & \textbf{tfidf} & \textbf{0.45} &  \\
- &  & bow & 0.40 &  \\
- &  & jaccard & 0.39 &  \\
- &  & lsi & 0.39 &  \\
- &  & lda & 0.16 &  \\ \cline{2-5} 
- & \multirow{4}{*}{bigram} & \textbf{tfidf} & \textbf{0.43} & \textbf{} \\
- &  & jaccard & 0.36 &  \\
- &  & lsi & 0.27 &  \\
- &  & bow & 0.26 &  \\ \cline{2-5} 
- & \multirow{4}{*}{trigram} & \textbf{tfidf} & \textbf{0.29} & \textbf{} \\
- &  & jaccard & 0.29 &  \\
- &  & bow & 0.23 &  \\
- &  & lsi & 0.14 &  \\ \hline
-\multirow{13}{*}{title} & \multirow{5}{*}{unigram} & \textbf{tfidf} & \textbf{0.31} & \textbf{} \\
- &  & bow & 0.28 &  \\
- &  & jaccard & 0.25 &  \\
- &  & lsi & 0.14 &  \\
- &  & lda & 0.10 &  \\ \cline{2-5} 
- & \multirow{4}{*}{bigram} & \textbf{tfidf} & \textbf{0.12} & \textbf{} \\
- &  & jaccard & 0.12 &  \\
- &  & bow & 0.09 &  \\
- &  & lsi & 0.03 &  \\ \cline{2-5} 
- & \multirow{4}{*}{trigram} & \textbf{jaccard} & \textbf{0.09} & \textbf{} \\
- &  & tfidf & 0.04 &  \\
- &  & bow & 0.04 &  \\
- &  & lsi & 0.03 &  \\ \hline
-\multirow{13}{*}{summary} & \multirow{5}{*}{unigram} & \textbf{tfidf} & \textbf{0.21} & \textbf{} \\
- &  & jaccard & 0.17 &  \\
- &  & bow & 0.14 &  \\
- &  & lsi & 0.05 &  \\
- &  & lda & 0.05 &  \\ \cline{2-5} 
- & \multirow{4}{*}{bigram} & \textbf{jaccard} & \textbf{0.08} & \textbf{} \\
- &  & tfidf & 0.06 &  \\
- &  & bow & 0.04 &  \\
- &  & lsi & 0.01 &  \\ \cline{2-5} 
- & \multirow{4}{*}{trigram} & \textbf{jaccard} & \textbf{0.06} & \textbf{} \\
- &  & bow & 0.03 &  \\
- &  & tfidf & 0.03 &  \\
- &  & lsi & 0.03 &  \\ \hline
-\end{tabular}
-\caption{My caption}
-\label{my-label}
-\end{table}
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=\textwidth]{fig/precision_2_3}
+    \caption{}
+    \label{fig:precision_2_3}
+\end{figure}
 
 
 \subsubsection{Precision from $1$-hop to $10$-hops}
