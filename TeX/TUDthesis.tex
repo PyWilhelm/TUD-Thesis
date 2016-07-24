@@ -13,6 +13,7 @@
 \usepackage[figuresright]{rotating}
 \usepackage{adjustbox}
 \usepackage{array}
+\usepackage{color}
 \newcolumntype{R}[2]{%
     >{\adjustbox{angle=#1,lap=\width-(#2)}\bgroup}%
     l%
@@ -31,7 +32,8 @@
     urlcolor=black
 }
 \numberwithin{equation}{section}
-
+\numberwithin{figure}{section}
+\numberwithin{table}{section}
 \setstretch{1.5}
 
 \newcommand{\getmydate}{%
