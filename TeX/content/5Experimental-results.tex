@@ -67,7 +67,7 @@ Figure \ref{fig:ndcg} illustrates the \textit{nDCG}, which is applied as the sup
 \begin{figure}[!htb]
     \centering
     \includegraphics[width=\textwidth]{fig/ndcg}
-    \caption{}
+    \caption{comparison the nDCG of jaccard, BoW, tfidf, LSI and LDA for all data sources with n-gram models.}
     \label{fig:ndcg}
 \end{figure}
 
@@ -81,44 +81,61 @@ Combining the results of two evaluation methods, we conclude as follows.
 3. Tfidf is in the dominant position for uni-/bigram and long documents and jaccard is more suitable in trigram and short documents. Unexpected, LDA works with unsatisfactory effectiveness. 
 
 
-\subsubsection{Coverage of Related Articles Prediction}
+%\subsubsection{Coverage of Related Articles Prediction}
 
-\begin{table}[]
+\begin{table}[!htb]
 \centering
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{lrr|rr|rr|rr|rr|rr|rr|rr|rr}
  & \multicolumn{6}{c|}{\textbf{Content}} & \multicolumn{6}{c|}{\textbf{Title}} & \multicolumn{6}{c}{\textbf{Summary}} \\
  & \multicolumn{2}{c|}{\textbf{1-tfidf}} & \multicolumn{2}{c|}{\textbf{2-tfidf}} & \multicolumn{2}{c|}{\textbf{3-jaccard}} & \multicolumn{2}{c|}{\textbf{1-tfidf}} & \multicolumn{2}{c|}{\textbf{2-tfidf}} & \multicolumn{2}{c|}{\textbf{3-jaccard}} & \multicolumn{2}{c|}{\textbf{1-tfidf}} & \multicolumn{2}{c|}{\textbf{2-jaccard}} & \multicolumn{2}{c}{\textbf{3-jaccard}} \\
  & \multicolumn{1}{c}{\textbf{r}} & \multicolumn{1}{c|}{\textbf{diff}} & \multicolumn{1}{c}{\textbf{r}} & \multicolumn{1}{c|}{\textbf{diff}} & \multicolumn{1}{c}{\textbf{r}} & \multicolumn{1}{c|}{\textbf{diff}} & \multicolumn{1}{c}{\textbf{r}} & \multicolumn{1}{c|}{\textbf{diff}} & \multicolumn{1}{c}{\textbf{r}} & \multicolumn{1}{c|}{\textbf{diff}} & \multicolumn{1}{c}{\textbf{r}} & \multicolumn{1}{c|}{\textbf{diff}} & \multicolumn{1}{c}{\textbf{r}} & \multicolumn{1}{c|}{\textbf{diff}} & \multicolumn{1}{c}{\textbf{r}} & \multicolumn{1}{c|}{\textbf{diff}} & \multicolumn{1}{c}{\textbf{r}} & \multicolumn{1}{c}{\textbf{diff}} \\ \hline
-\textbf{Average} & \multicolumn{2}{c|}{45.07} & \multicolumn{2}{c|}{42.65} & \multicolumn{2}{c|}{29.03} & \multicolumn{2}{c|}{30.85} & \multicolumn{2}{c|}{12.12} & \multicolumn{2}{c|}{8.65} & \multicolumn{2}{c|}{20.25} & \multicolumn{2}{c|}{8.20} & \multicolumn{2}{c}{6.48} \\ \hline
+\textbf{Mean} & \multicolumn{2}{c|}{45.07} & \multicolumn{2}{c|}{42.65} & \multicolumn{2}{c|}{29.03} & \multicolumn{2}{c|}{30.85} & \multicolumn{2}{c|}{12.12} & \multicolumn{2}{c|}{8.65} & \multicolumn{2}{c|}{20.25} & \multicolumn{2}{c|}{8.20} & \multicolumn{2}{c}{6.48} \\ \hline
 \textbf{\textcolor{blue}{Gesellschaft}} & 3 & $+~~8.75$ & 4 & $+~~6.89$ & 2 & $+17.38$ & 3 & $+15.20$ & 4 & $+13.20$ & 2 & $+53.01$ & 2 & $+14.98$ & 2 & $+28.53$ & 2 & $+43.84$ \\
 \textbf{\textcolor{blue}{Politik}} & 4 & $+~~8.24$ & 1 & $+14.57$ & 1 & $+41.88$ & 4 & $+~~6.97$ & 6 & $+~~5.00$ & 5 & $+~~6.89$ & 1 & $+16.26$ & 3 & $+16.23$ & 3 & $+10.94$ \\
 \textbf{Digital} & 1 & $+15.83$ & 2 & $+~~9.97$ & 7 & $-34.45$ & 1 & $+24.78$ & 5 & $+13.13$ & 7 & $-23.27$ & 3 & $+~~9.25$ & 6 & $-19.06$ & 8 & $-31.66$ \\
 \textbf{Kultur} & 6 & $-~~5.28$ & 6 & $-~~9.53$ & 9 & $-52.02$ & 6 & $-~~3.05$ & 1 & $+44.99$ & 4 & $+~~8.22$ & 4 & $+~~3.73$ & 4 & $+14.16$ & 5 & $+~~5.78$ \\
 \textbf{Lebensart} & 10 & $-34.97$ & 10 & $-35.32$ & 6 & $-28.72$ & 9 & $-27.35$ & 2 & $+42.20$ & 1 & $+59.46$ & 9 & $-31.89$ & 1 & $+47.18$ & 1 & $+59.77$ \\
 \textbf{Sport} & 7 & $-~~7.26$ & 5 & $-~~8.71$ & 5 & $-18.10$ & 7 & $-16.31$ & 3 & $+35.20$ & 8 & $-24.19$ & 5 & $-~~8.93$ & 5 & $-~~5.04$ & 6 & $-~~5.06$ \\
-\textbf{Wissen} & 2 & $+13.10$ & 3 & $+8.04$ & 4 & $-17.81$ & 2 & $+15.46$ & 9 & $-38.01$ & 9 & $-24.44$ & 7 & $-14.47$ & 9 & $-32.25$ & 10 & $-44.48$ \\
+\textbf{Wissen} & 2 & $+13.10$ & 3 & $+~~8.04$ & 4 & $-17.81$ & 2 & $+15.46$ & 9 & $-38.01$ & 9 & $-24.44$ & 7 & $-14.47$ & 9 & $-32.25$ & 10 & $-44.48$ \\
 \textbf{Karriere} & 5 & $+~~6.58$ & 7 & $-12.65$ & 8 & $-42.58$ & 5 & $-~~1.48$ & 10 & $-43.40$ & 6 & $-20.66$ & 6 & $-12.85$ & 8 & $-28.26$ & 4 & $+~~5.99$ \\
 \textbf{\textcolor{red}{Wirtschaft}} & 8 & $-14.73$ & 8 & $-17.52$ & 3 & $-13.03$ & 8 & $-19.23$ & 8 & $-36.87$ & 10 & $-26.57$ & 8 & $-15.55$ & 7 & $-20.55$ & 7 & $-11.96$ \\
 \textbf{\textcolor{red}{Reisen}} & 9 & $-30.22$ & 9 & $-31.93$ & 10 & $-52.77$ & 10 & $-34.65$ & 7 & $-20.19$ & 3 & $+11.88$ & 10 & $-64.16$ & 10 & $-50.83$ & 9 & $-37.73$ \\
 \textbf{\textcolor{red}{Studium}} & 11 & $-61.03$ & 11 & $-49.30$ & 11 & $-67.41$ & 11 & $-43.05$ & 11 & $-66.56$ & 11 & $-37.51$ & 11 & $-73.31$ & 11 & $-83.52$ & 11 & $-79.13$ \\ \hline
 \end{tabular}%
 }
-\caption{My caption}
-\label{my-label}
+\caption{Comparison between the precision of different categories and the mean precision of the entire corpus. \textbf{r} refers to the ranking of precision in all categories and \textbf{diff} indicates the ratio (\%) of difference compared with the mean precision ($diff = \frac{prec_{cate} - prec_{mean}}{prec_{mean}}\times 100\%$)}
+\label{tab:cate_precision}
 \end{table}
 
 \subsubsection{Divergence between Categories}
 
-以content-unigram为例，不同category有比较大的性能差异，XX最好，YY最差，相差ZZ\% 
-在实际应用中，对于表现较弱的category，可以增加预测数量并加以人工筛查，以提高可用性。
+The effectiveness is reported and analyzed above in general. Now we are also interested, how the models, which are selected as the best models for each data set respectively, work for specific categories. The results are drawn in table \ref{tab:cate_precision}, where the precision ranking of each category and the difference ratio to the mean precision of the entire corpus are revealed. \textit{Gesellschaft} (\textit{society}) and \textit{Politik} (\textit{politics}) surpass the mean precision in all data set. On the contrary, \textit{Wirtschaft} (\textit{economics}), \textit{Reisen} (\textit{traval}) and \textit{Studium} (\textit{study}) are the worst performed categories. The precision of these three categories is much lower than the mean level. Taking content-unigram as example, the precision of the best category (\textit{Digital}) is about three times greater than the precision of the weakest category (\textit{Studium}). The results of predicting hence have  different confidence according to the category which the target article belongs to. Once the confidence of particular categories is lower than the threshold, the framework is not suitable for theses categories. 
 
 \subsection{Efficiency of STS Models}
 \label{sec:5.3}
 
-1. building time
+Efficiency包括两部分，building时间和预测时间，building时间指在利用历史语料构建模型上所耗费的时间，预测时间是指对每一个input 也就是一个target article找到related articles所需要的时间。对Jaccard而言，不需要建立一个模型，只需要创建字典即可，所以building time可以忽略。对VSM而言，预测分成两个步骤，第一是将document convert to vector by model, 第二步是计算这个vector与历史语料库转化而来的vectors的cosine值，选取cosine值最大的两个历史articles为related articles. 下面两个parts针对这两个步骤进行分析。
 
-2. predicting time
+\subsubsection{Comparison of building time}
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=\textwidth]{fig/building_time}
+    \caption{}
+    \label{fig:build_time}
+\end{figure}
+
+
+\subsubsection{Comparison of predicting time}
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=\textwidth]{fig/predicting_time}
+    \caption{}
+    \label{fig:predict_time}
+\end{figure}
+
 
 \subsection{Results of Incremental Updating}
 \label{sec:5.4}
@@ -130,5 +147,38 @@ Combining the results of two evaluation methods, we conclude as follows.
 \subsection{Error Analysis}
 \label{sec:5.5}
 
+1. example for false positive
+
+a. 语义相关，但是由于corpus标记是人工进行的，因此存在相当程度的不完整性，这是系统性问题，不是错误判断，会导致effective下降，解决方案是将错误的进行人工标注，但是工作量较大。
+"Tod dem Diktator"-Rufe zur Vereidigung - http://www.zeit.de/online/2009/32/iran-proteste-vereidigung/komplettansicht
+Proteste in Teheran dauern an - http://www.zeit.de/online/2009/32/iran-ahmadineschad-proteste/komplettansicht
+
+b. 大量相似内容，但是最核心主题无关，而主题的权重是人确定的，我们的方法无法模拟人区分主题权重的过程。
+Tunesiens Innenminister wird neuer Regierungschef - http://www.zeit.de/politik/ausland/2013-02/tunesien-regierungschef-larayedh-jebali
+Tunesien hebt den Ausnahmezustand seit Arabellion auf - http://www.zeit.de/politik/ausland/2014-03/tunesien-ausnahmezustand-aufhebung
+
+c. 有相似内容，但是中心主题无关，
+Dem Präsidentenpaar droht eine herbe Wahlniederlage - http://www.zeit.de/online/2009/27/argentinien-wahl-kirchner
+Der Schattenpräsident - http://www.zeit.de/politik/ausland/2010-10/nestor-kirchner-nachruf/komplettansicht
+
+d. 无相关内容，完全错误预测
+Ohne Gras kein Spaß - http://www.zeit.de/2009/20/Portugal-Golf/komplettansicht
+Jonglieren entspannt und macht schlau - http://www.zeit.de/karriere/beruf/2012-10/konzentration-gehirnleistung-jonglage/komplettansicht
+
+2. examples for false negative
+a. 介绍宏观问题和报道具体例子
+Uni Leipzig droht mit Schließung ganzer Fakultäten - http://www.zeit.de/studium/hochschule/2014-02/universitaet-leipzig-finanzierung
+Drittmittel sind ungleich verteilt - http://www.zeit.de/studium/hochschule/2014-02/Drittmittel-an-Hochschulen
+
+b. 讨论同一主题下的不同分支内容
+Der Jugendschutzfilter blockiert zu viel - http://www.zeit.de/digital/internet/2012-02/jugendschutzfilter-filtern-blogs/komplettansicht
+Filmwirtschaft weitet Selbstkontrolle auf Internet aus - http://www.zeit.de/kultur/film/2011-10/fsk-jugendschutz-internet
+
+c. 只是基于同样的背景，而描述的事情并不相同，只是表达的情感、理念或观点相同。
+"Die Koordination durch Tepco ist oft furchtbar" - http://www.zeit.de/wissen/umwelt/2014-03/interview-fukushima-drei-jahre-arbeiter/komplettansicht
+Geächtet wie einst Japans Atombomben-Opfer - http://www.zeit.de/wissen/gesundheit/2014-03/fukushima-strahlenopfer-stigma-radioaktivitaet
 \subsection{Conclusion}
 \label{sec:5.6}
+1. 分析了性能，分析了错误
+2. 最好的是content-1-tfidf，其他的见表格
+3. 问题是没有使用corpus中的标记，即保存的人工标记related。利用这些数据，会训练出更加specific更加precise的模型，在下一章详细说明。
