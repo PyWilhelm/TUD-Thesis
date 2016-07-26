@@ -69,7 +69,7 @@ The component of model building is meaningful exclusive for VSMs. The approaches
 
 \begin{description}
 \item[BoW] BoW is the simplest and most basic model in VSMs. Each document is represented as a vector in which the weight of each dimension is the occurrence frequency of the respective term. In order to reduce the dimension of vectors, the terms which occur in the corpus at least $k$ times (in our case $k=5$) remain in the vocabulary. The BoW vector of a given document is independent of the rest corpus, so long as the vocabulary is constant. 
-\item[tfidf] Tfidf is the model based on BoW, but the vector is relevant to the corpus. The tool to build tfidf model and the following models is \textit{gensim}\footnote{gensim is a NLP tool, which focuses on topic modeling and retrieving semantically similar documents \cite{rehurek_lrec}. Offical website:  https://radimrehurek.com/gensim/}.
+\item[tfidf] Tfidf is the model based on BoW, but the vector is relevant to the corpus. The tool to build tfidf model and the following models is \textit{gensim}\footnote{gensim is a NLP tool, which focuses on topic modeling and retrieving semantically similar documents \cite{rehurek_lrec}. Offical website: \url{https://radimrehurek.com/gensim/}}.
 \item[LSI and LDA] We build the models LSI and LDA based on tfidf. Both models are capable to reduce the dimension of vectors from the vocabulary size to the number of topics. It is therefore necessary to determine the optimal number of topics, in order to make balance between the precision and computational performance. 
 \end{description}
 
