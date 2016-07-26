@@ -47,7 +47,7 @@ Topic models, such as LSI and LDA, represent documents as vectors in topic space
 \end{figure}
 
 
-\subsubsection{Model Selection}
+\subsubsection{Overall Analysis of Effectiveness}
 
 The five STS models are applied for the nine separated semantic data ( (\icontent{}, \ititle{}, \isummary{}) $\times$ (unigram, bigram, trigram)). We apply \textit{precision@2@3} and \textit{nDCG} for evaluating the effectiveness of the models. 
 
@@ -115,27 +115,65 @@ The effectiveness is reported and analyzed above in general. Now we are also int
 \subsection{Efficiency of STS Models}
 \label{sec:5.3}
 
-Efficiency包括两部分，building时间和预测时间，building时间指在利用历史语料构建模型上所耗费的时间，预测时间是指对每一个input 也就是一个target article找到related articles所需要的时间。对Jaccard而言，不需要建立一个模型，只需要创建字典即可，所以building time可以忽略。对VSM而言，预测分成两个步骤，第一是将document convert to vector by model, 第二步是计算这个vector与历史语料库转化而来的vectors的cosine值，选取cosine值最大的两个历史articles为related articles. 下面两个parts针对这两个步骤进行分析。
+The complete workflow of the framework can be simplified to two main phases, scilicet building phase and predicting phase. In building phase, the historical corpus is utilized and transformed through the sub-phases successively including preprocessing, vocabulary generating, model training/building and transforming. After building phase, articles from the historical corpus are represented as vectors or term-set, by the model. Then, predicting phase is the phase to discover related articles for target articles through vector representing, \textit{cosine} similarity computing and whereby ordering. 
+
+The time cost of preprocessing is not taken into account, since the cost is tiny and more importantly preprocessing does not depend on the selection of STS models nor n-gram models. In following we analyse efficiency on three views: internal comparison between STS models, vertical comparison between n-gram models, and horizontal comparison between data sources. 
 
 \subsubsection{Comparison of building time}
+
+The results of building time from experiment 1 are illustrated in figure \ref{fig:build_time} and analyzed as follows. 
 
 \begin{figure}[!htb]
     \centering
     \includegraphics[width=\textwidth]{fig/building_time}
-    \caption{}
+    \caption{Time cost of building phase}
     \label{fig:build_time}
 \end{figure}
 
+\begin{itemize}
+
+
+\item Building phase of jaccard spends less time than other VSMs. Unlike VSMs, there is no model as ``middleware'' between articles and representation for jaccard. The building phase of jaccard is actually the phase where one article is reduced as a set of appeared terms. 
+
+\item The building time cost of BoW and tdidf is roughly the same and tfidf spends slightly more time than BoW, because tdidf extends BoW with computing tf-idf weight. 
+
+\item Topic models are more expensive. To be specific, LSI consumes more than 5 times for \icontent{} in unigram and even more than 20 times as much as the time tfidf consumes because of computing SVD. More seriously, the building time of LDA is 47 times as high as the building time of tfidf for \icontent{} in unigram and the time cost exceeds an acceptable range in bi- and trigram. 
+
+\item Compared with unigram, the building time cost of jaccard, BoW, tfidf, LSI for \icontent{} in bigram, is increased by 3.2 times, 2.1 times, 2.1 times and 4.6 times, respectively, where as the time cost increases by only 2.4 times, 1.2 times, 1.2 times and 4.2 times correspondingly. On the other hand, the time cost of a particular STS model is not significantly different between uni-, bi- and trigram.
+
+\end{itemize}
 
 \subsubsection{Comparison of predicting time}
 
+The results of predicting time are illustrated in figure \ref{fig:predict_time} and analyzed as follows. 
 \begin{figure}[!htb]
     \centering
     \includegraphics[width=\textwidth]{fig/predicting_time}
-    \caption{}
+    \caption{Time cost of predicting related articles for one target}
     \label{fig:predict_time}
 \end{figure}
 
+\begin{itemize}
+\item Similar to building phase, jaccard is also quiet different from other VSMs. The jaccard similarity between two documents is computed by dividing the size of union of the corresponding term sets by the size of intersection of them. This operation is more costly than computing \textit{cosine} similarity between vectors. As compared with tfidf, jaccard costs 20-fold, 10-fold and 21 fold time for \icontent{} in uni-, bi- and trigram, respectively.
+
+\item Predicting phase consists of representing phase and similarity computing phase. The first phase depends on the complexity of the corresponding model. Specifically, a document is represented as a vector of occurrence frequency, tf-idf weight and topic weight for BoW, tfidf and topic modles(i.e. LSI and LDA), respectively, and complexity increases progressively. The second phase depends on the vector dimension and the amount of vectors. Normally, the vector dimension of topic models is much lower than BoW and tfidf and hence, topic models cost less time in the second phase. In \icontent{}, the cost of LSI is similar to BoW and tfidf, whereas it is much higher than BoW and tfidf in \ititle{} and \isummary{}, which generate much smaller vocabularies and accordingly the lower vector dimension. 
+
+\end{itemize} 
+
+In conclusion, we determine the final selection of the best model for each dataset in table \ref{tab:select}, taking into account both of effectiveness and efficiency.
+
+\begin{table}[!htb]
+\centering
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{Model} & \textbf{Content} & \textbf{Title} & \textbf{Summary} \\ \hline
+\textbf{Unigram} & tfidf & tfidf & tfidf \\ \hline
+\textbf{Bigram} & tfidf & tfidf & jaccard \\ \hline
+\textbf{Trigram} & tfidf & jaccard & jaccard \\ \hline
+\end{tabular}
+\caption{Model selection for each data source in n-gram.}
+\label{tab:select}
+\end{table}
 
 \subsection{Results of Incremental Updating}
 \label{sec:5.4}
@@ -150,33 +188,34 @@ Efficiency包括两部分，building时间和预测时间，building时间指在
 1. example for false positive
 
 a. 语义相关，但是由于corpus标记是人工进行的，因此存在相当程度的不完整性，这是系统性问题，不是错误判断，会导致effective下降，解决方案是将错误的进行人工标注，但是工作量较大。
-"Tod dem Diktator"-Rufe zur Vereidigung - http://www.zeit.de/online/2009/32/iran-proteste-vereidigung/komplettansicht
-Proteste in Teheran dauern an - http://www.zeit.de/online/2009/32/iran-ahmadineschad-proteste/komplettansicht
+"Tod dem Diktator"-Rufe zur Vereidigung - 
+\footnote{\url{http://www.zeit.de/online/2009/32/iran-proteste-vereidigung/komplettansicht}}
+Proteste in Teheran dauern an - \footnote{\url{http://www.zeit.de/online/2009/32/iran-ahmadineschad-proteste/komplettansicht}}
 
 b. 大量相似内容，但是最核心主题无关，而主题的权重是人确定的，我们的方法无法模拟人区分主题权重的过程。
-Tunesiens Innenminister wird neuer Regierungschef - http://www.zeit.de/politik/ausland/2013-02/tunesien-regierungschef-larayedh-jebali
-Tunesien hebt den Ausnahmezustand seit Arabellion auf - http://www.zeit.de/politik/ausland/2014-03/tunesien-ausnahmezustand-aufhebung
+Tunesiens Innenminister wird neuer Regierungschef - \footnote{\url{http://www.zeit.de/politik/ausland/2013-02/tunesien-regierungschef-larayedh-jebali}}
+Tunesien hebt den Ausnahmezustand seit Arabellion auf - \footnote{\url{http://www.zeit.de/politik/ausland/2014-03/tunesien-ausnahmezustand-aufhebung}}
 
 c. 有相似内容，但是中心主题无关，
-Dem Präsidentenpaar droht eine herbe Wahlniederlage - http://www.zeit.de/online/2009/27/argentinien-wahl-kirchner
-Der Schattenpräsident - http://www.zeit.de/politik/ausland/2010-10/nestor-kirchner-nachruf/komplettansicht
+Dem Präsidentenpaar droht eine herbe Wahlniederlage - \footnote{\url{http://www.zeit.de/online/2009/27/argentinien-wahl-kirchner}}
+Der Schattenpräsident - \footnote{\url{http://www.zeit.de/politik/ausland/2010-10/nestor-kirchner-nachruf/komplettansicht}}
 
 d. 无相关内容，完全错误预测
-Ohne Gras kein Spaß - http://www.zeit.de/2009/20/Portugal-Golf/komplettansicht
-Jonglieren entspannt und macht schlau - http://www.zeit.de/karriere/beruf/2012-10/konzentration-gehirnleistung-jonglage/komplettansicht
+Ohne Gras kein Spaß - \footnote{\url{http://www.zeit.de/2009/20/Portugal-Golf/komplettansicht}}
+Jonglieren entspannt und macht schlau - \footnote{\url{http://www.zeit.de/karriere/beruf/2012-10/konzentration-gehirnleistung-jonglage/komplettansicht}}
 
 2. examples for false negative
 a. 介绍宏观问题和报道具体例子
-Uni Leipzig droht mit Schließung ganzer Fakultäten - http://www.zeit.de/studium/hochschule/2014-02/universitaet-leipzig-finanzierung
-Drittmittel sind ungleich verteilt - http://www.zeit.de/studium/hochschule/2014-02/Drittmittel-an-Hochschulen
+Uni Leipzig droht mit Schließung ganzer Fakultäten - \footnote{\url{http://www.zeit.de/studium/hochschule/2014-02/universitaet-leipzig-finanzierung}}
+Drittmittel sind ungleich verteilt - \footnote{\url{http://www.zeit.de/studium/hochschule/2014-02/Drittmittel-an-Hochschulen}}
 
 b. 讨论同一主题下的不同分支内容
-Der Jugendschutzfilter blockiert zu viel - http://www.zeit.de/digital/internet/2012-02/jugendschutzfilter-filtern-blogs/komplettansicht
-Filmwirtschaft weitet Selbstkontrolle auf Internet aus - http://www.zeit.de/kultur/film/2011-10/fsk-jugendschutz-internet
+Der Jugendschutzfilter blockiert zu viel - \footnote{\url{http://www.zeit.de/digital/internet/2012-02/jugendschutzfilter-filtern-blogs/komplettansicht}}
+Filmwirtschaft weitet Selbstkontrolle auf Internet aus - \footnote{\url{http://www.zeit.de/kultur/film/2011-10/fsk-jugendschutz-internet}}
 
 c. 只是基于同样的背景，而描述的事情并不相同，只是表达的情感、理念或观点相同。
-"Die Koordination durch Tepco ist oft furchtbar" - http://www.zeit.de/wissen/umwelt/2014-03/interview-fukushima-drei-jahre-arbeiter/komplettansicht
-Geächtet wie einst Japans Atombomben-Opfer - http://www.zeit.de/wissen/gesundheit/2014-03/fukushima-strahlenopfer-stigma-radioaktivitaet
+"Die Koordination durch Tepco ist oft furchtbar" - \footnote{\url{http://www.zeit.de/wissen/umwelt/2014-03/interview-fukushima-drei-jahre-arbeiter/komplettansicht}}
+Geächtet wie einst Japans Atombomben-Opfer - \footnote{\url{http://www.zeit.de/wissen/gesundheit/2014-03/fukushima-strahlenopfer-stigma-radioaktivitaet}}
 \subsection{Conclusion}
 \label{sec:5.6}
 1. 分析了性能，分析了错误
