@@ -185,12 +185,23 @@ In conclusion, we determine the final selection of the best model for each datas
 \subsection{Error Analysis}
 \label{sec:5.5}
 
-1. example for false positive
+We present insights on the most severe types of errors of false positive and false negative that occurred in the experiments. In order to confirm the reasons or conditions of the errors, we inspect manually the predictions of the framework to discover related articles and compare them with the golden standard understanding of human beings.  
 
-a. 语义相关，但是由于corpus标记是人工进行的，因此存在相当程度的不完整性，这是系统性问题，不是错误判断，会导致effective下降，解决方案是将错误的进行人工标注，但是工作量较大。
-"Tod dem Diktator"-Rufe zur Vereidigung - 
-\footnote{\url{http://www.zeit.de/online/2009/32/iran-proteste-vereidigung/komplettansicht}}
-Proteste in Teheran dauern an - \footnote{\url{http://www.zeit.de/online/2009/32/iran-ahmadineschad-proteste/komplettansicht}}
+\subsubsection{False Positive Error}
+
+A false positive error is a result that indicates a given condition has been fulfilled, when it actually has not been fulfilled. In our case, a false positive error is the event that an article which is actually unrelated to the target article is assigned as related by the framework. 
+
+\begin{itemize}
+    \item One type of fp errors is caused by the labeled corpus we select. The list of related articles is marked by the editor manually and the size is limited up to $2$. Therefore, the list is incomplete, so that articles which should be related to each other under human understanding are unreachable to each other in the related-graph generated based on the lists of related articles. \\
+    Example: 
+    \begin{itemize}
+        \item \textit{``Tod dem Diktator'' - Rufe zur Vereidigung} (\textit{"Death to the dictator" - require for swearing}) \footnote{\url{http://www.zeit.de/online/2009/32/iran-proteste-vereidigung/komplettansicht}}
+        \item \textit{Proteste in Teheran dauern an} (\textit{Protests in Tehran persist}) \footnote{\url{http://www.zeit.de/online/2009/32/iran-ahmadineschad-proteste/komplettansicht}}
+
+    \end{itemize}
+\end{itemize}
+
+
 
 b. 大量相似内容，但是最核心主题无关，而主题的权重是人确定的，我们的方法无法模拟人区分主题权重的过程。
 Tunesiens Innenminister wird neuer Regierungschef - \footnote{\url{http://www.zeit.de/politik/ausland/2013-02/tunesien-regierungschef-larayedh-jebali}}
