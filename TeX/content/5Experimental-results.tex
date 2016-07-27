@@ -37,7 +37,7 @@ As described in section \ref{sec:3.3}, the effectiveness metrics include \textit
 
 \subsubsection{Parameter Selection for Topic Models}
 
-Topic models, such as LSI and LDA, represent documents as vectors in topic space. The dimension of the topic space, as well as the number of topics is pre-defined. Hence, it is necessary to determine the optimal number of topics before building and evaluating models. Figure \ref{fig:precision_topics} shows the change in precision and operational time of LSI with increasing the number of topics from $50$ to $1000$. The precision keeps increasing but the growth becomes weaker and weaker, when the number of topics becomes larger. On the other side, the time cost of both of building and predicting increases with a relative stable growth speed. We selects $500$ as the final value of this hyperparameter, because the precision increases quiet insignificantly with more than $500$ topics and we expect that the building time is limited to less than one hour and the predicting time is limited to less than one second. 
+Topic models, such as LSI and LDA, represent documents as vectors in topic space. The dimension of the topic space, as well as the number of topics is pre-defined. Hence, it is necessary to determine the optimal number of topics before building and evaluating models. Figure \ref{fig:precision_topics} shows the change in precision and operational time of LSI with increasing the number of topics from $50$ to $1000$. The precision keeps increasing but the growth becomes weaker and weaker, when the number of topics becomes larger. On the other side, the time cost of both of building and predicting increases with a relative stable growth speed. We selects $500$ as the final value of this hyperparameter, because the precision increases quite insignificantly with more than $500$ topics and we expect that the building time is limited to less than one hour and the predicting time is limited to less than one second. 
 
 \begin{figure}[!htb]
     \centering
@@ -154,7 +154,7 @@ The results of predicting time are illustrated in figure \ref{fig:predict_time} 
 \end{figure}
 
 \begin{itemize}
-\item Similar to building phase, jaccard is also quiet different from other VSMs. The jaccard similarity between two documents is computed by dividing the size of union of the corresponding term sets by the size of intersection of them. This operation is more costly than computing \textit{cosine} similarity between vectors. As compared with tfidf, jaccard costs 20-fold, 10-fold and 21 fold time for \icontent{} in uni-, bi- and trigram, respectively.
+\item Similar to building phase, jaccard is also quite different from other VSMs. The jaccard similarity between two documents is computed by dividing the size of union of the corresponding term sets by the size of intersection of them. This operation is more costly than computing \textit{cosine} similarity between vectors. As compared with tfidf, jaccard costs 20-fold, 10-fold and 21 fold time for \icontent{} in uni-, bi- and trigram, respectively.
 
 \item Predicting phase consists of representing phase and similarity computing phase. The first phase depends on the complexity of the corresponding model. Specifically, a document is represented as a vector of occurrence frequency, tf-idf weight and topic weight for BoW, tfidf and topic modles(i.e. LSI and LDA), respectively, and complexity increases progressively. The second phase depends on the vector dimension and the amount of vectors. Normally, the vector dimension of topic models is much lower than BoW and tfidf and hence, topic models cost less time in the second phase. In \icontent{}, the cost of LSI is similar to BoW and tfidf, whereas it is much higher than BoW and tfidf in \ititle{} and \isummary{}, which generate much smaller vocabularies and accordingly the lower vector dimension. 
 
@@ -192,20 +192,27 @@ We present insights on the most severe types of errors of false positive and fal
 A false positive error is a result that indicates a given condition has been fulfilled, when it actually has not been fulfilled. In our case, a false positive error is the event that an article which is actually unrelated to the target article is assigned as related by the framework. 
 
 \begin{itemize}
-    \item One type of fp errors is caused by the labeled corpus we select. The list of related articles is marked by the editor manually and the size is limited up to $2$. Therefore, the list is incomplete, so that articles which should be related to each other under human understanding are unreachable to each other in the related-graph generated based on the lists of related articles. \\
+    \item One type of fp errors is caused by the labeled corpus we select. The list of related articles is marked by the editor manually and the size is limited up to $2$. Therefore, the list is incomplete, so that articles which should be related to each other under human understanding are unreachable to each other in the related-graph generated based on the lists of related articles. Only this type is not the real errors but the inherent systematic lack. 
+    
     Example: 
     \begin{itemize}
-        \item \textit{``Tod dem Diktator'' - Rufe zur Vereidigung} (\textit{"Death to the dictator" - require for swearing}) \footnote{\url{http://www.zeit.de/online/2009/32/iran-proteste-vereidigung/komplettansicht}}
+        \item \textit{``Tod dem Diktator'' - Rufe zur Vereidigung} (\textit{``Death to the dictator'' - require for swearing}) \footnote{\url{http://www.zeit.de/online/2009/32/iran-proteste-vereidigung/komplettansicht}}
         \item \textit{Proteste in Teheran dauern an} (\textit{Protests in Tehran persist}) \footnote{\url{http://www.zeit.de/online/2009/32/iran-ahmadineschad-proteste/komplettansicht}}
-
     \end{itemize}
+    The both articles report the protest against Mahmoud Ahmadinejad, who is re-elected as the Iranian president, and the international as well as authoritative reaction. The articles should be related by the human judgement, but there is no related-path between them. We consider that the incompleteness of labeling causes the fp error. 
+    
+    \item One article usually contains a set of topics rather than the single topic. The topics are not treated equally, but they are understood in different importance. It is complicate and subtle, how human beings weigh the importance of different topics. Out of this view point, two articles are assigned as related, only when they share the topics with the highest weight, otherwise they are unrelated, even though they are similar to each other in semantic or lexical meaning. 
+    
+    Example:
+    \begin{itemize}
+        \item \textit{Tunesiens Innenminister wird neuer Regierungschef} (\textit{Tunisia Interior Minister appointed new head of government}) \footnote{\url{http://www.zeit.de/politik/ausland/2013-02/tunesien-regierungschef-larayedh-jebali}}
+        \item \textit{Tunesien hebt den Ausnahmezustand seit Arabellion auf} (\textit{Tunisia cancels the state of emergency beginning from Arabellion}) \footnote{\url{http://www.zeit.de/politik/ausland/2014-03/tunesien-ausnahmezustand-aufhebung}}
+    \end{itemize}
+    
+    The both articles mention the identical background, subject of the events and keywords. However, the critical reported topics are different and unrelated. In addition, quite a few named entities which they share confuse the framework predicts the relatedness between them. 
+    
 \end{itemize}
 
-
-
-b. 大量相似内容，但是最核心主题无关，而主题的权重是人确定的，我们的方法无法模拟人区分主题权重的过程。
-Tunesiens Innenminister wird neuer Regierungschef - \footnote{\url{http://www.zeit.de/politik/ausland/2013-02/tunesien-regierungschef-larayedh-jebali}}
-Tunesien hebt den Ausnahmezustand seit Arabellion auf - \footnote{\url{http://www.zeit.de/politik/ausland/2014-03/tunesien-ausnahmezustand-aufhebung}}
 
 c. 有相似内容，但是中心主题无关，
 Dem Präsidentenpaar droht eine herbe Wahlniederlage - \footnote{\url{http://www.zeit.de/online/2009/27/argentinien-wahl-kirchner}}
