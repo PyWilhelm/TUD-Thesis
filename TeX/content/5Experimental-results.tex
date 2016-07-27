@@ -196,8 +196,8 @@ A false positive error is a result that indicates a given condition has been ful
     
     Example: 
     \begin{itemize}
-        \item \textit{``Tod dem Diktator'' - Rufe zur Vereidigung} (\textit{``Death to the dictator'' - require for swearing}) \footnote{\url{http://www.zeit.de/online/2009/32/iran-proteste-vereidigung/komplettansicht}}
-        \item \textit{Proteste in Teheran dauern an} (\textit{Protests in Tehran persist}) \footnote{\url{http://www.zeit.de/online/2009/32/iran-ahmadineschad-proteste/komplettansicht}}
+        \item \textit{``Tod dem Diktator'' - Rufe zur Vereidigung} (\textit{``Death to the dictator'' - require for swearing}) \footnote{\url{http://www.zeit.de/online/2009/32/iran-proteste-vereidigung}}
+        \item \textit{Proteste in Teheran dauern an} (\textit{Protests in Tehran persist}) \footnote{\url{http://www.zeit.de/online/2009/32/iran-ahmadineschad-proteste}}
     \end{itemize}
     The both articles report the protest against Mahmoud Ahmadinejad, who is re-elected as the Iranian president, and the international as well as authoritative reaction. The articles should be related by the human judgement, but there is no related-path between them. We consider that the incompleteness of labeling causes the fp error. 
     
@@ -215,7 +215,7 @@ A false positive error is a result that indicates a given condition has been ful
     Example: 
     \begin{itemize}
         \item \textit{Dem Pr\"asidentenpaar droht eine herbe Wahlniederlage} (\textit{The presidential couple threatens a bitter election defeat}) \footnote{\url{http://www.zeit.de/online/2009/27/argentinien-wahl-kirchner}}
-        \item \textit{Der Schattenpr\"asident} (\textit{The Shadow President}) \footnote{\url{http://www.zeit.de/politik/ausland/2010-10/nestor-kirchner-nachruf/komplettansicht}}
+        \item \textit{Der Schattenpr\"asident} (\textit{The Shadow President}) \footnote{\url{http://www.zeit.de/politik/ausland/2010-10/nestor-kirchner-nachruf}}
     \end{itemize}
     The articles report the politics in Argentina and use many similar or same words to describe the situation of the government and the action thereof. However, the first article focuses on the difficulty of election, while the second article reviews mainly the record of achievements of the former president who just died. Hence, they are unrelated very clearly. 
     
@@ -223,26 +223,46 @@ A false positive error is a result that indicates a given condition has been ful
     
     Example: 
     \begin{itemize}
-        \item \textit{Ohne Gras kein Spa\ss} (\textit{Without grass no fun}) \footnote{\url{http://www.zeit.de/2009/20/Portugal-Golf/komplettansicht}}
-        \item \textit{Jonglieren entspannt und macht schlau} (\textit{Juggling relaxed and makes you smart}) \footnote{\url{http://www.zeit.de/karriere/beruf/2012-10/konzentration-gehirnleistung-jonglage/komplettansicht}}
+        \item \textit{Ohne Gras kein Spa\ss{}} (\textit{Without grass no fun}) \footnote{\url{http://www.zeit.de/2009/20/Portugal-Golf}}
+        \item \textit{Jonglieren entspannt und macht schlau} (\textit{Juggling relaxed and makes you smart}) \footnote{\url{http://www.zeit.de/karriere/beruf/2012-10/konzentration-gehirnleistung-jonglage}}
     \end{itemize}
     
     The first article describes the experiences of the golf trip in Portugal, whereas the second article reports a kind of game in office which can make the participants relaxer and smarter. They belong to even different separated categories and cannot be related to each other. 
 \end{itemize}
 
+\subsubsection{False Negative Error}
 
-2. examples for false negative
-a. 介绍宏观问题和报道具体例子
-Uni Leipzig droht mit Schließung ganzer Fakultäten - \footnote{\url{http://www.zeit.de/studium/hochschule/2014-02/universitaet-leipzig-finanzierung}}
-Drittmittel sind ungleich verteilt - \footnote{\url{http://www.zeit.de/studium/hochschule/2014-02/Drittmittel-an-Hochschulen}}
+A false positive error is, in our case, a result that indicates an article which is actually quite related to the target article is judged with a very low relatedness degree. Now we consider that the articles which are very related to the target article are exactly predicted unrelated with an unexpected low relatedness degree. More specifically, we only inspect the extreme and typical error that the framework treats the articles which are directly adjacent to the target article in the related-graph and should be one of the most related articles as unrelated in a very low level. We discuss the characteristics of the errors and the reasons why the errors occur. 
 
-b. 讨论同一主题下的不同分支内容
-Der Jugendschutzfilter blockiert zu viel - \footnote{\url{http://www.zeit.de/digital/internet/2012-02/jugendschutzfilter-filtern-blogs/komplettansicht}}
-Filmwirtschaft weitet Selbstkontrolle auf Internet aus - \footnote{\url{http://www.zeit.de/kultur/film/2011-10/fsk-jugendschutz-internet}}
+\begin{itemize}
+    \item Two articles discuss the same topics and related meaning, but the points of view and concrete events are different. 
+    
+    Example:
+    \begin{itemize}
+        \item \textit{Uni Leipzig droht mit Schlie\ss{}ung ganzer Fakult\"aten} (\textit{Without grass no fun}) \footnote{\url{http://www.zeit.de/studium/hochschule/2014-02/universitaet-leipzig-finanzierung}}
+        \item \textit{Drittmittel sind ungleich verteilt} (\textit{Juggling relaxed and makes you smart}) \footnote{\url{http://www.zeit.de/studium/hochschule/2014-02/Drittmittel-an-Hochschulen}}
+    \end{itemize}    
+    
+    b. 讨论同一主题下的不同分支内容    
+    
+    Example:
+    \begin{itemize}
+        \item \textit{Der Jugendschutzfilter blockiert zu viel} (\textit{Without grass no fun}) \footnote{\url{http://www.zeit.de/digital/internet/2012-02/jugendschutzfilter-filtern-blogs}}
+        \item \textit{Filmwirtschaft weitet Selbstkontrolle auf Internet aus} (\textit{Juggling relaxed and makes you smart}) \footnote{\url{http://www.zeit.de/kultur/film/2011-10/fsk-jugendschutz-internet}}
+    \end{itemize}    
 
-c. 只是基于同样的背景，而描述的事情并不相同，只是表达的情感、理念或观点相同。
-"Die Koordination durch Tepco ist oft furchtbar" - \footnote{\url{http://www.zeit.de/wissen/umwelt/2014-03/interview-fukushima-drei-jahre-arbeiter/komplettansicht}}
-Geächtet wie einst Japans Atombomben-Opfer - \footnote{\url{http://www.zeit.de/wissen/gesundheit/2014-03/fukushima-strahlenopfer-stigma-radioaktivitaet}}
+
+    c. 只是基于同样的背景，而描述的事情并不相同，只是表达的情感、理念或观点相同。
+
+    Example:
+    \begin{itemize}
+        \item \textit{``Die Koordination durch Tepco ist oft furchtbar''} (\textit{Without grass no fun}) \footnote{\url{http://www.zeit.de/wissen/umwelt/2014-03/interview-fukushima-drei-jahre-arbeiter/komplettansicht}}
+        \item \textit{Ge\"achtet wie einst Japans Atombomben-Opfer} (\textit{Juggling relaxed and makes you smart}) \footnote{\url{http://www.zeit.de/wissen/gesundheit/2014-03/fukushima-strahlenopfer-stigma-radioaktivitaet}}
+    \end{itemize}    
+    
+\end{itemize}
+
+
 \subsection{Conclusion}
 \label{sec:5.6}
 1. 分析了性能，分析了错误
