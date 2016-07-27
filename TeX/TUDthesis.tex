@@ -34,7 +34,7 @@
 \numberwithin{equation}{section}
 \numberwithin{figure}{section}
 \numberwithin{table}{section}
-\setstretch{1.5}
+\setstretch{1.3}
 
 
 \newcommand{\getmydate}{%
@@ -62,14 +62,16 @@
   \makethesistitle
   \affidavit{Ziyang Li}
   
-  \pagenumbering{roman}
-  \setcounter{page}{1}
+  \input{content/0abstract}
+  \clearpage  
+  %\pagenumbering{roman}
+  %\setcounter{page}{1}
   \tableofcontents
   \input{content/0newcommand}
   \clearpage
   
-  \pagenumbering{arabic}
-  \setcounter{page}{1}
+  %\pagenumbering{arabic}
+  %\setcounter{page}{1}
   \input{content/1Introduction}
   \clearpage
   \input{content/2State-of-art}
@@ -84,8 +86,12 @@
   \clearpage
   \input{content/7Conclusion}
   \clearpage
-  
-  
+  \addcontentsline{toc}{section}{\listfigurename}
+  \listoffigures
+  \clearpage
+  \addcontentsline{toc}{section}{\listtablename}
+  \listoftables
+  \clearpage
   \medskip
 \addcontentsline{toc}{section}{Bibliography}
 
