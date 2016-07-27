@@ -211,16 +211,25 @@ A false positive error is a result that indicates a given condition has been ful
     
     The both articles mention the identical background, subject of the events and keywords. However, the critical reported topics are different and unrelated. In addition, quite a few named entities which they share confuse the framework predicts the relatedness between them. 
     
+    \item Two articles have the identical or similar information, but they mention the very different topics. 
+    Example: 
+    \begin{itemize}
+        \item \textit{Dem Pr\"asidentenpaar droht eine herbe Wahlniederlage} (\textit{The presidential couple threatens a bitter election defeat}) \footnote{\url{http://www.zeit.de/online/2009/27/argentinien-wahl-kirchner}}
+        \item \textit{Der Schattenpr\"asident} (\textit{The Shadow President}) \footnote{\url{http://www.zeit.de/politik/ausland/2010-10/nestor-kirchner-nachruf/komplettansicht}}
+    \end{itemize}
+    The articles report the politics in Argentina and use many similar or same words to describe the situation of the government and the action thereof. However, the first article focuses on the difficulty of election, while the second article reviews mainly the record of achievements of the former president who just died. Hence, they are unrelated very clearly. 
+    
+    \item Two articles are about entirely different field and totally unrelated. 
+    
+    Example: 
+    \begin{itemize}
+        \item \textit{Ohne Gras kein Spa\ss} (\textit{Without grass no fun}) \footnote{\url{http://www.zeit.de/2009/20/Portugal-Golf/komplettansicht}}
+        \item \textit{Jonglieren entspannt und macht schlau} (\textit{Juggling relaxed and makes you smart}) \footnote{\url{http://www.zeit.de/karriere/beruf/2012-10/konzentration-gehirnleistung-jonglage/komplettansicht}}
+    \end{itemize}
+    
+    The first article describes the experiences of the golf trip in Portugal, whereas the second article reports a kind of game in office which can make the participants relaxer and smarter. They belong to even different separated categories and cannot be related to each other. 
 \end{itemize}
 
-
-c. 有相似内容，但是中心主题无关，
-Dem Präsidentenpaar droht eine herbe Wahlniederlage - \footnote{\url{http://www.zeit.de/online/2009/27/argentinien-wahl-kirchner}}
-Der Schattenpräsident - \footnote{\url{http://www.zeit.de/politik/ausland/2010-10/nestor-kirchner-nachruf/komplettansicht}}
-
-d. 无相关内容，完全错误预测
-Ohne Gras kein Spaß - \footnote{\url{http://www.zeit.de/2009/20/Portugal-Golf/komplettansicht}}
-Jonglieren entspannt und macht schlau - \footnote{\url{http://www.zeit.de/karriere/beruf/2012-10/konzentration-gehirnleistung-jonglage/komplettansicht}}
 
 2. examples for false negative
 a. 介绍宏观问题和报道具体例子
