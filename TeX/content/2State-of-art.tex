@@ -2,9 +2,11 @@
 \section{State of Art}
 \label{sec:2}
 
-In this chapter the common methods to calculate similarity between documents are summarized. The methods are usually categorized into two major classes, which are corpus-based and knowledge-based measures. Corpus-based measures try to calculate the value of similarity between documents using information exclusively extracted from large corpora. Normally, the corpora is used both for generating necessary knowledge (e.g. word2vec) and as input data for training models. Meanwhile, the knowledge derived from other resource, e.g. Wikipedia, New York Times, is drawn into the initializing of building models in knowledge-based measures. In our case, the corpus-based measures is preferred rather than knowledge-based measures. The reasons are briefly explained as follows. Firstly, the existent knowledge-based measures are more suitable in the field of word similarity, e.g. \cite{jiang1997semantic}, \cite{strube2006wikirelate} and \cite{Agirre2009ta}, but they are relatively weak for dealing with documents or paragraphs. The second viewpoint is that the prior knowledge has less relevance to the target corpus. The importance and meaning of a word or phrase could be different in difference resource, so that the knowledge from other resource could not interpret identical words in a specific corpus.  Furthermore, the knowledge-based measures have relatively unsatisfactory performance in case of dealing with the considerable number of Out of Vocabulary (OOV) words, whereas exactly compound words and inflection are ubiquitous in German.
+In this chapter the common methods to calculate similarity between documents are summarized. The methods are usually categorized into two major classes, scilicet corpus-based and knowledge-based measures. Corpus-based measures try to calculate the value of similarity between documents using information exclusively extracted from the large corpora. Normally, the corpora is used both for generating necessary knowledge (e.g. word2vec) and as input data for training models. Meanwhile, the knowledge derived from other resource, e.g. Wikipedia, New York Times, is drawn into the initializing of building models in knowledge-based measures. In our case, the corpus-based measures is preferred rather than knowledge-based measures. The reasons are briefly explained as follows. First, the existent knowledge-based measures are more suitable in the field of word similarity, e.g. \cite{jiang1997semantic}, \cite{strube2006wikirelate} and \cite{Agirre2009ta}, but they are relatively weak for dealing with documents or paragraphs. The second viewpoint is that the prior knowledge has less relevance to the target corpus. The importance and meaning of a word or phrase could be different in diverse sources, so that the knowledge from other sources could not interpret identical words in a specific corpus. Furthermore, the knowledge-based measures have relatively unsatisfactory performance in case of dealing with the considerable number of Out of Vocabulary (OOV) words, whereas exactly compound words and inflection are ubiquitous in German.
 
-In the following subsection, the traditional approaches of semantic text similarity are introduced. After that, a few of important measures of Vector Space Model (VSM) are described. The third part focuses on a short review of existent recommendation systems. The section concludes with a formulation of the research questions. 
+In the following parts in this section, the traditional approaches of semantic text similarity are introduced. After that, a few of important measures of Vector Space Model (VSM) are described. The section concludes with a formulation of the research questions. 
+
+%The third part focuses on a short review of existent recommendation systems. 
 
 \subsection{Traditional STS Methods}
 \label{sec:2.1}
@@ -21,12 +23,11 @@ Longest common substring is based on a basic idea that document is treated as se
 
 where the length $l$ of the longest contiguous character sequence $lcs$ is shared between the two texts. Moreover, longest common subsequence overcomes the limitation of continuousness. 
 
-The kind of measures have the drawbacks. One of them is that the measures do not utilize any semantic process, while the measures cannot use any optimization method, so that the operating efficiency is in a low level. Assumed there are $d$ documents in the corpora, average $\overline{w}$ words for each document, and average $\overline{c}$ characters for each word, the time complexity of lcs is $O((d \cdot \overline{w} \cdot \overline{c})^2)$. These drawback occur also in GST, which is drawn in next part. 
+The kind of measures have the drawbacks. One of them is that the measures do not utilize any semantic process, while the measures cannot use any optimization method, so that the operational efficiency is in a low level. Assumed there are $d$ documents in the corpus, $\overline{w}$ words for each document on average, and $\overline{c}$ characters for each word on average, the time complexity of lcs is $O((d \cdot \overline{w} \cdot \overline{c})^2)$. These drawbacks occur also in GST, which is drawn in next part. 
 
 \subsubsection{Greedy String Tiling}
 
-Greedy string tiling is implemented by \cite{wise1993string}. The purpose is to detect plagiarism in programming assignment of students. The algorithm works by searching for matches of a maximum-length marking them and continuing the search ignoring marked tokens. Therefore, this method is relatively insensitive the order of words. It makes more sense for similarity computing than LCS. However, the time complexity is worse than LCS. It will be  $O(d^2 \cdot (\overline{w} \cdot \overline{c})^3)$ in the worst case. Taking into consideration of a reasonable efficiency, this method is not used in our experiments.
-
+Greedy string tiling is implemented by \cite{wise1993string}. The purpose is to detect plagiarism in programming assignment of students. The algorithm works by searching for matches of a maximum-length marking them and continuing the search ignoring marked tokens. Therefore, this method is relatively insensitive the order of words. It makes more sense for similarity computing than LCS. However, the time complexity is worse than LCS. It will be  $O(d^2 \cdot (\overline{w} \cdot \overline{c})^3)$ in the worst case. Taking into account the reasonable efficiency, this method is ignored in the experiments.
 
 \subsubsection{\cite{islam2008semantic}}
 
@@ -37,7 +38,7 @@ The above described three measures regard documents as sequences of characters, 
 
 \subsubsection{N-gram Models and Jaccard Similarity Coefficient}
 
-From the viewpoint of n-gram models, the elementary unit of documents is not isolated words but combinations of $n$ words, where n equals 2 or 3 typically. N-gram models provide a basic processing idea, that most measures can utilize n-gram models as a part of the workflow, in order to obtain the (probabilistic) association between a word and $n-1$ words as predecessor thereof. One simple and intuitionistic measure is Jaccard similarity coefficient \cite{bank2008calculating}. For two documents $t_1=\{w^1_1, w^2_1, \cdots, w^{|t_1|-n+1}_1\}$, $t_2=\{w^1_2, w^2_2, \cdots, w^{|t_2|-n+1}_2\}$, Jaccard similarity coefficient is defined as the size of the intersection divided by the size of the union. Formally,
+From the viewpoint of n-gram models, the elementary unit of documents is not isolated words but combinations of $n$ words with using a sliding window of $n$ length, where n equals 2 or 3 typically. N-gram models provide a basic processing idea, that most measures can utilize n-gram models as a part of the workflow, in order to obtain the (probabilistic) association between a word and $n-1$ words as predecessor thereof. One simple and intuitionistic measure is Jaccard similarity coefficient \cite{bank2008calculating}. For two documents $t_1=\{w^1_1, w^2_1, \cdots, w^{|t_1|-n+1}_1\}$, $t_2=\{w^1_2, w^2_2, \cdots, w^{|t_2|-n+1}_2\}$, Jaccard similarity coefficient is defined as the size of the intersection divided by the size of the union. Formally,
 
 \begin{equation}
     sim_{jaccard}(t_1, t_2) = \frac{|t_1 \cap t_2|}{|t_1 \cup t_2|} = \frac{|t_1 \cap t_2|}{|t_1| + |t_2| - |t_1 \cap t_2|}. 
@@ -53,13 +54,13 @@ The idea of VSMs is to represent a document composed of a word sequence of an un
     sim_{cos}(t_1, t_2) = \frac{\mathbf{v_1} \cdot \mathbf{v_2}}{|\mathbf{v_1}| \cdot |\mathbf{v_2}|} = \frac{\sum_{i=1}^s v_1^i \cdot v_2^i}{\sqrt{\sum_{i=1}^s (v_1^i)^2} \cdot \sqrt{\sum_{i=1}^s (v_2^i)^2}}
 \end{equation}
 
-The $cosine$ similarity of two documents ranges from 0 to 1, when all components thereof are non-negative, e.g. in the tf-idf model, while it will rang also from -1 to 1 without the above non-negative requirement, e.g. in topic models. A variant $cosine$ similarity is so-called Pearson correlation, where vectors are normalized by subtracting the vector means $\mathbf{\overline{v}}$.  Mathematically, 
+The $cosine$ similarity of two documents ranges from 0 to 1, when all components thereof are non-negative, e.g. in the tf-idf model, while it will rang also from -1 to 1 without the above non-negative requirement, e.g. in topic models. A variant $cosine$ similarity is so-called \textit{Pearson} correlation, where vectors are normalized by subtracting the vector means $\mathbf{\overline{v}}$.  Mathematically, 
 
 \begin{equation}
     sim_{pearson}(t_1, t_2) = \frac{(\mathbf{v_1-\overline{v}}) \cdot (\mathbf{v_2-\overline{v}})}{|\mathbf{v_1-\overline{v}}| \cdot |\mathbf{v_2}-\mathbf{\overline{v}}|}
 \end{equation}
 
-Another measure to indicate the similarity of vectors is to compute the distance, such as Euclidean distance and Manhattan distance. In this kind of similarity measure, vector normalization must be taken into account. One typical method is to make the norm of vectors as 1, so that documents of different length are treated in the equality. 
+Another measure to indicate the similarity of vectors is to compute the distance, such as \textit{Euclidean} distance and \textit{Manhattan} distance. In this kind of similarity measure, vector normalization must be taken into account. One typical method is to make the norm of vectors as 1, so that documents of different length are treated in the equality. 
 
 \begin{equation}
     sim_{euclidean}(t_1, t_2) = 1 - \frac{\sqrt{\sum_{i=1}^s (v_1^i-v_2^i)^2}}{\sqrt{\sum_{i=1}^s r^2}} ,
@@ -68,18 +69,18 @@ where $r$ is the value range of components of vectors.
 
 VSMs can be classified as term-weighted models and topic-weighted models according to different methods of representing. In following sections we will introduce two common measures of these two types respectively and discuss their advantages and challenges. 
 
-\subsubsection{Bag-of-Words and \textit{tf-idf} Model}
+\subsubsection{Bag-of-Words and \textit{tfidf} Model}
 
-The bag-of-words (BoW) model is a simplest term-weighted vector space model. The vector of a document is composed of the frequency of occurrence of all words in the vocabulary. The dimension of BoW vector therefore is equal to the size of the vocabulary which is normally generated using the entire corpus. The BoW model has a crucial lack that some words occur in the most documents frequently, such as ``go'', ``buy'', ``play'' in English. After normalization, these words will occupy the dominating position and the weight of other words will be	insignificant. Quite the opposite, words, which occur infrequently in the corpus and relatively repeatedly in a cluster, make more sense in the specific context or topic than the common words. 
+The bag-of-words (BoW) model is a simplest term-weighted vector space model. The vector of a document is composed of the occurrence frequency of all words in the vocabulary. The dimension of BoW vector therefore is equal to the size of the vocabulary which is normally generated using the entire corpus. The BoW model has a crucial lack that some words occur in the most documents frequently, such as ``go'', ``buy'' and ``play'' in English. After normalization, these words will occupy the dominating position and the weight of other words will be	insignificant. Quite the opposite, words which occur infrequently in the corpus and relatively repeatedly in a cluster make more sense in the specific context or topic than the common words. 
 
-From this view point, term-frequency-inverse-document-frequency (\textit{tf-idf}) exhibits the importance to provide the meaning or the characteristic in a specific document but not frequency itself of words. The idea contains of two parts. On one side, the metric \textit{tf} indicates how frequent the current word is in the target document. On the other siede, the metric \textit{idf} exhibits the scarcity of the word in the entire corpus. Given a document $d$ from the corpus $D$ and an arbitrary word $w_i$ in the vocabulary, 
+From this view point, term-frequency-inverse-document-frequency (\textit{tfidf}) exhibits the importance to provide the meaning or the characteristic in a specific document but not frequency itself of words. The idea contains of two parts. On one side, the metric \textit{tf} indicates how frequent the word is in the target document. On the other side, the metric \textit{idf} refers to the scarcity of the word in the entire corpus. Given a document $d$ from the corpus $D$ and an arbitrary word $w_i$ in the vocabulary, 
 
 \begin{equation}
     tfidf(w_i, d) = tf(w_i, d) \cdot log_2(\frac{|D|}{df(w_i, D)}), 
 \end{equation}
 where \textit{tf} is the number of occurrences of $w_i$ in $d$, and \textit{df} is the number of documents containing $w_i$. 
 
-In both of BoW and \textit{tf-idf} models, the representation of documents is sparse vectors, of which in average more than 90\% components are zero,  because the vocabulary size is about 10k\textasciitilde 30k and each document has typically 300\textasciitilde 3k words. Furthermore, ignoring the ordering of words in documents for any measure based on the BoW model will lose information of semantics, e.g. relatedness of words, causal relationship between sentences. The former shortcoming will be overcome in topic-weighted measures reviewed in the next paragraphs. 
+In both of BoW and \textit{tfidf} models, the representation of documents is sparse vectors, where on average more than 90\% elements are zero, because the vocabulary size is about 10k\textasciitilde 30k and each document has typically 300\textasciitilde 3k words. Furthermore, ignoring the ordering of words in documents for any measure based on the BoW model will lose information of semantics, e.g. relatedness of words, causal relationship between sentences. The former shortcoming will be overcome in topic-weighted measures reviewed in the next paragraphs. 
 
 \subsubsection{Latent Semantic Indexing}
 
@@ -100,7 +101,14 @@ The LSI model is able to recognize synonyms and reduce the adverse impact of noi
 
 LDA was presented as a probabilistic graphical model by \cite{Blei:2003}. LDA is a BoW-based topic model, which can compute the probability distribution of topics for a given document. Moreover, topics can be represented as a series of weighted words by LDA. 
 
-The LDA model (\cite{Blei:2003}) is a Bayesian generative model. From the view point of LDA, a document is generated in the following phases:
+The LDA model (\cite{Blei:2003}) is a Bayesian generative model. From the view point of LDA, a document is generated in the following phases: 
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.5\textwidth]{fig/lda.pdf}
+    \caption{Plate notation of representation of LDA. The dual-line plate refers to the observed variable, i.e. the posterior distribution of words in this case, and the monocoil plates indicate the latent variables, such as topic distribution and word distributions given a topic. The direction of arrows refer the conditional dependency of variables. }
+    \label{fig:lda}
+\end{figure}
 
 \begin{itemize}
     \item[1.] select the topic distribution $\theta_i$ of the target document $d_i$ from the prior Dirichlet distribution $\alpha$, 
@@ -110,13 +118,6 @@ The LDA model (\cite{Blei:2003}) is a Bayesian generative model. From the view p
 \end{itemize}
 
 The progress of generation is illustrated by figure \ref{fig:lda}.
-
-\begin{figure}[!htb]
-    \centering
-    \includegraphics[width=0.5\textwidth]{fig/lda.pdf}
-    \caption{Plate notation of representation of LDA. The dual-line plate refers to the observed variable, i.e. the posterior distribution of words in this case, and the monocoil plates indicate the latent variables, such as topic distribution and word distributions given a topic. The direction of arrows refer the conditional dependency of variables. }
-    \label{fig:lda}
-\end{figure}
 
 The LDA model provides a general idea to build topic model. Since the work of \cite{Blei:2003}, subsequent research has explored many variant of LDA. There are four kinds of topic models so far, where are 1) unsupervised and non-hierarchical, 2) unsupervised and hierarchical, 3) supervised and non-hierarchical and 4) supervised and hierarchical. The research and model names are drawn in the table \ref{tab:lda} respectively.
 
@@ -134,15 +135,15 @@ The LDA model provides a general idea to build topic model. Since the work of \c
 \label{tab:lda}
 \end{table}
 
-\subsection{Recommendation System}
+% \subsection{Recommendation System}
 
 \subsection{Research Question}
 
-There is a nontrivial way from semantic text similarity to relatedness of documents. We attempt to find a systematic measure to discover related articles by given a target one. The main task is to discover 2\textasciitilde 5 candidate of related articles from a large corpora by given a target document. The most of researches have only discussed the degree of similarity between documents or the proportion of topics in each document and in the corpus. However, text similarity does not mean relatedness, neither do a few shared topics of documents. Four major questions have to be answered, so that achieving the relatedness degree of documents can be formulated more properly: 
+There is a nontrivial way from semantic text similarity to relatedness of documents. We attempt to find a systematic measure to discover related articles by one target article. The main task is to discover 2\textasciitilde 5 candidate of related articles from the large corpora for a given target document. The most of researches have only discussed the degree of similarity between documents or the proportion of topics in each document and in the corpus. However, text similarity means neither relatedness, nor a few shared topics of documents. Four major questions have to be answered, so that achieving the relatedness degree of documents can be formulated more properly: 
 
-\begin{itemize}
-    \item[1.] \label{q:1}[1] Can Semantic Text Similarity including string-based and vector space models methods be used to find related articles? How effective and efficient is the metrics of performance, such as precision and operating time?
-    \item[2.] \label{q:2}[2] Taking reducing time and memory usage into account, some documents, which are clearly unrelated to the target, should be filtered before processed by STS measures.  Can a filtering method based on data and meta-data be applied to reduce the number candidates that must be checked?
-    \item[3.] \label{q:3}[3] Is it useful to combine STS methods with semantic vector space? Does it yield to an improvement in performance or to a significant decrease of runtime?
-    \item[4.] \label{q:4}[4] The above introduced methods are unsupervised. Does it lead to an improvement when (semi-) supervised methods are utilized?
-\end{itemize}
+\begin{description}
+    \item[1.] \label{q:1} Can Semantic Text Similarity including string-based and vector space models methods be used to find related articles? How effective and efficient is the metrics of performance, such as precision and operational time?
+    \item[2.] \label{q:2} Taking reducing time and memory usage into account, some documents, which are clearly unrelated to the target, should be filtered before processed by STS measures.  Can a filtering method based on data and meta-data be applied to reduce the number candidates that must be checked?
+    \item[3.] \label{q:3} Is it useful to combine STS methods with semantic vector space? Does it yield to an improvement in performance or to a significant decrease of runtime?
+    \item[4.] \label{q:4} The above introduced methods are unsupervised and ignore other meta-data. Does it lead to an improvement with utilizing (semi-) supervised methods?
+\end{description}

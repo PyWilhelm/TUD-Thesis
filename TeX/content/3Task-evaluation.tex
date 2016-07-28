@@ -16,6 +16,26 @@ The record of each article consists of a structure of meta-data, which describe 
 
 
     
+
+
+\begin{description}
+    \item[\texttt{URL}] the hyperlink as the entry to access the article.
+
+    \item[\texttt{Title}] a descriptive heading or caption, in which the article is summarized.
+    \item[\texttt{Supertitle}] a label of the article, which indicates a particular theme under the category.
+    \item[\texttt{Summary}] a couple of sentences where is used for arousing the interest of reader and which are the explanation of the background or the summarization of the article. 
+    \item[\texttt{Author}] the writer of the article.
+    \item[\texttt{Release date}] the timestamp of publishing the article.
+    \item[\texttt{Category}] the category which the article belongs to.
+
+    \item[\texttt{Content}] the main body of the article.
+    
+    \item[\texttt{Keywords}] a couple of nouns or phrases which are significant for the article and can be used for retrieval. Normally, the vocabulary of all possible keywords is maintained manually. 
+
+    \item[\texttt{Related articles}] the recommendation for extended reading according to the current article. The related articles may have the same topic, similar background, or causal relationship to the current article.
+        
+\end{description}
+
     \begin{figure}[!htb]
     \centering
     \includegraphics[width=1\textwidth]{fig/article.pdf}
@@ -23,29 +43,9 @@ The record of each article consists of a structure of meta-data, which describe 
     \label{fig:article_structure}
     \end{figure}
 
-\begin{description}
-    \item[URL] the hyperlink as the entry to access the article.
+\subsubsection{Relatedness and Related-Graph}
 
-    \item[Title] a descriptive heading or caption, in which the article is summarized.
-    \item[Supertitle] a label of the article, which indicates a particular theme under the category.
-    \item[Summary] a couple of sentences where is used for arousing the interest of reader and which are the explanation of the background or the summarization of the article. 
-    \item[Author] the writer of the article.
-    \item[Release date] the timestamp of publishing the article..
-    \item[Category] the category which the article belongs to..
-
-    \item[Content] the main body of the article.
-    
-    \item[Keywords] a couple of nouns or phrases which are significant for the article and can be used for retrieval. Normally, the vocabulary of all possible keywords is maintained manually. 
-
-    
-    \item[Related articles] the recommendation for extended reading according to the current article. The related articles may have the same topic, similar background, or causal relationship to the current article.
-
-        
-\end{description}
-
-\subsubsection{Relatedness and Corpus-Graph}
-
-As introduced in the previous section, each article has one or two recommended articles. From the viewpoint of graph theory, the corpus is treated as a undirected graph, in which articles are regarded as vertices and the relationship of recommendation are as edges between the target article and recommended articles. Formally, two articles can be labeled as ``related''-by-$h$ to each other, if a path between them exists in the path and the length thereof is shorted than the pre-defined value $h$ (by default: 3). For instance represented in figure \ref{fig:relatedness}, article $A$ is related to article $B, C, D, E, F, F, G$, and unrelated to  article $H$ (too far from the target), $I, J, K$ (unreachable from the target). 
+As introduced in the previous section, each article has one or two recommended articles. From the viewpoint of graph theory, the corpus is treated as a undirected graph, in which articles are regarded as vertices and the relationship of recommendation are as edges between the target article and recommended articles. Formally, two articles can be labeled as ``related''-by-$h$ to each other, if a path between them exists in the graph and the length thereof is shorted than the pre-defined value $h$ (by default: $3$). For instance represented in figure \ref{fig:relatedness}, article $A$ is related to article $B, C, D, E, F, F, G$, and unrelated to  article $H$ (too far from the target), $I, J, K$ (unreachable from the target). We denote the graph as ``related-graph''.
  
 \begin{figure}[!htb]
     \centering
@@ -58,7 +58,7 @@ As introduced in the previous section, each article has one or two recommended a
 \subsection{Description of Task}
 \label{sec:3.2}
 
-In the past, the relationship of relatedness are labeled typically by the author. However, this way has some disadvantages. On the one hand, the job need more human costs. On the other hand, the selection of candidates is limited by the work capacity and knowledge of the author, and these level is not stable. So it is necessary to exploit an automatic framework to discover related articles. The input of the framework is a article represented in a structure described in section \ref{sec:3structure}, while the output is $k$ (in our case, $k=2$) articles which are marked as ``related'' normally with highest score or probability computed by the model. After determining the input and the expected output format, the main task is to train the model with the corpora of historical articles. The training methods are classified into unsupervised and supervised methods. The both kinds of methods are elaborated in section \ref{sec:5} and \ref{sec:6}. In the scenario of reality, articles come in chronological order and the corpora which is as dataset of candidates has to be updated timely, because articles which are close to each other in time prefer to be more related than articles which are distant in time (see section \ref{sec:4.6}). Furthermore, it is also essential to update the model, in order to improve the precision, while operation of updating is costly and will lead to decrease the operating performance. Another task is, hence, to find an incremental method of updating and the trade-off between the effectiveness (precision) and efficiency (operating performance). The high-level depiction is drawn in figure~\ref{fig:highlevel}. 
+The relationship of relatedness are labeled typically by the author at the moment. However, this way has some disadvantages. On the one hand, the job need more labor cost. On the other hand, the selection of candidates is limited by the capacity and knowledge of the author, and there is no standard to evaluate. So it is necessary to exploit an automatic framework to discover related articles. The input of the framework is a series of instances representing the article in the structure described in section \ref{sec:3structure}, while the output is $k$ (in our case, $k=2$) articles which are marked as ``related'' normally with highest score or probability. After determining the input and the expected output format, the crucial task is to train the model using the corpora of historical articles and the related-graph. In the scenario of reality, articles come in chronological order and the dataset of candidates has to be updated timely, because articles which are close to each other in time prefer to be more related than articles which are distant in time (see section \ref{sec:6.XXX}). In addition, it is also essential to update the model, in order to improve the precision, while operation of updating is costly and will lead to decrease the operating performance. The other task is, hence, to find an incremental method of updating to make balance between the effectiveness (precision) and efficiency (operational performance). The high-level depiction is drawn in figure \ref{fig:highlevel}. 
 
 \begin{figure}[!htb]
     \centering
@@ -70,11 +70,11 @@ In the past, the relationship of relatedness are labeled typically by the author
 \subsection{Evaluation Method}
 \label{sec:3.3}
 
-Effectiveness and efficiency are two main performance indicator. Effectiveness is about doing the right things. particularly in our case, it refers to whether the framework discovers related articles. Efficiency is about doing the things in optimal way, i.e., how much time and memory usage a series of operations to find related articles consumes. 
+Effectiveness and efficiency are two main performance indicators. Effectiveness is about doing the right things. Particularly in our case, it refers to how precise related articles are discovered by the framework. Efficiency is about doing the things in optimal way, i.e., how much time a series of operations to find related articles consumes. 
 
 \subsubsection{Effectiveness}
 
-The evaluation of effectiveness can be separated into two parts. One of them is to evaluate how well the final results and the other one is to indicate how well the entire ranking of candidates are computed by the framework given the target article. \textit{Precision@k@h} is used for the former and \textit{normalized Discounted Cumulative Gain} (\textit{nDCG}) is applied for the latter. 
+The evaluation of effectiveness can be separated into two parts. One of them is \textit{precision@k@h} which is used for evaluating how available the final results are in the real application and the other one is \textit{normalized Discounted Cumulative Gain} (abbr. \textit{nDCG})  to indicate how similar the entire results of the relatedness degree of candidates which are computed by the framework is compared with the ideal relatedness degree.
 
 \textit{Precision@k@h} is defined as the ratio of the number of the correct predictions to the number of predictions. Formally, given the corpora $D = \{d_1, d_2, \cdots, d_n\}$, a target set $T = \{t_1, t_2, \cdots, t_s\}$, the framework predicts $k$ related articles $P_i = \{d_{i_1}, \cdots, d_{i_k}\}$ for each article $i$ in $T$. Articles, which are at most $h$-hops apart from the target article, are regarded as the set $R_i^h$ of the true related articles of the article $i$ in $T$. 
 \begin{equation}
@@ -93,4 +93,4 @@ Where $r_{d_i}$ is the position of $d_i$ of the ideal ranking which is generated
 
 \subsubsection{Efficiency}
 
-The newspaper is quite time-sensitive, so that it is significant that all tasks inclusive of discovery related articles should be completed as soon as possible. The time and memory usage of building model, predicting and updating model should be evaluated respectively. We focus mainly on the divergence between different methods in order to compare their relative merits, whereas the concrete value of time cost and memory usage depends on the performance of hardware and hence we discuss just whether the cost is in a reasonable range. For instance, the operation of predicting should be finshed in one minute maximal and it is reasonable and tolerable that building model is completed in one day or even a couple days. 
+The newspaper is time-sensitive, so that it is significant that all tasks inclusive of discovery related articles should be completed as soon as possible. The time usage of model building, predicting and model updating should be evaluated respectively. We focus mainly on the divergence between different methods in order to compare their relative merits, whereas the concrete value of time cost and memory usage depends on the performance of hardware and hence we discuss just whether the cost is in a reasonable range. For instance, the operation of predicting should be finished in one minute maximal and it is reasonable and tolerable that building model is completed in one day or even a couple days. 
