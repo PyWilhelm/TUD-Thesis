@@ -239,32 +239,27 @@ A false positive error is, in our case, a result that indicates an article which
     
     Example:
     \begin{itemize}
-        \item \textit{Uni Leipzig droht mit Schlie\ss{}ung ganzer Fakult\"aten} (\textit{Without grass no fun}) \footnote{\url{http://www.zeit.de/studium/hochschule/2014-02/universitaet-leipzig-finanzierung}}
-        \item \textit{Drittmittel sind ungleich verteilt} (\textit{Juggling relaxed and makes you smart}) \footnote{\url{http://www.zeit.de/studium/hochschule/2014-02/Drittmittel-an-Hochschulen}}
-    \end{itemize}    
+    \item \textit{Drittmittel sind ungleich verteilt} (\textit{Third-party funds are distributed unequally}) \footnote{\url{http://www.zeit.de/studium/hochschule/2014-02/Drittmittel-an-Hochschulen}}
+    \item \textit{Uni Leipzig droht mit Schlie\ss{}ung ganzer Fakult\"aten} (\textit{Uni Leipzig threatened with closure of entire faculties}) \footnote{\url{http://www.zeit.de/studium/hochschule/2014-02/universitaet-leipzig-finanzierung}}
+    \end{itemize}
+    The first article discusses the phenomenon of education abstractly, while the second reports the very concrete expression in a specific university. They are not similar semantically, but related because of the same topic.
     
-    b. 讨论同一主题下的不同分支内容    
+    
+    \item Humans classify an articles into topics hierarchically rather than separately. Two articles may be related in higher level but different in the particular level. The critical point is how the humans determine which level is the most important. 
     
     Example:
     \begin{itemize}
-        \item \textit{Der Jugendschutzfilter blockiert zu viel} (\textit{Without grass no fun}) \footnote{\url{http://www.zeit.de/digital/internet/2012-02/jugendschutzfilter-filtern-blogs}}
-        \item \textit{Filmwirtschaft weitet Selbstkontrolle auf Internet aus} (\textit{Juggling relaxed and makes you smart}) \footnote{\url{http://www.zeit.de/kultur/film/2011-10/fsk-jugendschutz-internet}}
+        \item \textit{Der Jugendschutzfilter blockiert zu viel} (\textit{The youth safety filter blocking too much}) \footnote{\url{http://www.zeit.de/digital/internet/2012-02/jugendschutzfilter-filtern-blogs}}
+        \item \textit{Filmwirtschaft weitet Selbstkontrolle auf Internet aus} (\textit{Film industry is expanding self-regulation on the Internet}) \footnote{\url{http://www.zeit.de/kultur/film/2011-10/fsk-jugendschutz-internet}}
     \end{itemize}    
-
-
-    c. 只是基于同样的背景，而描述的事情并不相同，只是表达的情感、理念或观点相同。
-
-    Example:
-    \begin{itemize}
-        \item \textit{``Die Koordination durch Tepco ist oft furchtbar''} (\textit{Without grass no fun}) \footnote{\url{http://www.zeit.de/wissen/umwelt/2014-03/interview-fukushima-drei-jahre-arbeiter/komplettansicht}}
-        \item \textit{Ge\"achtet wie einst Japans Atombomben-Opfer} (\textit{Juggling relaxed and makes you smart}) \footnote{\url{http://www.zeit.de/wissen/gesundheit/2014-03/fukushima-strahlenopfer-stigma-radioaktivitaet}}
-    \end{itemize}    
+    
+    The first article reports the current situation of the youth safety filter and the second article reports that the change of film industry on the Internet may harm the youth protection. These two article share the same topic on ``youth procection'' but have difference on the particular fields. They are labeled as related based on the editor's understanding. However, this judgement is not absolutely correct. 
     
 \end{itemize}
 
 
-\subsection{Conclusion}
-\label{sec:5.6}
-1. 分析了性能，分析了错误
-2. 最好的是content-1-tfidf，其他的见表格
-3. 问题是没有使用corpus中的标记，即保存的人工标记related。利用这些数据，会训练出更加specific更加precise的模型，在下一章详细说明。
+%\subsection{Conclusion}
+%\label{sec:5.6}
+%1. 分析了性能，分析了错误
+%2. 最好的是content-1-tfidf，其他的见表格
+%3. 问题是没有使用corpus中的标记，即保存的人工标记related。利用这些数据，会训练出更加specific更加precise的模型，在下一章详细说明。
