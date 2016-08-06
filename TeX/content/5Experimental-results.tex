@@ -173,12 +173,38 @@ In conclusion, we determine the final selection of the best model for each datas
 \label{tab:select}
 \end{table}
 
+\clearpage
+
 \subsection{Results of Incremental Updating}
 \label{sec:5.4}
 
+As described in section \ref{sec:4.4}, the whole corpus is splitted into a historic dataset in which the articles are released before 2012 and which is used for initializing the system as well as a testing dataset containing the released after 2012 articles which is used for both of evaluating the system and updating the system incrementally. In the practical point of view,  The candidates of related articles for a target article must be released before the target. We have two main purposes of the experiment. On the one hand, we attempt to find the differences between the results of the system with incremental updating and the results of the controlled experiment and analyse whether the differences are acceptable and  the reason why the differences occur. On the other hand, we focus on the balance between the step of updating and the corresponding additional cost of time. 
+
+Before analyzing the results, we define a controlled experiment in advance. The system in the controlled experiment is static and complete. The only difference between the evaluated system and the controlled system is the training dataset. The training dataset in the evaluated system is initialized with the released before 2012 articles and updated in the predicting phase, and, at the meanwhile, the system is updated at some predefined  at some particular time points. In contrast, the training dataset in the controlled system is definitely the entire corpus and the controlled system stays constant in the predicting phase. The characteristics of the system with incremental updating is exposed by comparing the results of the two experiments.  
+
+Without loss of generality, we select the best STS method for every preprocessed text field (see table \ref{tab:select}). In addition, LSI in the text field \icontent{} with unigram is chosen as well, in order to be a typical case to evaluate the performance of topic models in experiment 2.
+
+
 \subsubsection{Effectiveness}
 
+In this part, only the metric \textit{precision} is chosen to evaluate effectiveness. Instead of the mean of \textit{precision} of all target articles in experiment 1, we compute the average \textit{precision} using moving average, which is often applied with time series data to smooth out short-term fluctuations and highlight longer-term trends or cycles. A common application of moving average is to analyze stock prices. In our case, we calculate the moving mean of \textit{precision} of the $i$-th target article and $n-1$ previous targets mathematically as follows:
+
+\begin{equation}
+    MM_{i} = \frac{\sum^{n-1}_{j=0} \text{correct predictions for }(i-j)}{2\times n}
+\end{equation}
+where $n$ is the moving window size and pre-defined as $100$. 
+
+\paragraph{Incremental and Constant System}
+
+
+
+1. 不同methods的precision的变化曲线的横向对比：与实验一结论一致，但是precision低于实验一，主要原因可能是实验二只比较早于自己release的articles，number of related articles比实验一少，所以命中率低。
+2. 同一个method的precision与非增量算法得到的precision、每个article拥有的related articles数量曲线、模型更新点做纵向对比：incremental方法的precision略低于non-incremental，但是曲线形状基本一致；同时也与no. related articles一致，在模型更新之后delta-precision下降，随着模型的过时，delta-precision上升。
+
 \subsubsection{Efficiency}
+1. model updating time 绝对时间和在整个过程中的占比为多少。
+2. predicting time是否与实验一保持一致。
+
 
 \subsection{Error Analysis}
 \label{sec:5.5}
