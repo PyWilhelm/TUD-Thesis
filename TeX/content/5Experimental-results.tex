@@ -178,33 +178,38 @@ In conclusion, we determine the final selection of the best model for each datas
 \subsection{Results of Incremental Updating}
 \label{sec:5.4}
 
-As described in section \ref{sec:4.4}, the whole corpus is splitted into a historic dataset in which the articles are released before 2012 and which is used for initializing the system as well as a testing dataset containing the released after 2012 articles which is used for both of evaluating the system and updating the system incrementally. In the practical point of view,  The candidates of related articles for a target article must be released before the target. We have two main purposes of the experiment. On the one hand, we attempt to find the differences between the results of the system with incremental updating and the results of the controlled experiment and analyse whether the differences are acceptable and  the reason why the differences occur. On the other hand, we focus on the balance between the step of updating and the corresponding additional cost of time. 
+As described in section \ref{sec:4.4}, the whole corpus is splitted into a historic dataset, in which the articles are released before 2012 and which is used for initializing the system, and a testing dataset containing the released after 2012 articles, which is used for both of evaluating the system and updating the system incrementally. In the sight of reality, the candidates of related articles for a target article must be released before the target. We have two main purposes of the experiment. On the one hand, we attempt to find the differences between the results of the system with incremental updating and the results of the controlled experiments and analyse whether the differences are acceptable and the reason why the differences occur. On the other hand, we focus on the trade-off between the step of updating and the corresponding additional cost of time. 
 
-Before analyzing the results, we define a controlled experiment in advance. The system in the controlled experiment is static and complete. The only difference between the evaluated system and the controlled system is the training dataset. The training dataset in the evaluated system is initialized with the released before 2012 articles and updated in the predicting phase, and, at the meanwhile, the system is updated at some predefined  at some particular time points. In contrast, the training dataset in the controlled system is definitely the entire corpus and the controlled system stays constant in the predicting phase. The characteristics of the system with incremental updating is exposed by comparing the results of the two experiments.  
+Before analyzing the results, we define the controlled experiments in advance. The system in the controlled experiments is constant. It means, the systems are trained only in the phase of initialization and keep constant after that. In the first experiment, the STS methods in the system is learned from the candidate corpus, or, in other words, the released before 2012 articles. Accordingly the system contains only the semantic information before the first target is released and we say this system is ``out-of-date''. In the second experiment, there is only one difference from the first experiment, that the STS methods are trained by the all complete articles and the system contains therefore the complete semantic information of the entire corpus. The second controlled system is a ``coverall'' system. Any article which is released before the target is transformed as the corresponding representation by the STS methods. Let $CS1$ denote the first controlled system, $CS2$ denote the second and $ES$ denote the evaluated system. The comparison between the evaluated system and the controlled systems is able to indicate the particular characteristics of the system with incremental updating and the differences from the ``out-of-date'' system and ``coverall'' system. 
 
-Without loss of generality, we select the best STS method for every preprocessed text field (see table \ref{tab:select}). In addition, LSI in the text field \icontent{} with unigram is chosen as well, in order to be a typical case to evaluate the performance of topic models in experiment 2.
-
+Jaccard and BoW are not involved in the evaluation. These two methods are only dependent on the current articles and independent of the rest information of the corpus. The model updating therefore does not affect the results of the semantic similarity from Jaccard and BoW. Consequently, the evaluation concentrates on three VSMs, namely tf-idf and LSI (due to the high complexity and low performance, LDA is ignored). Based on the result of experiment 1, the preprocessed field \icontent{} with unigram always outperforms other preprocessed fields. In this experiment, we only discuss the performance of the three STS methods in \icontent{} with unigram. 
 
 \subsubsection{Effectiveness}
 
-In this part, only the metric \textit{precision} is chosen to evaluate effectiveness. Instead of the mean of \textit{precision} of all target articles in experiment 1, we compute the average \textit{precision} using moving average, which is often applied with time series data to smooth out short-term fluctuations and highlight longer-term trends or cycles. A common application of moving average is to analyze stock prices. In our case, we calculate the moving mean of \textit{precision} of the $i$-th target article and $n-1$ previous targets mathematically as follows:
+Instead of \textit{precision@k@h} used in experiment 1, we compute the precision with moving average, which is often applied with time series data to smooth out short-term fluctuations and highlight longer-term trends or cycles. A typical application of moving average is to analyze stock prices. In our case, we calculate the moving mean precision (MMP) of the $i$-th target article and $n-1$ previous targets mathematically as follows:
 
 \begin{equation}
-    MM_{i} = \frac{\sum^{n-1}_{j=0} \text{correct predictions for }(i-j)}{2\times n}
+    MM_{i} = \frac{\sum^{n-1}_{j=0} \text{correct predictions for }(i-j)}{k\times n}
 \end{equation}
-where $n$ is the moving window size and pre-defined as $100$. 
+where $n$ is the moving window size and pre-defined as $100$ and $k$ is the number of related articles for each target. 
 
-\paragraph{Incremental and Constant System}
+\paragraph{Comparison with Controlled Systems}
 
 
 
 1. 不同methods的precision的变化曲线的横向对比：与实验一结论一致，但是precision低于实验一，主要原因可能是实验二只比较早于自己release的articles，number of related articles比实验一少，所以命中率低。
 2. 同一个method的precision与非增量算法得到的precision、每个article拥有的related articles数量曲线、模型更新点做纵向对比：incremental方法的precision略低于non-incremental，但是曲线形状基本一致；同时也与no. related articles一致，在模型更新之后delta-precision下降，随着模型的过时，delta-precision上升。
 
-\subsubsection{Efficiency}
-1. model updating time 绝对时间和在整个过程中的占比为多少。
-2. predicting time是否与实验一保持一致。
+\paragraph{Correlation with the number of true related articles}
 
+\paragraph{Impact of updating}
+
+
+\subsubsection{Efficiency}
+
+1. 总体来说，predicting的时间随着corpus的增加呈现线性递增，大概每100个articles增加xx\%；building时间也是线性递增，增长率为：
+2. 在两次update之间，predicting时间呈现一个较高比率的增加，平均值为：而在update之后，时间则回落到正常值，主要原因是需要构建额外的matrix来计算similarity，这个可能是可以优化的空间。
+3. 对于tfidf, bulding predicting时间比值平均为1.1 而lsi此比值为4.3。当然这个时间是dependent on update频率。 明显lsi所需要的building时间要更大。 考虑单次update的情况，这个占比是随着corpus的不断增长而有较为缓慢的下降的，也就是说predicting的时间的增长率要比building的时间增长率高。
 
 \subsection{Error Analysis}
 \label{sec:5.5}

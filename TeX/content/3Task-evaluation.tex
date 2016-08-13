@@ -1,38 +1,30 @@
 \section{Description of Dataset, Task and Evaluation}
 \label{sec:3}
 
-In this section we introduce the target dataset, the structure of articles and the relationship between articles which is regarded as a graph, called corpus-graph. Then, we bring forward the task of our work that a framework or a recommendation system is designed to discover related articles automatically instead of accomplishing the job manually. The final goals is to make the break-even point between the precision of predicting and the operating performance. In the end of the section, we discuss which evaluation methods are chosen and the reason thereof. 
+In this section we introduce the target dataset, the structure of articles and the relationship between articles in section \ref{sec:3.1}, called corpus-graph. Then, we bring forward our task that a framework or a recommendation system is designed to discover related articles automatically instead of accomplishing the job manually in section \ref{sec:3.2}. The final objective is to make the break-even point between the precision of predicting and the operating performance. In the end of the section, we discuss which evaluation methods are chosen and the reason thereof. 
 
 \subsection{Description of Dataset}
 \label{sec:3.1}
 
-Our task concentrates on the corpus \textbf{ZEIT} ONLINE. ``DIE ZEIT'' (eng. ``the time'') is a German national weekly newspaper and ``ZEIT ONLINE''\footnote{ZEIT ONLINE: \url{http://www.zeit.de/index}} is the corresponding online representation. More than 300,000 articles, which are released between 1946 and 2014 and marked into 20 different categories, are collected in the corpus. Basically, one or two articles are indicated as recommended reading for each article. In the past, normally, this kind of assignments is completed by editors manually. The motivation of this research is to find an automatic or semiautomatic alternative approach to accomplish the job. Foremost, the elementary information and statistic are useful for a better understanding of the corpus. 
+The corpus \textbf{ZEIT} ONLINE is the data source of our task. ``DIE ZEIT'' (eng. ``the time'') is a German national weekly newspaper and ``ZEIT ONLINE''\footnote{ZEIT ONLINE: \url{http://www.zeit.de/index}} is the corresponding online representation. More than 300,000 articles, which are released between 1946 and 2014 and belong to 20 different categories, are collected in the corpus. Basically, one or two articles are indicated as recommended reading for each article. Normally, this type of assignments is completed by editors manually. The motivation of this research is to find an automatic or semi-automatic approach to accomplish the job. Foremost, the elementary information and statistic are useful for a better understanding of the corpus. 
 
 \subsubsection{Meta-data and Structure}
 \label{sec:3structure}
 
-The record of each article consists of a structure of meta-data, which describe the elementary information of the article. The structure is introduced briefly in this section. Then a typical example is depicted in figure~\ref{fig:article_structure}.
-
-
-
-    
-
+The instance of each article consists of a structure of meta-data, which maintains the elementary information of the article. The structure is introduced detailed in this section. Then a typical instance is depicted in figure \ref{fig:article_structure}.
 
 \begin{description}
     \item[\texttt{URL}] the hyperlink as the entry to access the article.
 
     \item[\texttt{Title}] a descriptive heading or caption, in which the article is summarized.
-    \item[\texttt{Supertitle}] a label of the article, which indicates a particular theme under the category.
-    \item[\texttt{Summary}] a couple of sentences where is used for arousing the interest of reader and which are the explanation of the background or the summarization of the article. 
+    \item[\texttt{Supertitle}] a label of the article, which indicates a particular theme under the category or the most important keyword.
+    \item[\texttt{Summary}] a couple of sentences which is used for arousing the interest of readers and which are the explanation of the background or the summarization of the article. 
     \item[\texttt{Author}] the writer of the article.
     \item[\texttt{Release date}] the timestamp of publishing the article.
     \item[\texttt{Category}] the category which the article belongs to.
-
     \item[\texttt{Content}] the main body of the article.
-    
-    \item[\texttt{Keywords}] a couple of nouns or phrases which are significant for the article and can be used for retrieval. Normally, the vocabulary of all possible keywords is maintained manually. 
-
-    \item[\texttt{Related articles}] the recommendation for extended reading according to the current article. The related articles may have the same topic, similar background, or causal relationship to the current article.
+    \item[\texttt{Keywords}] a couple of named entities which are significant for the article and can be used for text retrieval. Normally, the vocabulary of all possible keywords is maintained manually. 
+    \item[\texttt{Related articles}] the recommendation for extended reading. The related articles may have the same topic, similar background, or causal relationship to the current article.
         
 \end{description}
 
@@ -45,7 +37,7 @@ The record of each article consists of a structure of meta-data, which describe 
 
 \subsubsection{Relatedness and Related-Graph}
 
-As introduced in the previous section, each article has one or two recommended articles. From the viewpoint of graph theory, the corpus is treated as a undirected graph, in which articles are regarded as vertices and the relationship of recommendation are as edges between the target article and recommended articles. Formally, two articles can be labeled as ``related''-by-$h$ to each other, if a path between them exists in the graph and the length thereof is shorted than the pre-defined value $h$ (by default: $3$). For instance represented in figure \ref{fig:relatedness}, article $A$ is related to article $B, C, D, E, F, F, G$, and unrelated to  article $H$ (too far from the target), $I, J, K$ (unreachable from the target). We denote the graph as ``related-graph''.
+As introduced in the previous section, each article has one or two recommended articles. From the viewpoint of graph theory, the corpus is treated as a undirected graph, in which articles are regarded as vertices and the relationship of recommendation are as edges between the target article and recommended articles. We define the term ``related'' as the relationship between articles. We say that two articles are related to each other, if a path between them exists and the length of the path is not greater than the pre-defined threshold $h$ \footnote{$3$ is a reasonable value of the threshold through manual observation}. For the instance which is represented in figure \ref{fig:relatedness}, article $A$ is related to article $B, C, D, E, F, F, G$, and unrelated to article $H$ (too far from the target), $I, J, K$ (unreachable from the target). We call the graph as ``related-graph''.
  
 \begin{figure}[!htb]
     \centering
@@ -58,7 +50,7 @@ As introduced in the previous section, each article has one or two recommended a
 \subsection{Description of Task}
 \label{sec:3.2}
 
-The relationship of relatedness are labeled typically by the author at the moment. However, this way has some disadvantages. On the one hand, the job need more labor cost. On the other hand, the selection of candidates is limited by the capacity and knowledge of the author, and there is no standard to evaluate. So it is necessary to exploit an automatic framework to discover related articles. The input of the framework is a series of instances representing the article in the structure described in section \ref{sec:3structure}, while the output is $k$ (in our case, $k=2$) articles which are marked as ``related'' normally with highest score or probability. After determining the input and the expected output format, the crucial task is to train the model using the corpora of historical articles and the related-graph. In the scenario of reality, articles come in chronological order and the dataset of candidates has to be updated timely, because articles which are close to each other in time prefer to be more related than articles which are distant in time (see section \ref{sec:6.XXX}). In addition, it is also essential to update the model, in order to improve the precision, while operation of updating is costly and will lead to decrease the operating performance. The other task is, hence, to find an incremental method of updating to make balance between the effectiveness (precision) and efficiency (operational performance). The high-level depiction is drawn in figure \ref{fig:highlevel}. 
+The relationship of relatedness are labeled typically by the author currently. However, this way has some disadvantages. On the one hand, the job need more labor cost. On the other hand, the selection of candidates is limited by the capacity and knowledge of the author, and there is no standard to evaluate. So it is necessary to exploit an automatic system to discover related articles. The input of the system is the structured instance of the corresponding article, which is about to publish and requires the list of related articles as the attachment. The output of the system is therefore the required list of the most ``related'' articles. The system maintains a collection of articles which are processed by a series of components of the system, e.g. vectorization. Each stored in the system article is called as a \textit{candidate} of potential related articles and the collection of all candidates is called the \textit{candidate corpus}. After determining the input and the expected output format, the crucial task is to train the model with utilizing the corpora of all achieved articles and the truth related-graph. In the scenario of reality, articles are fed to the system in chronological order and the candidate corpus has to be updated timely, since an article prefers to be more related to articles which are published in a close time	interval than to articles which are distant in time (see section \ref{sec:6.XXX}). In addition, it is also essential to update the model, in order to improve the precision, while operation of updating is costly and leads to decrease the operating performance. The other task is, hence, to find an incremental method of updating to make balance between the effectiveness (precision) and efficiency (operational performance). The high-level depiction is drawn in figure \ref{fig:highlevel}. 
 
 \begin{figure}[!htb]
     \centering
@@ -74,14 +66,14 @@ Effectiveness and efficiency are two main performance indicators. Effectiveness 
 
 \subsubsection{Effectiveness}
 
-The evaluation of effectiveness can be separated into two parts. One of them is \textit{precision@k@h} which is used for evaluating how available the final results are in the real application and the other one is \textit{normalized Discounted Cumulative Gain} (abbr. \textit{nDCG})  to indicate how similar the entire results of the relatedness degree of candidates which are computed by the framework is compared with the ideal relatedness degree.
+We apply two evaluation methods. One of them is \textit{precision@k@h} which is used for evaluating how available the final results are in the real application and the other one is \textit{normalized Discounted Cumulative Gain} (\textit{nDCG}). NDCG is a measure of ranking quality and indicates how different the relatedness degree ranking of articles which is computed by the system is compared to the ideal ranking which are generated by the hand-made labels of the historic corpus. 
 
-\textit{Precision@k@h} is defined as the ratio of the number of the correct predictions to the number of predictions. Formally, given the corpora $D = \{d_1, d_2, \cdots, d_n\}$, a target set $T = \{t_1, t_2, \cdots, t_s\}$, the framework predicts $k$ related articles $P_i = \{d_{i_1}, \cdots, d_{i_k}\}$ for each article $i$ in $T$. Articles, which are at most $h$-hops apart from the target article, are regarded as the set $R_i^h$ of the true related articles of the article $i$ in $T$. 
+\textit{Precision@k@h} is defined as the ratio of the number of the correct predictions to the number of predictions at the top $k$ positions. Formally, given the candidate set, $D = \{d_1, d_2, \cdots, d_n\}$ and a set of targets, $T = \{t_1, t_2, \cdots, t_s\}$, the system discovers $k$ related articles $P_i = \{d_{i_1}, \cdots, d_{i_k}\}$ for each article $i$ in $T$. $h$ denotes the maximum distance of two related to each other articles in the related-graph. 
 \begin{equation}
     precision@k@h = \frac{\sum_{i=1}^s{|P_i \cap R_i^h|}}{k \cdot |T|}
 \end{equation}
 
-Unlike \textit{precision@k@h} which is applied to evaluate the final results of the framework, \textit{nDCG}, which is a measure of ranking quality in the field of information retrieval, focuses to evaluate the relatedness degree of the entire candidates. The framework makes a ranking of all $n$ candidates by the relatedness score or probability for a given target article $t$. Note that a article $d_i$ is placed at the position $i$ in the ranking. The relatedness degree is defined as $2^{-l}$ where $l$ is the distance between two articles in the corpus-graph.\footnote{$l=+\infty$ and the degree is $0$, if the articles are unreachable to each other.} We denote the degree between the target $t$ and a candidate $d_i$ by $ref_{d_i}^t$.
+Unlike \textit{precision@k@h} which is applied to evaluate the final results of the system, \textit{nDCG}, which is a measure of ranking quality in the field of information retrieval, focuses to evaluate the relatedness degree of the entire candidates. The system makes a ranking of all $n$ candidates by the relatedness score or probability for a given target article $t$. Note that an article $d_i$ is placed at the position $i$ in the ranking. The relatedness degree is defined as $2^{-l}$ where $l$ is the distance between two articles in the related-graph.\footnote{$l=+\infty$ and the degree is hence $0$, if the articles are unreachable to each other.} We denote the degree between the target $t$ and a candidate $d_i$ by $ref_{d_i}^t$.
 
 The formula to compute \textit{nDCG} of a target article $t$ is as followed. 
 
@@ -89,7 +81,7 @@ The formula to compute \textit{nDCG} of a target article $t$ is as followed.
    & nDCG_t = \frac{DCG_t}{IDCG_t} = (\sum_{i=1}^n\frac{ref_{d_i}^t-1}{log_2(i+1)})/(\sum_{i=1}^n\frac{ref_{d_i}^t-1}{log_2(r_{d_i}+1)})
 \end{align}
 
-Where $r_{d_i}$ is the position of $d_i$ of the ideal ranking which is generated by ordering by the relatedness degree. The \textit{nDCG} of the target set is $nDCG = \sum_{t \in T}nDCG_t$/s.
+where $r_{d_i}$ is the position of $d_i$ of the ideal ranking. The \textit{nDCG} of the target set is $nDCG = \sum_{t \in T}nDCG_t/s$, where $s$ is the number of targets.
 
 \subsubsection{Efficiency}
 
