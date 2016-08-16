@@ -4,7 +4,7 @@
 
 The purpose of this section is to design experiments to evaluate how the STS methods which are aforementioned in section \ref{sec:2} work in effectiveness and efficiency together with different text fields. In addition, we also give the conditions, parameters and settings to support the experiments working. 
 
-In section \ref{sec:4.1} the theoretical feasibility and challenge is discussed. The definition of terms and notations which are used in this section and the following sections is brought forwards in section \ref{sec:4.2}. In section \ref{sec:4.3} we discuss the architecture and the working procedure of the system. Section \ref{sec:4.4} mentions the design of experiments according to the application scenarios and depict the architecture of the framework. The list of the hardware and software which are applied for the experiments is enumerated in section \ref{sec:4.5} briefly. Furthermore, the setup of datasets which are used as training data and testing data is described in section \ref{sec:4.6}
+In section \ref{sec:4.1} the theoretical feasibility and challenge is discussed. The definition of terms and notations which are used in this section and the following sections is brought forwards in section \ref{sec:4.2}. In section \ref{sec:4.3} we discuss the architecture and the working procedure of the system. Section \ref{sec:4.4} mentions the design of experiments according to the application scenarios and depict the architecture of the framework. Furthermore, the setup of datasets which are used as training data and testing data is described in section \ref{sec:4.6} In the end, the list of the hardware and software which are applied for the experiments is enumerated in section \ref{sec:4.5} briefly.
 
 \subsection{Theoretical Feasibility and Challenge}
 \label{sec:4.1}
@@ -23,105 +23,83 @@ Certainly, discovery related articles using similarity methods leads to bias. It
 \subsection{Definition and Notions}
 \label{sec:4.2}
 
-In the following sections, a series of concepts is mentioned frequently. In order to avoid ambiguity and misapprehension, the definition and interpretation of these terms are given in the following list.
+In the following sections, a series of concepts are mentioned frequently. In order to avoid ambiguity and misapprehension, the definition and interpretation of these terms are given in the following list.
 
 \begin{description}
-\item[\texttt{Article}] an instance of a piece of news or report, which contains the complete information, scilicet title, summary and content which performs in text form as well as meta-data. Denoted as $D$.
-\item[\texttt{Document}] a specific component of an article which refers to the string of content without any explicit declaration as well as the string of title or summary when an explicit declaration is given. Denoted as $d$.
-\item[\texttt{Historic dataset}] the dataset in which all articles are as training data to build the model and are computed similarity with the newcome article. 
-\item[\texttt{Candidate}] any article in the historic dataset.
-\item[\texttt{Text source}] a general designation of title, summary and content of the article.
-\item[\texttt{Preprocessed dataset}] From each article $3\times3=9$ different outcomes are generated after preprocessing phase. They are unigram-content, bigram-content, trigram-content, unigram-title, bigram-title, trigram-title, unigram-summary, bigram-summary and trigram-summary. The general designation of the set of each kind of outcomes is called a preprocessed dataset (abbr. PDS). 
+\item[\texttt{Article}] an instance of a piece of news or report, which contains the complete information containing title, summary and content, which express in string form, and meta-data. Denoted as $D$.
+\item[\texttt{Document}] a specific component of an article which refers to the string of content, title or summary. Without any explicit declaration, the document refers particularly to content. Denoted as $d$.
+\item[\texttt{Candidate dataset}] the dataset in which all articles are as training data to build or update the model and used as candidates to be judged related articles. 
+\item[\texttt{Candidate}] an instance in the candidate dataset.
+\item[\texttt{Text field}] a general designation of title, summary and content of the article. 
+\item[\texttt{N-gram field}] From each article $3\times3=9$ different outcomes are generated after preprocessing phase. They are unigram-content, bigram-content, trigram-content, unigram-title, bigram-title, trigram-title, unigram-summary, bigram-summary and trigram-summary. The general designation of the set of each kind of outcomes is called a n-gram field (abbr. NGF). 
 \item[\texttt{Token}] the elementary semantic unit of a document.
-\item[\texttt{Word}] (in the n-gram models) the elementary semantic unit of a document, which consists of $n$ adjacent tokens. For the case of $n > 1$, the concept ``phrase'' is more precise. However, we still use the uniform notion ``word'', to avoid the possible confusion. Denoted as $w_i$. 
+\item[\texttt{Word}] (in the n-gram models) the elementary semantic unit of a document, which consists of $n$ adjacent tokens. ``Word'' is the same concept of ``token'', when $n$ equals $1$. In the case of $n > 1$, the concept ``phrase'' is more precise. However, we still use the uniform notion ``word'', to avoid the possible confusion. Denoted as $w_i$. 
 \item[\texttt{Vocabulary}] the set of words which occur in the corpus. In VSMs, the vocabulary contains the words which occur in the corpus at least $k$ times (in our case, $k=5$), in order to reduce the dimension of term-weighted vectors. 
 \item[\texttt{Term}] the unique item of the vocabulary $V$ which is generated by the entire corpus. Denoted as $t_i \in V$. 
-\item[\texttt{Related-graph}] the graph in which the vertices are connected to each other according to the recommendation relationship which is stored in the corpus. If a path with two vertices exists, the corresponding articles are regarded as related to each other with the length $h$ of the path. Denoted the two articles are related with \textbf{hop-$h$}.
+\item[\texttt{Related-graph}] the graph in which the vertices are connected to each other according to the recommendation relationship which is stored in the corpus. If a path with two vertices exists, the corresponding articles are regarded as related to each other with the length $h$ of the path. Denoted the two articles are related with \textbf{$h$-hop}.
 
 \label{tab:def_terms}
 \end{description}
 
 
-\subsection{Architecture of Framework and Experiments Design}
+\subsection{Architecture of System and Experiments Design}
 \label{sec:4.3}
 
-The high-level architecture of the framework was already depicted in figure \ref{fig:highlevel}. In this section, we explain how the framework predicts related articles and improves itself. 
+The high-level architecture of the system was already depicted in figure \ref{fig:highlevel}. In this subsection, we explain how the system discovers related articles. 
 
-The framework consists of four phases of preprocessing, model building, similarity computing and model updating. The architecture of the framework is illustrated in figure \ref{fig:unsupervised}. 
+The system consists of four components including preprocessing, model building, similarity computing and model updating. The architecture of the system is illustrated in figure \ref{fig:unsupervised}. 
 
 \begin{figure}[!htb]
     \centering
     \includegraphics[width=0.7\textwidth]{fig/unsupervise}
-    \caption{The architecture of the framework to discover related articles.}
+    \caption{The architecture of the system to discover related articles.}
     \label{fig:unsupervised}
 \end{figure}
 
-
 \subsubsection{Preprocessing}
-The original data of title, summary and content is stored in the strings in HTML format. After all markups are removed and all characters are converted to small case, preprocessing separates the strings into the respective sequences of tokens. Four common methods are explained as follows:
+The original data of title, summary and content is stored in the strings in HTML format. After all markups are removed and all characters are converted to small case, a preprocessing method separates the strings into the respective sequences of tokens. Four alternative methods are explained as follows:
 
 \begin{description}
-\item[\texttt{\underline{SP}lit}] The string is splitted into a sequence of tokens with the special characters (whitespace, hyphen and punctuations). 
-\item[\texttt{\underline{S}t\underline{E}m}] Tokens, which are the result from the method \textit{SP} are replaced by the respective stems. For example, ``book'' is the stem of ``books'', ``booking'' and ``booked''. The advantage of stemming is to reduce the vocabulary size and decrease computational complexity and avoid overfitting of building semantic models. However, stemming causes the more serious problem of polysemy. 
-\item[\texttt{\underline{ST}op}] After \textit{SP}, the stopwords, which are the most common words in a language, such as pronouns and prepositions are filtered out from the sequence. 
+\item[\texttt{\underline{SP}lit}] The string is splitted into a sequence of tokens by the special characters (whitespace, hyphen and punctuations). 
+\item[\texttt{\underline{S}t\underline{E}m}] Tokens, which are the results from the method \textit{SP} are replaced by the respective stems. For example, ``book'' is the stem of ``books'', ``booking'' and ``booked''. The advantage of stemming is to reduce the vocabulary size and decrease computational complexity and avoid overfitting of building semantic models. However, stemming causes the problem of polysemy. 
+\item[\texttt{\underline{ST}op}] After \textit{SP}, the stopwords, which are the most common words in a language, such as pronouns and prepositions, are filtered out from the sequence. 
 \item[\texttt{\underline{S}tem+\underline{S}top}] The data is handled by both of \textit{SP} and \textit{SE}. 
 \end{description}
 
-
 \subsubsection{Model Building and Similarity Computing}
-The component of model building is meaningful exclusive for VSMs. The approaches of different models are quite different. The detailed methods are described in the following list respectively.
+
+The component of model building is the crucial part exclusive for VSMs. The approaches of different STS methods are quite different. The detailed ways are described in the following list respectively.
 
 \begin{description}
-\item[\texttt{Jaccard}] Jaccard is distinct from VSMs, because there is no actual building phase. The so-called building phase is just to represent documents to sets of terms. The phase of similarity computing is that the term sets of the two articles are compared to compute Jaccard coefficient.  
-\item[\texttt{BoW}] BoW is the simplest and most basic model in VSMs. Each document is represented as a vector of which the each dimension weight is the occurrence frequency of the respective term. In order to reduce the dimension of vectors, the terms which occur in the corpus less than $k$ times (in our case $k=5$) are filtered out from the vocabulary. The BoW vector of a given document is independent of the rest corpus, so long as the vocabulary is constant. 
-\item[\texttt{tfidf}] Tfidf is the model based on BoW, but the vector is sensitive to the change of the corpus. The applied tool to build tfidf model and the following models is \textit{gensim}\footnote{gensim is a NLP tool, which focuses on topic modeling and retrieving semantically similar documents \cite{rehurek_lrec}. Offical website: \url{https://radimrehurek.com/gensim/}}.
-\item[\texttt{LSI} and \texttt{LDA}] We build the models LSI and LDA based on tfidf. Both models are capable to reduce the dimension of vectors from the vocabulary size to the number of topics to avoid overfitting and decrease the time cost in similarity computing. It is therefore necessary to determine the optimal number of topics, in order to make balance between the precision and computational performance. 
+\item[\texttt{Jaccard}] Jaccard is distinct from VSMs, because there is no actual building phase. The so-called building phase is just to represent documents to sets of terms. The phase of similarity computing is that the term sets of the two articles are used for computing Jaccard coefficient.  
+\item[\texttt{BoW}] BoW is the basic model in VSMs. Each document is represented as a vector, in which the weight of each dimension is the occurrence frequency of the corresponding term. The BoW vector of a given document is independent of the rest corpus, so long as the vocabulary is constant.
+\item[\texttt{\tfidf{}}] \tfidf{} is the model based on BoW. Unlike BoW, the \tfidf{} vector is dependent on the document frequency and hence is sensitive to the change of the corpus. The applied tool to build \tfidf{} model is \textit{gensim}\footnote{gensim is a NLP tool, which focuses on topic modeling and retrieving semantically similar documents \cite{rehurek_lrec}. Official website: \url{https://radimrehurek.com/gensim/}}.
+\item[\texttt{LSI} and \texttt{LDA}] We build model LSI and model LDA based on \tfidf{}. The function of models is to represent term-weighted vectors to topic-weighted vectors. In the both models, the hyperparameter is the number of topics, which impacts the quality of the semantic representation and the complexity of computation. It is therefore necessary to determine the optimal number of topics, in order to make balance between the quality and computational performance. 
 \end{description}
 
-In VSMs, each document is transformed as a vector and the semantic similarity to other documents is the \textit{cosine} similarity between the vector of the target document and the vector of candidate documents. Two articles in the historic dataset which have the greatest score to the given target article are predicted as the related articles. 
-
+In VSMs, each document is transformed as a vector and the semantic similarities to other documents are the \textit{cosine} similarities between the vector of the target document and the vectors of candidate documents. Two articles which have the greatest score in the candidate dataset to the given target article are predicted as the related articles. 
 \subsubsection{Model Updating}
 
-In the application scenario of reality, the historic dataset is not constant but increases over time. Once an article is ready to publish, the framework should select two articles with the greatest relatedness to the current article from the dataset. After the article released, it should be stored into the historic dataset immediately and becomes a candidate to future articles. Therefore, the amount of the dataset will increase throughout. In the mean time, the characteristics of the dataset, for example, the topic distribution and the occurrence of new popular words, is rearranged over time. It is necessary thereby to update the model incrementally, in order to be able to reflect the recent state of the dataset in time. However, the computational time cost of model updating must be taken into account. Accordingly, one of the research tasks is to find the trade-off between the interval of updating and the impact on the performance of the effectiveness.  
+In the application scenario of reality, the candidate dataset is not constant but increases over time. Once an article is ready to publish, the system should select two articles with the greatest relatedness to the current article from the dataset. After the article released, it should be stored into the candidate dataset immediately and becomes a candidate of related articles to future articles. Therefore, the amount of the dataset will increase throughout. In the mean time, the characteristics of the dataset, for example, the topic distribution and the occurrence of new popular words, are rearranged over time. It is thereby necessary to update the model incrementally, in order to be capable of reflecting the recent state of the dataset in time. However, the computational time cost of model updating must be taken into account. Accordingly, one of the research tasks is to find the trade-off between the interval of updating and the impact on the performance of the effectiveness.  
 
 \subsection{Experiment Description}
 \label{sec:4.4}
 
-The evaluation of the framework is divided into two parts: static and dynamic evaluation. In the static evaluation, we focuses on the intrinsic performance including effectiveness and efficiency of the STS models for the different PDS, when the historic dataset and the target dataset are constant during the execution of the experiment. Accordingly, the goal of the first experiment is evaluate the results of different combinations of STS models and PDS and select the best model for each PDS as well as the best model overall. 
+The evaluation of the system is divided into two parts: static and dynamic evaluation. In the static evaluation, we focuses on the intrinsic performance including effectiveness and efficiency of the STS methods for the different NGF, when the candidate dataset and the target dataset are constant during the execution of the experiment. Accordingly, the objective of the first experiment is evaluate the performance of different STS methods in different NGF. Furthermore, how useful the different text fields and n-gram models are in relatedness computation and how different the STS methods perform in different NGF are analyzed. In the end, the system selects the method of best performance in each NGF. 
 
-The dynamic evaluation concentrates on the availability of the models in the scenario of reality. To be specific, the second experiment is more interested in the fluctuate of performance when the historic dataset grows and the model needs updating incrementally. In addition, the second interesting point is to attempt at find the ``sweet spot'' between effectiveness and efficiency.
-
-\subsection{Hardware and Software}
-
-The framework is set on a server running Linux system. The detailed information of the server is drawn in table \ref{tab:pcinfo}
-
-\begin{table}[!htb]
-%\centering
-\begin{tabular}{ll}
-CPU & Intel Xeon CPU E5420 @ 8 $\times$ 2.50GHz \\
-RAM & 32GB \\ 
-Disk & 3TB HDD \\ 
-System & Debian GNU/Linux 7.7, 64 bits \\ 
-Runtime & Python 3.4 \\
-DBMS & MongoDB v3.2.5\\ 
-Persistance & HDF5, gzip compressed \\
-Externel Packages & NLTK, gensim, scikit-learn, pandas \\
-\end{tabular}
-\caption{General view of the hardware, system and software in use at major. }
-\label{tab:pcinfo}
-\end{table}
-
+The dynamic evaluation concentrates on the availability of the models in the scenario of reality. To be specific, the second experiment is more interested in the fluctuate of performance, if the candidate dataset keeps increasing and the model needs updating incrementally. In addition, we attempt to find the balance between effectiveness and efficiency. The experiment sets up one evaluated system and two controlled system and evaluates them respectively. In brief, one controlled system refers to the theoretic lower bound of the system which has only old information and the other one refers to the theoretic upper bound of the system which maintains the complete information. The details of the controlled systems are described in section \ref{sec:5.4}. The performance characteristics of the evaluated system are discovered explicitly by comparing it with the controlled systems. 
 
 \subsection{Dataset Setup}
 \label{sec:4.6}
 
-We setup the training and testing datasets from the ZEIT-corpus. Articles, which have no related articles or no \textit{title}, or whose content is less than 1000 characters, are filtered. Furthermore, articles which belong to a weak category \footnote{Weak category: the amount of articles in this category is fewer than $1\%$ of the corpus size} or which were released before 2009 are also removed from the corpus. We have $75908$ articles in $7$ categories. The category distribution is drawn in table \ref{tab:cate_dist_new} and the release date distribution is in table \ref{tab:release_dist_new}. 
+We setup the training and testing datasets from the ZEIT-corpus. Articles, which have no related articles or no \ititle{} field, or whose \icontent{} is less than 1000 characters, are filtered. Furthermore, articles which belong to a weak category \footnote{Weak category: the amount of articles in this category is fewer than $1\%$ of the corpus size} or which were released before 2009 are also removed from the corpus. Consequently, we have $75908$ articles in $7$ categories. The category distribution is drawn in table \ref{tab:cate_dist_new} and the release date distribution is in table \ref{tab:release_dist_new}. 
 
-We separate the corpus into historic dataset and testing dataset in different strategies for two experiments respectively. 
+We separate the corpus into the (initial) training dataset and the testing dataset in different strategies for two experiments respectively. 
 
 \begin{description}
-\item[Experiment 1] $2000$ articles are selected randomly from the corpus as the testing dataset, and the others are as the history data to train the models and as the candidates. 
-\item[Experiment 2] The articles in corpus are sorted by the \textit{release date}, so that the real-world scenario can be simulated. The articles, which were published before 2013, are as the training data to initialize models. There are two phases to deal with each testing article including predicting related articles from the historical dataset and updating the model incrementally. 
+\item[Experiment 1] $2000$ articles are selected randomly from the corpus as the testing dataset, and the rest articles are as the training data to train the models and as the candidates. 
+\item[Experiment 2] The articles in corpus are sorted by the \textit{release date}, such that the real-world scenario can be simulated. The articles, which were published before 2013, are as the training data to initialize models. Meanwhile, the articles released after 2013 are as the testing dataset.
+
 \end{description}
 
 \begin{table}[!ht]
@@ -172,3 +150,24 @@ Lebensart    &        985 &             1.30 \\
 \end{minipage}
 \end{table}
 
+\clearpage
+
+\subsection{Hardware and Software}
+
+The system is running on a Linux server. The detailed information of the server is drawn in table \ref{tab:pcinfo}.
+
+\begin{table}[!htb]
+%\centering
+\begin{tabular}{ll}
+CPU & Intel Xeon CPU E5420 @ 8 $\times$ 2.50GHz \\
+RAM & 32GB \\ 
+Disk & 3TB HDD \\ 
+System & Debian GNU/Linux 7.7, 64 bits \\ 
+Runtime & Python 3.4 \\
+DBMS & MongoDB v3.2.5\\ 
+Persistance & HDF5, gzip compressed \\
+Externel Packages & NLTK, gensim, scikit-learn, pandas \\
+\end{tabular}
+\caption{General view of the hardware, system and software to be in use. }
+\label{tab:pcinfo}
+\end{table}

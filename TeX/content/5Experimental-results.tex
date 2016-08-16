@@ -180,7 +180,7 @@ In conclusion, we determine the final selection of the best model for each datas
 
 As described in section \ref{sec:4.4}, the whole corpus is splitted into a historic dataset, in which the articles are released before 2012 and which is used for initializing the system, and a testing dataset containing the released after 2012 articles, which is used for both of evaluating the system and updating the system incrementally. In the sight of reality, the candidates of related articles for a target article must be released before the target. We have two main purposes of the experiment. On the one hand, we attempt to find the differences between the results of the system with incremental updating and the results of the controlled experiments and analyse whether the differences are acceptable and the reason why the differences occur. On the other hand, we focus on the trade-off between the step of updating and the corresponding additional cost of time. 
 
-Before analyzing the results, we define the controlled experiments in advance. The system in the controlled experiments is constant. It means, the systems are trained only in the phase of initialization and keep constant after that. In the first experiment, the STS methods in the system is learned from the candidate corpus, or, in other words, the released before 2012 articles. Accordingly the system contains only the semantic information before the first target is released and we say this system is ``out-of-date''. In the second experiment, there is only one difference from the first experiment, that the STS methods are trained by the all complete articles and the system contains therefore the complete semantic information of the entire corpus. The second controlled system is a ``coverall'' system. Any article which is released before the target is transformed as the corresponding representation by the STS methods. Let $CS1$ denote the first controlled system, $CS2$ denote the second and $ES$ denote the evaluated system. The comparison between the evaluated system and the controlled systems is able to indicate the particular characteristics of the system with incremental updating and the differences from the ``out-of-date'' system and ``coverall'' system. 
+Before analyzing the results, we define the controlled experiments in advance. The system in the controlled experiments is constant. It means, the systems are trained only in the phase of initialization and keep constant after that. In the first experiment, the STS methods in the system is learned from the candidate corpus, or, in other words, the released before 2012 articles. Accordingly the system contains only the semantic information before the first target is released and this system is hence ``out-of-date''. The system 1 is called the ``lower bound'' system. In the second experiment, there is only one difference from the first experiment, that the STS methods are trained by the all complete articles and the system contains therefore the complete semantic information of the entire corpus. The second controlled system is a ``upper bound'' system. Any article which is released before the target is transformed as the corresponding representation by the STS methods.  The comparison between the evaluated system and the controlled systems is able to indicate the particular characteristics of the system with incremental updating and the differences from the ``out-of-date'' system and ``coverall'' system. 
 
 Jaccard and BoW are not involved in the evaluation. These two methods are only dependent on the current articles and independent of the rest information of the corpus. The model updating therefore does not affect the results of the semantic similarity from Jaccard and BoW. Consequently, the evaluation concentrates on three VSMs, namely tf-idf and LSI (due to the high complexity and low performance, LDA is ignored). Based on the result of experiment 1, the preprocessed field \icontent{} with unigram always outperforms other preprocessed fields. In this experiment, we only discuss the performance of the three STS methods in \icontent{} with unigram. 
 
@@ -193,12 +193,20 @@ Instead of \textit{precision@k@h} used in experiment 1, we compute the precision
 \end{equation}
 where $n$ is the moving window size and pre-defined as $100$ and $k$ is the number of related articles for each target. 
 
-\paragraph{Comparison with Controlled Systems}
+\paragraph{Comparison with Controlled Systems}.
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=\textwidth]{fig/precision_inc}
+    \caption{Compare the precision of the evaluated system with the controlled systems. The window size of moving average is set to $400$.}
+    \label{fig:predict_inc}
+\end{figure}
+
+Figure \ref{fig:predict_inc} illustrates the moving average precision which the evaluated system and the controlled systems achieve. In general, the average precision of the system using LSI and \tfidf{} is $29.95\%$ and $37.50\%$, respectively. The result confirms the conclusion we obtain in experiment 1. The subfigures below is obtained by subtracting the precision of the controlled systems from the precision of the evaluated system. For method LSI, the evaluated system outperforms the ``lower bound'' system and underperforms the ``upper bound'' system definitely. Meanwhile, the differences in the systems using \tfidf{} are insignificant. Therefore, LSI is more sensitive than \tfidf{} to the completeness of information and model updating. However, an interesting point for LSI is that the difference between the evaluated system and the ``lower bound'' system does not keep increasing or decreasing along with handling more and more articles, but the difference between the evaluated system and the ``upper bound'' system is in the increasing trend. 
 
 
-
-1. 不同methods的precision的变化曲线的横向对比：与实验一结论一致，但是precision低于实验一，主要原因可能是实验二只比较早于自己release的articles，number of related articles比实验一少，所以命中率低。
-2. 同一个method的precision与非增量算法得到的precision、每个article拥有的related articles数量曲线、模型更新点做纵向对比：incremental方法的precision略低于non-incremental，但是曲线形状基本一致；同时也与no. related articles一致，在模型更新之后delta-precision下降，随着模型的过时，delta-precision上升。
+%1. 不同methods的precision的变化曲线的横向对比：与实验一结论一致，但是precision低于实验一，主要原因可能是实验二只比较早于自己release的articles，number of related articles比实验一少，所以命中率低。
+%2. 同一个method的precision与非增量算法得到的precision、每个article拥有的related articles数量曲线、模型更新点做纵向对比：incremental方法的precision略低于non-incremental，但是曲线形状基本一致；同时也与no. related articles一致，在模型更新之后delta-precision下降，随着模型的过时，delta-precision上升。
 
 \paragraph{Correlation with the number of true related articles}
 
