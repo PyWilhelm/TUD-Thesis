@@ -2,42 +2,51 @@
 \section{State of Art}
 \label{sec:2}
 
-In this section the concepts related to \textit{Semantic Text Relatedness} (\textit{STR}) and \textit{Semantic Text Similarity} (\textit{STS}) are introduced and several methods of similarity computation are reviewed. Section \ref{sec:2.1} interprets the similarities and differences between \textit{STR} and \textit{STS}. The STS methods which are classified into two major categories are reviewed in section \ref{sec:2.2} and section \ref{sec:2.3} respectively. After that, we summarize in section \ref{sec:2.4} the common used technique of \textit{Machine-learned ranking}, which can be applied in our research from the viewpoint of \textit{information retrieval}. The section concludes with a formulation of the research questions. 
+In this section the concept, \textit{Semantic Text Similarity} (\textit{STS}), is introduced and several methods of similarity computation are reviewed. Section \ref{sec:2.1} interprets the concept \textit{STS}. The STS methods which are classified into two major categories are reviewed in section \ref{sec:2.2} and section \ref{sec:2.3} respectively. After that, we summarize in section \ref{sec:2.4} the commonly used technique of \textit{learning to rank}, which can be applied in our research from the viewpoint of \textit{information retrieval}. The section concludes with a formulation of the research questions. 
 
 %The third part focuses on a short review of existent recommendation systems. 
-
+\bigbreak
 \subsection{Semantic Text Relatedness and Semantic Text Similarity}
 \label{sec:2.1}
 
-There are the two most important concepts in the research work: \textit{Semantic Text Relatedness} and \textit{Semantic Text Similarity}. We explain the concepts word by word. Starting with the different terms between the two concepts, \textit{relatedness} includes all relations between two objects, e.g. ``is-a'', ``has-a'' and causal relations, while \textit{similarity} usually is more specific than \textit{relatedness} and describes, to what degree the characteristics of one object match the characteristics of another object. The second term \textit{text} means a sequence of words with any length. The term \textit{Document} is commonly mentioned as a synonym of \textit{text}. The term \textit{semantic} is the one of three levels of study of nature language including syntax, semantic and pragmatic. Semantics indicates that the concepts focuses on the literal and inherent meaning of nature language instead of the written or spoken form. In contrast, syntax is the study of the regularity of the combination of symbols without understanding their meaning in languages, and pragmatics studies how to understand the indeed intent of the speakers or authors. Semantics is in the middle of these three levels according to the complexity of understanding the real meaning of nature language. 
+The objective of the thesis is to design a automatic system to discover related articles from the ZEIT corpus. However, ``related'' is not a well defined term. Nevertheless, if two articles are ``related'' to each other, they could be on the same topic or have other relationship like chronological relation. The methods of \textit{Semantic Textual Similarity} are able to compute the degree of such relationships. Before introducing the particular methods, we have to interpret what \textit{Semantic Text Similarity} is. We explain the concepts word by word. Starting with the last term of the concept, \textit{similarity} describes to what degree the characteristics of one object match the characteristics of another object. The second term \textit{textual} means a sequence of words with any length. The term \textit{document} is commonly mentioned as a synonym of \textit{text}. The term \textit{semantic} is the one of three levels of study of nature language including syntax, semantic and pragmatic. Semantics indicates that the concepts focuses on the literal and inherent meaning of nature language instead of the written or spoken form. In contrast, syntax is the study of the regularity of the combination of symbols without understanding their meaning in languages, and pragmatics studies how to understand the indeed intent of the speakers or authors. Semantics is in the middle of these three levels according to the complexity of understanding the real meaning of nature language. 
 
-With combination of the three terms, \textit{Semantic Text Relatedness} (STR) hence means the degree of any possible relation between two texts in the human understanding and \textit{Semantic Text Similarity} (STS) is more specific and means how much the information of one text matches the information of another text. However, in the practical application, these two concepts have quite intersection. The most researches on \textit{semantic relatedness} \citep{rohrbach2010helps, gracia2008web, gabrilovich2007computing} focus only on the relatedness between words or phrases but not on the texts. On the other hand, \textit{STS} is a more mature study field. One of our goals is to find a way from obtaining \textit{Semantic Text Similarity} to obtaining \textit{Semantic Text Relatedness}. 
+With combination of the three terms, \textit{Semantic Text Similarity} (STS) means how much the information of one text matches the information of another text. There is also a related concept: \textit{Semantic Relatedness}. However, the most researches on \textit{semantic relatedness} \citep{rohrbach2010helps, gracia2008web, gabrilovich2007computing} focus only on the relatedness between words or phrases but not on the texts. Therefore, it is an unrelated concept to our thesis. 
 
-There are many classification schemas according to the viewpoint. We introduce and assess three of them. The STS methods are usually categorized into two major classes, scilicet corpus-based and knowledge-based methods. Corpus-based methods try to compute the degree of similarity between texts using semantic information exclusively extracted from the large corpora. Normally, the corpora is used both in necessary knowledge generating (e.g. word2vec \cite{mikolov2013efficient}) and in model building. Meanwhile, the knowledge which is derived from other resources, e.g. Wikipedia, New York Times, is drawn into the initializing of models building in knowledge-based method. In our case, the corpus-based methods are preferred rather than knowledge-based methods. The reasons are briefly explained as follows. First, the existent knowledge-based measures are more suitable in the field of word similarity, e.g. \cite{jiang1997semantic}, \cite{strube2006wikirelate} and \cite{Agirre2009ta}, but they are relatively weak for dealing with documents or paragraphs. The second viewpoint is that the prior knowledge has less relevance to the target corpus. The importance and meaning of a word or phrase could be different in diverse sources, so that the knowledge from other sources could not interpret identical words in a specific corpus. Furthermore, the knowledge-based methods have unsatisfactory performance in case of dealing with the considerable number of Out of Vocabulary (OOV) words, whereas exactly compound words and inflection are ubiquitous in German. 
+In our case, we define the similarity score between two documents is assigned from the closed interval $[0, 1]$. If the similarity degree between two texts is $1$, we say that these texts are absolutely similar. If the similarity degree is $0$, the texts are absolutely not similar. However, in some STS methods, the similarity degree can be negative and means that the texts have contrary meanings. Here an interesting open issue is whether one text is related to another text which has the contrary meanings. We use only non-negative value to indicate the similarity score.
 
-\cite{bar2013composite} proposes a classification schema which categorizes the STS methods into \textit{compositional methods} and \textit{non-compositional methods}. In short, \textit{compositional methods} treat a text as a sequence of words and compute the overall text similarity by aggregating pairwise word similarity.  \textit{Non-compositional methods} regard a text as an entirety and represent it using a semantic model. The overall text similarity is computed by comparing the corresponding representations. 
+There are many classification schemas to classify the existing methods. We introduce and assess three of them. 
+
+\paragraph{Corpus-based and Knowledge-based}
+The STS methods are usually categorized into two major classes, scilicet corpus-based and knowledge-based methods. Corpus-based methods try to compute the degree of similarity between texts using semantic information exclusively extracted from the large corpora. Normally, the corpora is used both in necessary knowledge generating (e.g. word2vec \cite{mikolov2013efficient}) and in model building. Meanwhile, the knowledge which is derived from other resources, e.g. Wikipedia, New York Times, is drawn into the initializing of models building in knowledge-based method. In our case, the corpus-based methods are preferred rather than knowledge-based methods. The reasons are briefly explained as follows. First, the existent knowledge-based measures are more suitable in the field of word similarity, e.g. \cite{jiang1997semantic}, \cite{strube2006wikirelate} and \cite{Agirre2009ta}, but they are relatively weak for dealing with documents or paragraphs. The second viewpoint is that the prior knowledge has less relevance to the target corpus. The importance and meaning of a word or phrase could be different in diverse sources, so that the knowledge from other sources could not interpret identical words in a specific corpus. Furthermore, the knowledge-based methods have unsatisfactory performance in case of dealing with the considerable number of Out of Vocabulary (OOV) words, whereas exactly compound words and inflection are ubiquitous in German. 
+
+\paragraph{Compositional and Non-Compositional}
+
+\cite{bar2013composite} proposes a classification schema which categorizes the STS methods into \textit{compositional methods} and \textit{non-compositional methods}. In short, \textit{compositional methods} treat a text as a sequence of words and compute the overall text similarity by aggregating pairwise word similarity. The representive methods are \citet{islam2008semantic} and \citet{tsatsaronis2010text}. \textit{Non-compositional methods}, e.g. \citet{gabrilovich2007computing} and \citet{kennedy2008evaluating}, regard a text as an entirety and represent it using a semantic model. The overall text similarity is computed by comparing the corresponding representations. 
+
+\paragraph{String-based and Vector Space Model}
+
 In the end, we propose a classification schema which categorize the STS methods into \textit{string-based methods} and \textit{vector space model (VSM) methods} according to the type of text representations and the approach of similarity computation. \textit{String-based methods} compute the text similarity through directly comparing the texts in string format and hence the complexity of similarity computation depends on the text length. \textit{VSM methods} represent a text as a vector with the fixed dimension and compute the text similarity through computing the relevance between the vectors. The similarity computation is only dependent on the dimension, whereas how to represent texts becomes the new issue. 
-
+\bigbreak
 \subsection{String-based Methods}
 \label{sec:2.2}
 
-First of all, we define the value range of similarity and their interpretations. If the similarity degree between two texts is $1$, we say that these texts are absolutely similar. If the similarity degree is $0$, the texts are absolutely not similar. In some STS methods, the similarity degree can be $-1$ and means that the texts have absolutely contrary meanings. Here an interesting open issue is whether one text is related to another text which has the contrary meanings. 
 
-\textit{String-based methods} have developed since several decades. The methods implement the naive idea that the texts are more similar if they share more same content. In the following parts, longest common subsequence, greedy string tiling and Jaccard coefficient based on the n-gram model are described respectively and their advantages and disadvantages are explained as well. 
+\textit{String-based methods} have been used since several decades. The methods implement the naive idea that the texts are more similar if they share more same content. In the following parts, longest common subsequence, greedy string tiling and Jaccard coefficient based on the n-gram model are described respectively and their advantages and disadvantages are explained as well. 
 
 \subsubsection{Longest Common Subsequence}
 
 Given a string $s = s_1, \cdots, s_n$, a subsequence of $s$ is any string in which the character is selected in $s$ with an arbitrary increasing order. A longest common subsequence of a set of strings is a string that is a maximal subsequence of all strings in the set. 
 
-The longest common subsequence method treats one text as a sequence of characters and the text similarity is the ratio of the length of one longest common subsequence to the average length of the both texts. Mathematically, the similarity between two texts, $t_1$ and $t_2$, can be defined as: 
+The longest common subsequence method treats one text as a sequence of characters and the text similarity is the ratio of the length of the longest common subsequence to the average length of the both texts. Mathematically, the similarity between two texts, $t_1$ and $t_2$, can be defined as: 
 
 \begin{equation}
     sim_{LCS}(t_1, t_2) = 1 -  \frac{l(t_1) + l(t_2) - 2 \cdot l(lcs)}{l(t_1) + l(t_2)}
 \end{equation}
 
-where $lcs$ is one longest common subsequence of the texts and function $l$ is used for obtaining the length of a string. 
+where $lcs$ is the longest common subsequence of the texts and function $l$ is used for obtaining the length of a string. 
 
-The method has drawbacks. One of them is that the measures do not utilize any semantic process. Second, the method cannot use any sufficient optimization method, so that the operational efficiency is in a low level. According to \cite{paterson1994longest}, the time complexity of LCS is $O(mn)$ or a insignificant improvement with $O(n\cdot max(1, m/log n))$, where $m$ and $n$ are the length of the texts. Assumed there are $d$ documents in the corpus, $\overline{w}$ words for each document on average, and $\overline{c}$ characters for each word on average, the time complexity of LCS is $O(d \cdot (\overline{w} \cdot \overline{c})^2)$ for computing similarity between the target text and all rest texts in the corpus.
+The method has drawbacks. One of them is that the measures do not utilize any semantics. Second, the method cannot use any sufficient optimization method, so that the operational efficiency is in a low level. According to \cite{paterson1994longest}, the time complexity of LCS is $O(mn)$ or a insignificant improvement with $O(n\cdot max(1, m/log n))$, where $m$ and $n$ are the length of the texts. Assumed there are $d$ documents in the corpus, $\overline{w}$ words for each document on average, and $\overline{c}$ characters for each word on average, the time complexity of LCS is $O(d \cdot (\overline{w} \cdot \overline{c})^2)$ for computing similarity between the target text and all rest texts in the corpus.
 
 \subsubsection{Greedy String Tiling}
 
@@ -57,7 +66,7 @@ Both of longest common subsequence and Greedy String Tiling regard texts as sequ
 
 \subsubsection{N-gram Models and Jaccard Similarity Coefficient}
 
-An n-gram model is a common used type of probabilistic language model for analyzing the relation between an item and the former $n-1$ items and predicting the next item given the $n-1$ continuous items. The model is based on the assumption that the probability of occurrence of an item is only dependent on the combination of $n-1$ predecessors. An n-gram model with size $1$ is referred to as a ``unigram'', an model with size $2$ is a ``bigram'' and an model with size $3$ is a ``trigram''. Now we assume that all words in any text are selected from a set of words $\Sigma$ (or called vocabulary). From the viewpoint of n-gram, a text can be represented as a sequence of elements which are selected from the Cartesian product $\Sigma ^n$ of $\Sigma$ by $n$ times. N-gram models can work together with STS methods, so that the STS methods utilize not only the information of isolated words but also the information of the combination of several adjacent words. 
+An n-gram model is a commonly used model for analyzing the relation between an item and the former $n-1$ items and predicting the next item given the $n-1$ continuous items. The model is based on the assumption that the probability of occurrence of an item is only dependent on the combination of $n-1$ predecessors. An n-gram model with size $1$ is referred to as a ``unigram'', an model with size $2$ is a ``bigram'' and an model with size $3$ is a ``trigram''. Now we assume that all words in any text are selected from a set of words $\Sigma$ (or called vocabulary). From the viewpoint of n-gram, a text can be represented as a sequence of elements which are selected from the Cartesian product $\Sigma ^n$ of $\Sigma$ by $n$ times. N-gram models can work together with STS methods, so that the STS methods utilize not only the information of isolated words but also the information of the combination of several adjacent words. 
 
 Jaccard similarity coefficient \cite{bank2008calculating} is a simple method for computing the similarity and diversity between two sets. For two texts $t_1=\{w^1_1, w^2_1, \cdots, w^{|t_1|-n+1}_1\}$, $t_2=\{w^1_2, w^2_2, \cdots, w^{|t_2|-n+1}_2\}$, where $w_i^j$ refers to the word at the $j$-th position in the text $i$. Jaccard similarity coefficient is defined as the size of the intersection divided by the size of the union. Formally,
 
@@ -65,7 +74,7 @@ Jaccard similarity coefficient \cite{bank2008calculating} is a simple method for
     sim_{jaccard}(t_1, t_2) = \frac{|t_1 \cap t_2|}{|t_1 \cup t_2|} = \frac{|t_1 \cap t_2|}{|t_1| + |t_2| - |t_1 \cap t_2|}. 
 \end{equation}
 
-
+\bigbreak
 \subsection{Vector Space Models}
 \label{sec:2.3}
 
@@ -93,7 +102,7 @@ Another measure to indicate the similarity of vectors is to compute the distance
 \end{equation}
 where $r$ is the value range of every dimension and . 
 
-\subsubsection{Bag-of-words and \textit{tf-idf} Model}
+\subsubsection{Bag-of-words and \tfidf{} Model}
 
 Before defining the bag-of-words model, two concepts, ``word'' and ``term'', are interpreted. A ``word'' is the elementary unit of documents and a ``term'' is the unique element of a vocabulary which contains no duplicate words. 
 In other words, we can say that the word at position $i$ of document $d$ is the word $w_t^i$, and that a term $t$ is used in document $d$ in $k$ times. 
@@ -118,7 +127,7 @@ Latent Semantic Indexing applies Singular Value Decomposition (SVD) for decompos
 \begin{figure}[!htb]
     \centering
     \includegraphics[width=1\textwidth]{fig/SVD.pdf}
-    \caption{the sketch of the process of LSI using SVD}
+    \caption{the sketch of the process of LSI using SVD, where $D$ is the document-term matrix containing document representation of term weight, $U$ is the document-topic matrix containing document representations of topic weight, $\Sigma$ is the diagonal matrix containing the importance of topics and $V$ is the topic-term matrix containing the topic representations of term weight.}
     \label{fig:svd}
 \end{figure}
 
@@ -144,13 +153,13 @@ The LDA model is a Bayesian generative model. From the view point of LDA, a docu
 \begin{figure}[!htb]
     \centering
     \includegraphics[width=0.5\textwidth]{fig/lda.pdf}
-    \caption{Plate notation of representation of LDA.}
-    The dual-line plate refers to the observed variable, i.e. the posterior distribution of words in this case, and the monocoil plates indicate the latent variables, such as topic distribution and word distributions given a topic. The direction of arrows refer the conditional dependency of variables. 
+    \caption{Plate notation of representation of LDA. The dual-line plate refers to the observed variable, i.e. the posterior distribution of words in this case, and the monocoil plates indicate the latent variables, such as topic distribution and word distributions given a topic. The direction of arrows refer the conditional dependency of variables.}
     \label{fig:lda}
 \end{figure}
+\bigbreak
 
-The LDA model provides a general idea to build topic model. Since the work of \cite{Blei:2003}, subsequent research has explored many variant of LDA. There are four kinds of topic models so far, where are 1) unsupervised and non-hierarchical, 2) unsupervised and hierarchical, 3) supervised and non-hierarchical and 4) supervised and hierarchical. The research and model names are drawn in the table \ref{tab:lda} respectively.
-
+The LDA model provides a general idea to build topic model. Since the work of \cite{Blei:2003}, subsequent research has explored many variant of LDA. There are four kinds of topic models so far, where are 1) unsupervised and non-hierarchical, 2) unsupervised and hierarchical, 3) supervised and non-hierarchical and 4) supervised and hierarchical. The main difference between supervised and unsupervised models is that each document has a response which could refers to the category or numeric rating. In the hierarchical approach, topics are organized hierarchically, in other words, one topic could have a super-topic and several sub-topics, such that document is understood more closely to the human understanding. The research and model names are drawn in the table \ref{tab:lda} respectively.
+\bigbreak
 \begin{table}[!htb]
 \centering
 \resizebox{\textwidth}{!}{%
@@ -165,12 +174,16 @@ The LDA model provides a general idea to build topic model. Since the work of \c
 \label{tab:lda}
 \end{table}
 
-\subsection{Machine-learned Ranking}
+\bigbreak
+
+\clearpage
+
+\subsection{Learning to rank}
 \label{sec:2.4}
 
-The introduced in section \ref{sec:2.2} and \ref{sec:2.3} similarity methods extract the characteristics of documents and then compute the text similarity with unsupervised approaches. Machine-learned Ranking (MLR) is an application of machine learning for document retrieval. The ranking function assigns the relevance degree for each candidate document in the corpus for a given query. The greater degree represents that the corresponding document is more relevant to the query. The documents are sorted in descending order of the corresponding relevance scores and then as the results of the retrieval. In the learning phase, a series of queries are provided and each query is associated with an ideal ordered list of documents. The MLR model as well as the ranking function are trained using those lists of documents as training data. 
+The introduced in section \ref{sec:2.2} and \ref{sec:2.3} similarity methods extract the characteristics of documents and then compute the text similarity with unsupervised approaches. Learning to rank (LR) is an application of machine learning for document retrieval. The ranking function assigns the relevance degree for each candidate document in the corpus for a given query. The greater degree represents that the corresponding document is more relevant to the query. The documents are sorted in descending order of the corresponding relevance scores and then as the results of the retrieval. In the learning phase, a series of queries are provided and each query is associated with an ideal ordered list of documents. The LR model as well as the ranking function are trained using those lists of documents as training data. 
 
-Due to the importance and necessity of ranking of the mass of relevant information, machine-learned ranking is applied widely in search engine, recommendation systems and online advertising. According to the representation form of input data and the loss function, MLR methods can be classified into three categories, namely pointwise, pairwise and listwise approaches \citet{liu2009learning}. 
+Due to the importance and necessity of ranking of the mass of relevant information, learning to rank is applied widely in search engine, recommendation systems and online advertising. According to the representation form of input data and the loss function, LR methods can be classified into three categories, namely pointwise, pairwise and listwise approaches \citet{liu2009learning}. 
 
 We define the symbols which are mentioned in learning phase. $Q=(q^1,\cdots,q^m)$ denotes the collection of queries. A set of documents $d^i=(d_1^i, \cdots, d_{n^i}^i)$ is retrieved by the corresponding query $q^i$, where $n^i$ is the number of the related documents. $y_j^i$ denotes the true relevance degree of document $d_j^i$ to query $q^i$ and the degree is usually marked manually. $\mathbf{x}_j^i$ refers to the feature vector of the corresponding query-document pair. The key difference of strategies between pointwise, pairwise and listwise approaches is how to organize the query-document pairs as the training data and how to represent the predictions as output results. 
 
@@ -188,15 +201,18 @@ The listwise approach focuses on the real purpose of the ranking task and proces
 
 The listwise approach uses all documents as the input data and the order of documents as the output label, so that the model is more impressive to deal with the differences between different queries. However, the complexity of the algorithms are higher than the other two approaches. 
 
+\bigbreak
 
 \subsection{Research Question}
 \label{sec:2.5}
 
 There is a nontrivial way from semantic text similarity to relatedness of documents. We attempt to find a systematic measure to discover related articles by one target article. The main task is to discover 2 candidates of related articles from the large corpora for a given target document automatically instead of manually. The most of researches have only discussed the degree of similarity between documents or the proportion of topics in each document and in the corpus. However, semantic text relatedness means means not only the semantic text similarity or the scale of a few common topics of documents. Four major questions have to be answered, so that achieving the relatedness degree of documents can be formulated more properly: 
 
+\clearpage
+
 \begin{description}
     \item[1.] \label{q:1} Can Semantic Text Similarity including string-based and vector space models methods be used to find related articles? How effective and efficient is the metrics of performance, such as precision and operational time?
     \item[2.] \label{q:2} How does the methods work in the practical scenario that the corpus keeps increasing with time? How is the performance of the incremental system different from a constant system? 
     \item[3.] \label{q:3} Is it useful to combine the STS methods? Does it yield to an improvement in performance or to a significant decrease of runtime?
-    \item[4.] \label{q:4} The above introduced methods are unsupervised and ignore other meta-data. Does it lead to an improvement with utilizing supervised or semi-supervised algorithms which are proposed in the field of machine-learned ranking?
+    \item[4.] \label{q:4} The above introduced methods are unsupervised and ignore other meta-data. Does it lead to an improvement with utilizing supervised or semi-supervised algorithms which are proposed in the field of learning to rank?
 \end{description}

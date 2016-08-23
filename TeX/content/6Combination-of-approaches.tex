@@ -34,18 +34,30 @@ Each feature is computed from the comparison of two articles in a specific field
     \item[\texttt{number of words}] This feature indicates the length relevance between two articles. For each article-pair, feature \texttt{number of words} is the ratio of the number of tokens of the shorter article to the number of tokens of the longer article. 
 \end{description}
 
-Now we have $3$ features including \texttt{category}, \texttt{keyword} and \texttt{release time} which are generated from the ``meta-data'', $2$ features including \texttt{number of terms} and \texttt{number of words} which are ``extracted'' from the \icontent{}, and $11$ STS features which are determined in table \ref{tab:select}. In order to describe the STS features simply, each such feature is denoted by a short symbol. The symbol is in the format of \texttt{\{n\}\{f\}-\{m\}}, where \texttt{\{n\}} denotes an n-gram model and the possible values are $1$, $2$ and $3$, \texttt{\{f\}} denotes a text field, and \texttt{\{m\}} denotes a STS method. In terms of \texttt{\{f\}}, the possible assignments are \textit{c}, \textit{t} and \textit{s}, which refer to \icontent{}, \ititle{} and \isummary{}, respectively. In respect of \texttt{\{m\}}, \textit{j}, \textit{t} and \textit{l} denote method Jaccard, \tfidf{} and LSI, respectively. For example, ``1c-t'' means method \tfidf{} for the unigram over \icontent{}.
+Now we have $3$ features including \texttt{category}, \texttt{keyword} and \texttt{release time} which are generated from the ``meta-data'', $2$ features including \texttt{number of terms} and \texttt{number of words} which are ``extracted'' from the \icontent{}, and $11$ STS features which are determined in table \ref{tab:select}. In order to describe the STS features simply, each such feature is denoted by a short symbol. The symbol is in the format of \texttt{\{n\}\{f\}-\{m\}}, where \texttt{\{n\}} denotes an n-gram model and the possible values are $1$, $2$ and $3$, \texttt{\{f\}} denotes a text field, and \texttt{\{m\}} denotes an STS method. In terms of \texttt{\{f\}}, the possible assignments are \textit{c}, \textit{t} and \textit{s}, which refer to \icontent{}, \ititle{} and \isummary{}, respectively. In respect of \texttt{\{m\}}, \textit{j}, \textit{t} and \textit{l} denote method Jaccard, \tfidf{} and LSI, respectively. For example, ``1c-t'' means method \tfidf{} for the unigram over \icontent{}.
 
 
-\subsection{Supervised Methods}
+\subsection{Experimental Setup}
 \label{sec:6.3}
+
+The algorithms of Machine-learned ranking can be classified into pointwise, pairwise and listwise approaches. In order to avoid confusion of the terms, term ``queries'' is used for referring to ``target articles'' and ``candidates'' indicates articles in the candidate dataset. 
+
+First, in the pointwise approach, the algorithms are trained directly by the feature vector of each single candidate over the corresponding query, and the output is the relatedness degree. Therefore, the pointwise approach does not discriminate between different queries, and moreover, it can be treated as an approach of multiclass classification. Second, an example in the pairwise approach is a vector which is computed by comparing two candidates over the same query, and the output is assigned from $\{+1, -1\}$, where $+1$ refers to the first candidate is more related to the query than the second candidate and $-1$ refers to the contrary. Therefore, the pairwise approach also ignores the difference of queries, and it is a kind of binary classification. Third, the listwise approach applies the entire group of candidates for the identical query as a single example, and the output is a series of relatedness degree or the ranking of candidates. In the listwise approach, the algorithms operate directly on the level of queries but not of candidates. 
+
+For pointwise, pairwise and listwise approach, logistic regression, Multiple Additive Regression Tree (MART) \citep{friedman2002stochastic} and ListNet \citep{cao2007learning} are selected respectively. 
+
+In logistic regression, the labels are assigned from $\{0, 1\}$ instead of relatedness degree. If the candidate is one of $3$-hop neighbors of the query in the related-graph, the candidate is related to the query and then the label is assigned with $1$, otherwise, with $0$. The output of logistic regression is the probabilities that the candidate is related to the query. The 2 candidates with the highest probability are selected as related articles. 
+
+In MART, SVM\textsuperscript{\textit{rank}} and ListNet, the label of each candidate equals $10 - h$, where $h$ is the distance between the candidate and the query in the related-graph. 
+
+
 
 \subsection{Experimental Results}
 \label{sec:6.4}
 
-\begin{table}[]
+\begin{table}[!hbt]
 \centering
-\begin{tabular}{llrrr}
+\begin{tabularx}{0.9\textwidth}{lXrrr}
 \textbf{No.} & \textbf{Combination of Features} & \textbf{LogReg} & \textbf{MART} & \textbf{ListNet} \\ \hline
 \#00 & 1c-t (BASLINE) & 0.451 & 0.451 & 0.451 \\ \hline
 \#01 & 1c-t, 1c-l & 0.458 & 0.445 & 0.453 \\
@@ -67,7 +79,7 @@ Now we have $3$ features including \texttt{category}, \texttt{keyword} and \text
 \#17 & meta-data + extend-data + \#01 & 0.628 & 0.587 & 0.605 \\
 \#18 & meta-data + extend-data + \#02 & \textbf{0.640} & 0.605 & 0.608 \\
 \#19 & meta-data + extend-data + \#04 & 0.634 & 0.612 & 0.585 \\ \hline
-\end{tabular}
+\end{tabularx}
 \caption{My caption}
 \label{my-label}
 \end{table}
