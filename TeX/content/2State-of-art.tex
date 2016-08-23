@@ -156,10 +156,8 @@ The LDA model is a Bayesian generative model. From the view point of LDA, a docu
     \caption{Plate notation of representation of LDA. The dual-line plate refers to the observed variable, i.e. the posterior distribution of words in this case, and the monocoil plates indicate the latent variables, such as topic distribution and word distributions given a topic. The direction of arrows refer the conditional dependency of variables.}
     \label{fig:lda}
 \end{figure}
-\bigbreak
 
 The LDA model provides a general idea to build topic model. Since the work of \cite{Blei:2003}, subsequent research has explored many variant of LDA. There are four kinds of topic models so far, where are 1) unsupervised and non-hierarchical, 2) unsupervised and hierarchical, 3) supervised and non-hierarchical and 4) supervised and hierarchical. The main difference between supervised and unsupervised models is that each document has a response which could refers to the category or numeric rating. In the hierarchical approach, topics are organized hierarchically, in other words, one topic could have a super-topic and several sub-topics, such that document is understood more closely to the human understanding. The research and model names are drawn in the table \ref{tab:lda} respectively.
-\bigbreak
 \begin{table}[!htb]
 \centering
 \resizebox{\textwidth}{!}{%
@@ -175,8 +173,6 @@ The LDA model provides a general idea to build topic model. Since the work of \c
 \end{table}
 
 \bigbreak
-
-\clearpage
 
 \subsection{Learning to rank}
 \label{sec:2.4}
