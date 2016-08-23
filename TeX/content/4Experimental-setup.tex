@@ -31,7 +31,7 @@ In the following sections, a series of concepts are mentioned frequently. In ord
 \item[\texttt{Candidate dataset}] the dataset in which all articles are as training data to build or update the model and used as candidates to be judged related articles. 
 \item[\texttt{Candidate}] an instance in the candidate dataset.
 \item[\texttt{Text field}] a general designation of title, summary and content of the article. 
-\item[\texttt{N-gram field}] From each article $3\times3=9$ different outcomes are generated after preprocessing phase. They are unigram-content, bigram-content, trigram-content, unigram-title, bigram-title, trigram-title, unigram-summary, bigram-summary and trigram-summary. The general designation of the set of each kind of outcomes is called a n-gram field (abbr. NGF). 
+\item[\texttt{Processed field}] From each article $3\times3=9$ different outcomes are generated after preprocessing phase. They are unigram-content, bigram-content, trigram-content, unigram-title, bigram-title, trigram-title, unigram-summary, bigram-summary and trigram-summary. The general designation of the set of each kind of outcomes is called a processed field. 
 \item[\texttt{Token}] the elementary semantic unit of a document.
 \item[\texttt{Word}] (in the n-gram models) the elementary semantic unit of a document, which consists of $n$ adjacent tokens. ``Word'' is the same concept of ``token'', when $n$ equals $1$. In the case of $n > 1$, the concept ``phrase'' is more precise. However, we still use the uniform notion ``word'', to avoid the possible confusion. Denoted as $w_i$. 
 \item[\texttt{Vocabulary}] the set of words which occur in the corpus. In VSMs, the vocabulary contains the words which occur in the corpus at least $k$ times (in our case, $k=5$), in order to reduce the dimension of term-weighted vectors. 
@@ -42,7 +42,7 @@ In the following sections, a series of concepts are mentioned frequently. In ord
 \end{description}
 
 
-\subsection{Architecture of System and Experiments Design}
+\subsection{Architecture of System}
 \label{sec:4.3}
 
 The high-level architecture of the system was already depicted in figure \ref{fig:highlevel}. In this subsection, we explain how the system discovers related articles. 
@@ -104,34 +104,32 @@ We separate the corpus into the (initial) training dataset and the testing datas
 
 \begin{table}[!ht]
 \centering
-\begin{minipage}[b]{.48\linewidth}
-\centering
-\begin{tabular}{rrr}
+\begin{tabularx}{0.7\textwidth}{XXX}
 \hline
 \textbf{category} &   \textbf{quantity} &   \textbf{proportion (\%)} \\
 \hline
 Politik      &      26071 &            34.35 \\
 Wirtschaft   &      12531 &            16.51 \\
-Kultur       &       8584 &            11.31 \\
-Gesellschaft &       7646 &            10.07 \\
-Wissen       &       5273 &             6.95 \\
-Sport        &       4993 &             6.58 \\
-Digital      &       3887 &             5.12 \\
-Reisen       &       2199 &             2.90 \\
-Karriere     &       2169 &             2.86 \\
-Studium      &       1570 &             2.07 \\
-Lebensart    &        985 &             1.30 \\
+Kultur       &       ~~8584 &            11.31 \\
+Gesellschaft &       ~~7646 &            10.07 \\
+Wissen       &       ~~5273 &             ~~6.95 \\
+Sport        &       ~~4993 &             ~~6.58 \\
+Digital      &       ~~3887 &             ~~5.12 \\
+Reisen       &       ~~2199 &             ~~2.90 \\
+Karriere     &       ~~2169 &             ~~2.86 \\
+Studium      &       ~~1570 &             ~~2.07 \\
+Lebensart    &       ~~~~985 &             ~~1.30 \\
 \hline
 \textbf{total}        &      75908 &           100.00 \\
 \hline
-\end{tabular}
+\end{tabularx}
 \caption{Category distribution of \textit{ZEIT} corpus after filtering unsatisfied articles}
 \label{tab:cate_dist_new}
+\end{table}
 
-\end{minipage}
-\begin{minipage}[b]{.48\linewidth}
+\begin{table}[!ht]
 \centering
-\begin{tabular}{rrr}
+\begin{tabularx}{0.7\textwidth}{XXX}
 \hline
 \textbf{year} &   \textbf{quantity} &   \textbf{proportion (\%)} \\
 \hline
@@ -140,14 +138,13 @@ Lebensart    &        985 &             1.30 \\
 2011 & 13970 &            18.40 \\
 2012 & 14583 &            19.21 \\
 2013 & 14941 &            19.68 \\
-2014 &  5070 &             6.68 \\
+2014 &  ~~5070 &            ~~6.68 \\
 \hline
 \textbf{total} & 75908 &           100.00 \\
 \hline
-\end{tabular}
+\end{tabularx}
 \caption{Release date distribution of \textit{ZEIT} corpus after filtering unsatisfied articles}
 \label{tab:release_dist_new}
-\end{minipage}
 \end{table}
 
 \clearpage

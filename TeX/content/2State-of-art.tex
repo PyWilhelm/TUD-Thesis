@@ -144,7 +144,8 @@ The LDA model is a Bayesian generative model. From the view point of LDA, a docu
 \begin{figure}[!htb]
     \centering
     \includegraphics[width=0.5\textwidth]{fig/lda.pdf}
-    \caption{Plate notation of representation of LDA. The dual-line plate refers to the observed variable, i.e. the posterior distribution of words in this case, and the monocoil plates indicate the latent variables, such as topic distribution and word distributions given a topic. The direction of arrows refer the conditional dependency of variables. }
+    \caption{Plate notation of representation of LDA.}
+    The dual-line plate refers to the observed variable, i.e. the posterior distribution of words in this case, and the monocoil plates indicate the latent variables, such as topic distribution and word distributions given a topic. The direction of arrows refer the conditional dependency of variables. 
     \label{fig:lda}
 \end{figure}
 
@@ -156,8 +157,8 @@ The LDA model provides a general idea to build topic model. Since the work of \c
 \begin{tabular}{|l|l|l|}
 \hline
 \textbf{Topic Models} & \textbf{non-hierarchical} & \textbf{hierarchical} \\ \hline
-\textbf{unsupervised} & \begin{tabular}[c]{@{}l@{}}LDA \cite{Blei:2003} \\ Correlated Topic Model \cite{blei2006correlated} \end{tabular} & HLDA \cite{sivic2008unsupervised} \\ \hline
-\textbf{supervised} & \begin{tabular}[c]{@{}l@{}}sLDA \cite{Blei:2008wy} \\ labeled LDA \cite{ramage2009labeled} \end{tabular} & HSLDA \cite{perotte2011hierarchically} \\ \hline
+\textbf{unsupervised} & \begin{tabular}[c]{@{}l@{}}LDA, \cite{Blei:2003} \\ Correlated Topic Model, \cite{blei2006correlated} \end{tabular} & HLDA, \cite{sivic2008unsupervised} \\ \hline
+\textbf{supervised} & \begin{tabular}[c]{@{}l@{}}sLDA, \cite{Blei:2008wy} \\ labeled LDA, \cite{ramage2009labeled} \end{tabular} & HSLDA, \cite{perotte2011hierarchically} \\ \hline
 \end{tabular}%
 }
 \caption{Topic Models Variant of LDA}
@@ -167,7 +168,7 @@ The LDA model provides a general idea to build topic model. Since the work of \c
 \subsection{Machine-learned Ranking}
 \label{sec:2.4}
 
-The introduced in section \ref{sec:2.2} and \ref{sec:2.3} similarity methods extract the characteristics of documents and then compute the text similarity with unsupervised approaches. Machine-learned Ranking (MLR) is a application of machine learning for document retrieval. The ranking function assigns the relevance degree for each candidate document in the corpus for a given query. The greater degree represents that the corresponding document is more relevant to the query. The documents are sorted in descending order of the corresponding relevance scores and then as the results of the retrieval. In the learning phase, a series of queries are provided and each query is associated with an ideal ordered list of documents. The MLR model as well as the ranking function are trained using those lists of documents as training data. 
+The introduced in section \ref{sec:2.2} and \ref{sec:2.3} similarity methods extract the characteristics of documents and then compute the text similarity with unsupervised approaches. Machine-learned Ranking (MLR) is an application of machine learning for document retrieval. The ranking function assigns the relevance degree for each candidate document in the corpus for a given query. The greater degree represents that the corresponding document is more relevant to the query. The documents are sorted in descending order of the corresponding relevance scores and then as the results of the retrieval. In the learning phase, a series of queries are provided and each query is associated with an ideal ordered list of documents. The MLR model as well as the ranking function are trained using those lists of documents as training data. 
 
 Due to the importance and necessity of ranking of the mass of relevant information, machine-learned ranking is applied widely in search engine, recommendation systems and online advertising. According to the representation form of input data and the loss function, MLR methods can be classified into three categories, namely pointwise, pairwise and listwise approaches \citet{liu2009learning}. 
 
