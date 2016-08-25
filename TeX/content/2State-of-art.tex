@@ -36,7 +36,7 @@ In the end, we propose a classification schema which categorize the STS methods 
 
 \subsubsection{Longest Common Subsequence}
 
-Given a string $s = s_1, \cdots, s_n$, a subsequence of $s$ is any string in which the character is selected in $s$ with an arbitrary increasing order. A longest common subsequence of a set of strings is a string that is a maximal subsequence of all strings in the set. 
+Given a string $s$, a subsequence of $s$ is any string in which the character is selected in $s$ with an arbitrary increasing order. The longest common subsequence of a set of strings is a string that is the maximal subsequence of all strings in the set. 
 
 The longest common subsequence method treats one text as a sequence of characters and the text similarity is the ratio of the length of the longest common subsequence to the average length of the both texts. Mathematically, the similarity between two texts, $t_1$ and $t_2$, can be defined as: 
 
@@ -68,17 +68,19 @@ Both of longest common subsequence and Greedy String Tiling regard texts as sequ
 
 An n-gram model is a commonly used model for analyzing the relation between an item and the former $n-1$ items and predicting the next item given the $n-1$ continuous items. The model is based on the assumption that the probability of occurrence of an item is only dependent on the combination of $n-1$ predecessors. An n-gram model with size $1$ is referred to as a ``unigram'', an model with size $2$ is a ``bigram'' and an model with size $3$ is a ``trigram''. Now we assume that all words in any text are selected from a set of words $\Sigma$ (or called vocabulary). From the viewpoint of n-gram, a text can be represented as a sequence of elements which are selected from the Cartesian product $\Sigma ^n$ of $\Sigma$ by $n$ times. N-gram models can work together with STS methods, so that the STS methods utilize not only the information of isolated words but also the information of the combination of several adjacent words. 
 
-Jaccard similarity coefficient \cite{bank2008calculating} is a simple method for computing the similarity and diversity between two sets. For two texts $t_1=\{w^1_1, w^2_1, \cdots, w^{|t_1|-n+1}_1\}$, $t_2=\{w^1_2, w^2_2, \cdots, w^{|t_2|-n+1}_2\}$, where $w_i^j$ refers to the word at the $j$-th position in the text $i$. Jaccard similarity coefficient is defined as the size of the intersection divided by the size of the union. Formally,
+Jaccard similarity coefficient \citep{bank2008calculating} is a simple method for computing the similarity and diversity between two sets. For two texts $t_1=\{w^1_1, w^2_1, \cdots, w^{|t_1|-n+1}_1\}$, $t_2=\{w^1_2, w^2_2, \cdots, w^{|t_2|-n+1}_2\}$, where $w_i^j$ refers to the word at the $j$-th position in the text $i$. Jaccard similarity coefficient is defined as the size of the intersection divided by the size of the union. Formally,
 
 \begin{equation}
     sim_{jaccard}(t_1, t_2) = \frac{|t_1 \cap t_2|}{|t_1 \cup t_2|} = \frac{|t_1 \cap t_2|}{|t_1| + |t_2| - |t_1 \cap t_2|}. 
 \end{equation}
 
+where $|t|$ is the number of distinct words in text $t$.
+
 \bigbreak
 \subsection{Vector Space Models}
 \label{sec:2.3}
 
-The idea of Vector Space Models (VSMs) is to represent a document as a vector in the vector space. The document is composed of a word sequence of an arbitrary or infinite (e.g. data streams) length, whereas the dimension of vector space is finite. Let $\mathbf{v}=(v_1, \cdots, v_n)$ represent a document $t$. Each dimension refers to a feature of the document. How to understand the $n$ features is defined differently according to the different hypothesis of the vector space. For example, each dimension corresponds the weight of a term in term-weighted vector spaces such Bag-of-Words and the weight of a topic in topic-weighted vector spaces, e.g. Latent Dirichlet Allocation. Once the dimension and the corresponding implication of the vector space are determined, each document is represented as a vector of the identical form, such that the text similarity can be transformed equivalently as computing the vector similarity. 
+The idea of Vector Space Models (VSMs) is to represent a document as a vector in the vector space. The document is composed of a word sequence of an arbitrary or infinite (e.g. data streams) length, whereas the dimension of vector space is finite. Let $\mathbf{v}=(v_1, \cdots, v_n)$ represent a document $t$. Each dimension $v_i$ refers to a feature of the document. How to understand the $n$ features is defined differently according to the different hypothesis of the vector space. For example, each dimension corresponds the weight of a term in term-weighted vector spaces such Bag-of-Words and the weight of a topic in topic-weighted vector spaces, e.g. Latent Dirichlet Allocation. Once the dimension and the corresponding implication of the vector space are determined, each document is represented as a vector of the identical form, such that the text similarity can be transformed equivalently as computing the vector similarity. 
 
 $cosine$ similarity of vectors is the most common used method. Let $\mathbf{v_1}=(v_1^1, \cdots, v_1^n)$ represent a document, $t_1$, and $\mathbf{v_2}=(v_2^1, \cdots, v_2^n)$ represent another document, $t_2$, $cosine$ similarity is defined as follows:
 
@@ -91,7 +93,7 @@ $cosine$ similarity of two documents ranges from 0 to 1, if the weight in each d
 \textit{Pearson} product-moment correlation coefficient (PCC) is a measure of the linear correlation between two variables. Mathematically, PCC is defined in our case as: 
 
 \begin{equation}
-    sim_{PCC}(t_1, t_2) = \frac{(\mathbf{v_1-\overline{v}}) \cdot (\mathbf{v_2-\overline{v}})}{|\mathbf{v_1-\overline{v}}| \cdot |\mathbf{v_2}-\mathbf{\overline{v}}|} = \frac{\sum_{i=1}^n (v_1^i-\overline{v}) \cdot (v_2^i-\overline{v})}{\sqrt{\sum_{i=1}^n (v_1^i-\overline{v})^2} \cdot \sqrt{\sum_{i=1}^n (v_2^i-\overline{v})^2}}
+    sim_{PCC}(t_1, t_2) = \frac{(\mathbf{v_1-\overline{v}}) \cdot (\mathbf{v_2-\overline{v}})}{|\mathbf{v_1-\overline{v}}| \cdot |\mathbf{v_2}-\mathbf{\overline{v}}|} = \frac{\sum_{i=1}^n (v_1^i-\overline{v^i}) \cdot (v_2^i-\overline{v^i})}{\sqrt{\sum_{i=1}^n (v_1^i-\overline{v^i})^2} \cdot \sqrt{\sum_{i=1}^n (v_2^i-\overline{v^i})^2}}
 \end{equation}
 where $\mathbf{\overline{v}}=(\overline{v^1}, \cdots, \overline{v^n})$ is the expectation vector of all vectors which represent all documents in the corpus. An geometric interpretation of PCC is that the coordinate system is transformed by moving the coordinate origin to the vertex of the expectation vector and then the similarity between new vectors is computed. 
 
@@ -127,7 +129,7 @@ Latent Semantic Indexing applies Singular Value Decomposition (SVD) for decompos
 \begin{figure}[!htb]
     \centering
     \includegraphics[width=1\textwidth]{fig/SVD.pdf}
-    \caption{the sketch of the process of LSI using SVD, where $D$ is the document-term matrix containing document representation of term weight, $U$ is the document-topic matrix containing document representations of topic weight, $\Sigma$ is the diagonal matrix containing the importance of topics and $V$ is the topic-term matrix containing the topic representations of term weight.}
+    \caption[The sketch of the process of LSI using SVD]{the sketch of the process of LSI using SVD, where $D$ is the document-term matrix containing document representation of term weight, $U$ is the document-topic matrix containing document representations of topic weight, $\Sigma$ is the diagonal matrix containing the importance of topics and $V$ is the topic-term matrix containing the topic representations of term weight.}
     \label{fig:svd}
 \end{figure}
 
@@ -153,7 +155,7 @@ The LDA model is a Bayesian generative model. From the view point of LDA, a docu
 \begin{figure}[!htb]
     \centering
     \includegraphics[width=0.5\textwidth]{fig/lda.pdf}
-    \caption{Plate notation of representation of LDA. The dual-line plate refers to the observed variable, i.e. the posterior distribution of words in this case, and the monocoil plates indicate the latent variables, such as topic distribution and word distributions given a topic. The direction of arrows refer the conditional dependency of variables.}
+    \caption[Plate notation of representation of LDA]{Plate notation of representation of LDA. The dual-line plate refers to the observed variable, i.e. the posterior distribution of words in this case, and the monocoil plates indicate the latent variables, such as topic distribution and word distributions given a topic. The direction of arrows refer the conditional dependency of variables.}
     \label{fig:lda}
 \end{figure}
 
@@ -168,7 +170,7 @@ The LDA model provides a general idea to build topic model. Since the work of \c
 \textbf{supervised} & \begin{tabular}[c]{@{}l@{}}sLDA, \cite{Blei:2008wy} \\ labeled LDA, \cite{ramage2009labeled} \end{tabular} & HSLDA, \cite{perotte2011hierarchically} \\ \hline
 \end{tabular}%
 }
-\caption{Topic Models Variant of LDA}
+\caption{Topic Model Variants of LDA}
 \label{tab:lda}
 \end{table}
 
@@ -203,8 +205,6 @@ The listwise approach uses all documents as the input data and the order of docu
 \label{sec:2.5}
 
 There is a nontrivial way from semantic text similarity to relatedness of documents. We attempt to find a systematic measure to discover related articles by one target article. The main task is to discover 2 candidates of related articles from the large corpora for a given target document automatically instead of manually. The most of researches have only discussed the degree of similarity between documents or the proportion of topics in each document and in the corpus. However, semantic text relatedness means means not only the semantic text similarity or the scale of a few common topics of documents. Four major questions have to be answered, so that achieving the relatedness degree of documents can be formulated more properly: 
-
-\clearpage
 
 \begin{description}
     \item[1.] \label{q:1} Can Semantic Text Similarity including string-based and vector space models methods be used to find related articles? How effective and efficient is the metrics of performance, such as precision and operational time?

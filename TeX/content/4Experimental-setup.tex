@@ -1,10 +1,9 @@
 \section{Experimental Setup}
 \label{sec:4}
-% In this section, we discuss how to design the framework for discovering related articles in the corpus. As described in section \ref{sec:3}, each article contains semantic data including title, summary and content, together with meta-data, which consists of category, keywords, release date and the number of words/terms in the texts. The purpose of this section is to evaluate how the methods which are mentioned in section \ref{sec:2} work in effectiveness and efficiency together with different semantic data. Then the assessment of filtering method which reduces the number of candidates with combining the meta-data is analyzed. In other words, this section focuses on finding the answer of question 1 and 2.
 
 The purpose of this section is to design experiments to evaluate how the STS methods which are aforementioned in section \ref{sec:2} work in effectiveness and efficiency together with different text fields. In addition, we also give the conditions, parameters and settings to support the experiments working. 
 
-In section \ref{sec:4.1} the theoretical feasibility and challenge is discussed. The definition of terms and notations which are used in this section and the following sections is brought forwards in section \ref{sec:4.2}. In section \ref{sec:4.3} we discuss the architecture and the working procedure of the system. Section \ref{sec:4.4} mentions the design of experiments according to the application scenarios and depict the architecture of the framework. Furthermore, the setup of datasets which are used as training data and testing data is described in section \ref{sec:4.6} In the end, the list of the hardware and software which are applied for the experiments is enumerated in section \ref{sec:4.5} briefly.
+In section \ref{sec:4.1} the theoretical feasibility and challenge is discussed. The definition of terms and notations which are used in this section and the following sections is brought forwards in section \ref{sec:4.2}. In section \ref{sec:4.3} we discuss the architecture and the working procedure of the system. Section \ref{sec:4.4} mentions the design of experiments according to the application scenarios and depict the architecture of the framework. Furthermore, the setup of datasets which are used as training data and testing data is described in section \ref{sec:4.5} In the end, the list of the hardware and software which are applied for the experiments is enumerated in section \ref{sec:4.6} briefly.
 
 \bigbreak
 
@@ -57,7 +56,7 @@ The system consists of four components including preprocessing, model building, 
 \begin{figure}[!htb]
     \centering
     \includegraphics[width=0.7\textwidth]{fig/unsupervise}
-    \caption{The architecture of the system to discover related articles.}
+    \caption{The architecture of the system to discover related articles}
     \label{fig:unsupervised}
 \end{figure}
 
@@ -99,7 +98,7 @@ The dynamic evaluation concentrates on the availability of the models in the sce
 \bigbreak
 
 \subsection{Dataset Setup}
-\label{sec:4.6}
+\label{sec:4.5}
 
 We setup the training and testing datasets from the ZEIT-corpus. Articles, which have no related articles or no \ititle{} field, or whose \icontent{} is less than 1000 characters, are filtered. Furthermore, articles which belong to a weak category \footnote{Weak category: the amount of articles in this category is fewer than $1\%$ of the corpus size} or which were released before 2009 are also removed from the corpus. Consequently, we have $75908$ articles in $7$ categories. The category distribution is drawn in table \ref{tab:cate_dist_new} and the release date distribution is in table \ref{tab:release_dist_new}. 
 
@@ -113,7 +112,7 @@ We separate the corpus into the (initial) training dataset and the testing datas
 
 \begin{table}[!ht]
 \centering
-\begin{tabularx}{0.7\textwidth}{XXX}
+\begin{tabularx}{0.7\textwidth}{Xcc}
 \hline
 \textbf{category} &   \textbf{quantity} &   \textbf{proportion (\%)} \\
 \hline
@@ -132,13 +131,13 @@ Lebensart    &       ~~~~985 &             ~~1.30 \\
 \textbf{total}        &      75908 &           100.00 \\
 \hline
 \end{tabularx}
-\caption{Category distribution of \textit{ZEIT} corpus after filtering unsatisfied articles}
+\caption{Category distribution of \textit{ZEIT} corpus which is used in the experiments}
 \label{tab:cate_dist_new}
 \end{table}
 
 \begin{table}[!ht]
 \centering
-\begin{tabularx}{0.7\textwidth}{XXX}
+\begin{tabularx}{0.7\textwidth}{Xcc}
 \hline
 \textbf{year} &   \textbf{quantity} &   \textbf{proportion (\%)} \\
 \hline
@@ -152,7 +151,7 @@ Lebensart    &       ~~~~985 &             ~~1.30 \\
 \textbf{total} & 75908 &           100.00 \\
 \hline
 \end{tabularx}
-\caption{Release date distribution of \textit{ZEIT} corpus after filtering unsatisfied articles}
+\caption{Release date distribution of \textit{ZEIT} corpus which is used in the experiments}
 \label{tab:release_dist_new}
 \end{table}
 
@@ -161,6 +160,7 @@ Lebensart    &       ~~~~985 &             ~~1.30 \\
 \clearpage
 
 \subsection{Hardware and Software}
+\label{sec:4.6}
 
 The system is running on a Linux server. The detailed information of the server is drawn in table \ref{tab:pcinfo}.
 
@@ -176,6 +176,6 @@ DBMS & MongoDB v3.2.5\\
 Persistance & HDF5, gzip compressed \\
 Externel Packages & NLTK, gensim, scikit-learn, pandas \\
 \end{tabular}
-\caption{General view of the hardware, system and software to be in use. }
+\caption{General view of the hardware, system and software to be in use}
 \label{tab:pcinfo}
 \end{table}
