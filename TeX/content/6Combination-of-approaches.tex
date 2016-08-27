@@ -58,6 +58,10 @@ In logistic regression, the labels are assigned from $\{0, 1\}$ instead of relat
 \subsection{Experimental Results}
 \label{sec:6.4}
 
+The supervised system is evaluated using 5-fold cross-validation. The final system with the average parameters or coefficients is available to compute the relatedness scores for testing query-candidate pairs and discover related articles for the corresponding query. We configures $19$ feature sets with different combination between meta-data, extend-data and STS features to train the three algorithms  respectively. In addition, we choose the effectiveness of the system using \tfidf{} in \icontent{} over unigram (1c-t) as the baseline, because the system has the best effectiveness in all unsupervised systems with single STS method. 
+
+\subsubsection{Selection of Algorithm and Feature Set}
+
 \begin{table}[!hbt]
 \centering
 \resizebox{\textwidth}{!}{%
@@ -90,11 +94,11 @@ In logistic regression, the labels are assigned from $\{0, 1\}$ instead of relat
 \label{tab:supervised}
 \end{table}
 
+\clearpage
 
-The supervised system is evaluated using 5-fold cross-validation. The final system with the average parameters or coefficients is available to compute the relatedness scores for testing query-candidate pairs and discover related articles for the corresponding query. We configures $19$ feature sets with different combination between meta-data, extend-data and STS features to train the three algorithms  respectively. In addition, we choose the effectiveness of the system using \tfidf{} in \icontent{} over unigram (1c-t) as the baseline, because the system has the best effectiveness in all unsupervised systems with single STS method. 
+Table \ref{tab:supervised} reports the configuration of feature sets and the results that each algorithm performs with these feature sets. For logistic regression, the system using feature set \# 15 has both of the best \textit{precision@2@3} of $0.640$ and \textit{nDCG} of $0.778$. Feature sets, \# 18, \#16 and \#19, has slightly worse performance than \#15 and take separately the second place to the fifth place. ListNet, which uses a linear Neural Network model, has the similar results to logistic regression. For ListNet, \#15, \#16, \#11 take respectively the first, second and third place. For MART, which applies regression trees, feature set \#13 trains the best performed algorithm in \textit{precision@2@3} but the best result of \textit{nDCG} is obtained from \#16 and \#19. MART has the greatest different between \textit{precision@2@3} and \textit{nDCG} in the identical feature set. Hence, MART is the most unstable algorithm in the experiment. Moreover, we find that the combinations of STS features (\#1, \#2, \#3 and \#4) lead to an insignificant improvement in the effectiveness of the systems. We also find another interesting point. The feature sets which contain \#4 normally achieve the best results, if none or only one of meta-data features is selected. However, the feature sets containing \#2 outweigh the sets containing \#4, if all meta-data are selected. One result of the experiment is that the system using logistic regression outweighs the systems using MART and ListNet.
 
-Table \ref{tab:supervised} reports the configuration of feature sets and the results that each algorithm performs with these feature sets. For logistic regression, the system using feature set \# 15 has both of the best \textit{precision@2@3} of $0.640$ and \textit{nDCG} of $0.778$. Feature sets, \# 18, \#16 and \#19, has slightly worse performance than \#15 and take separately the second place to the fifth place. ListNet, which uses a linear Neural Network model, has the similar results to logistic regression. For ListNet, \#15, \#16, \#11 take respectively the first, second and third place. For MART, which applies regression trees, feature set \#13 trains the best performed algorithm in \textit{precision@2@3} but the best result of \textit{nDCG} is obtained from \#16 and \#19. MART has the greatest different between \textit{precision@2@3} and \textit{nDCG} in the identical feature set. Hence, MART is the most unstable algorithm in the experiment. The one result of the experiment is that the system using logistic regression outweighs the systems using MART and ListNet.
-
+\subsubsection{Analysis of Feature Coefficient}
 
 \begin{table}[!hbt]
 \centering
@@ -114,10 +118,18 @@ term ratio & - & - & $-~0.025$ \\ \hline
 \label{tab:coef}
 \end{table}
 
+In table \ref{tab:coef} the coefficient of each feature is given with ascending order of the absolute value. First, the ranking of weights of the STS features is exactly relevant to the ranking of the \textit{precision@2@3} of the corresponding methods. Second, the relatedness score of a query-candidate pair is quite negative correlated to the release time interval, while other meta-data features impact the relatedness score positively. Third, the extend-data features are absolutely insignificant and hence such features are disregarded to be used in the system. In the end, we select logistic regression with feature set \#15 as the configuration of the final supervised system. 
+
+
+
+
+\subsubsection{Supervised Algorithm in Dynamic Application}
+
+We now evaluate the performance of the selected algorithm in the experiment of dynamical system which is described in section \ref{sec:4.4}. Figure \ref{fig:prec_supervised} illustrates the moving average \textit{precision@2@3} of the results of logistic regression and \tfidf{} in \icontent{} over unigram as baseline in percent with the moving windows size of $400$. On average, the precision of logistic regression is $53.38\%$ and then outperforms the baseline by $15.86\%$. In the practical application, one of two related articles which are selected by the system is correct. The actual proportion should be higher because of the incompleteness of the hand-labeling, which is discussed in section \ref{sec:5.5}.
 
 \begin{figure}[!htb]
     \centering
     \includegraphics[width=\textwidth]{fig/precision_inc_supervised}
-    \caption[]{}
+    \caption[The moving average \textit{precision@2@3} of the results of logistic regression and \tfidf{} in \icontent{} over unigram as baseline]{The moving average \textit{precision@2@3} of the results of logistic regression and \tfidf{} in \icontent{} over unigram as baseline in percent with the moving windows size of $400$.}
     \label{fig:prec_supervised}
 \end{figure}

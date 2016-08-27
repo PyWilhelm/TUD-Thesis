@@ -1,1 +1,17 @@
 \section{Conclusion}
+
+\paragraph{Answer of Research Question}
+通过逐一回答research question的方式总结整篇文章
+
+\paragraph{Application in Reality}
+如果将系统实际使用，考虑到现在可以达到的准确率，无法实现完全自动化，可选取五个作为备选，然后人工选择，这一操作也可以大大提高准确率和减少工作量。
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=\textwidth]{fig/precision_inc_supervised_5}
+    \caption[]{}
+    \label{fig:top5}
+\end{figure}
+
+\paragraph{Future Work}
+首先说明系统设计中的lack，即存在比较大的bias，因为我们主观的将discover related articles的过程简化为计算STS并combine with meta-data relevance. 这个做法会产生较大的bias, errors are reported in section 5. Future work 是可以使用其他的附加方法，来减少或者消除bias，在更精确的同时，达到覆盖更恰当的范围。
