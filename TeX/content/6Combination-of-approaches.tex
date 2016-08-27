@@ -24,69 +24,100 @@ From the viewpoint of learning to rank, we rename several concepts and define th
 \label{sec:6.2}
 
 Each feature is computed from the comparison of two articles in a specific attribute. The value range of each feature is normalized to the range between $0$ and $1$. One type of features is the semantic textual similarity over particular text fields, such as \tfidf{} similarity and LSI similarity over \icontent{}. Another type is the comparison of meta-data between articles. The computation of remaining features is defined as follows.
-\begin{description}
-    \item[\texttt{category}] This feature indicates the category relevance between two articles. Each article belongs to a category. Let $c_i$ denote the category which query $i$ belongs to and $c_j$ the category which candidate $j$ belongs to. We say the number of all categories is $n$. For each query $i$, the distribution of related categories which true related articles belong to. The $n\times n$ matrix of related categories is computed by adding distributions for all queries. The matrix is marked as $\mathbf{M}$, where $\mathbf{M}_{\alpha,\beta}$ refers to the corresponding category relevance between a query which belongs to category $\alpha$ and a candidate which belongs to category $\beta$. Hence, feature \texttt{category} of an query-candidate pair, $\langle i, j \rangle$ , is $\mathbf{M}_{c_i, c_j}$.
 
-    \item[\texttt{keyword}] This feature indicates the keyword relevance between query $i$ and candidate $j$. First, the inverse-document-frequency (\textit{idf}) of keyword $k$ is computed with $$idf_k=log_2 \dfrac{\text{the number of all candidates}}{\text{the number of candidates containing keyword}~~k}$$ Assuming a series of keywords $\mathbf{K}={k_1, \cdots, k_m}$ which occur in both of query $i$ and candidate $j$, we compute feature \texttt{keyword} with $\sum_{i=1}^{m} idf_{k_i}$. One issue of this feature is normalization. In our case, the feature value is divided by the greatest value in all examples of the corresponding query. 
-        
-    \item[\texttt{release time}] This feature indicates the relevance of issue time between query $i$ and candidate $j$. Let $r_i$ denote the release time of query $i$ and $r_j$ the release time of candidate $j$. The time interval $\Delta_{i,j}=\text{days}~(|r_i - r_j|)$. \\ With normalization, feature $\mathtt{release~time} = \begin{cases} \Delta_{ij}~/~365, & \Delta_{ij} < 365 \\ 1, & \Delta_{ij} \ge \text{one year} \end{cases}$. 
-    
-    \item[\texttt{number of terms}] This feature indicates the term relevance between query $i$ and candidate $j$. Let $v_i$ denote the vocabulary of query $i$ which is extracted from \icontent{} and $v_j$ the vocabulary of candidate $j$. Feature \texttt{number of terms} equals the ratio of the size of the smaller of the two vocabulary to the size of the larger one. 
-    
-    \item[\texttt{number of words}] This feature indicates the length relevance between query $i$ and candidate $j$. Feature \texttt{number of words} is the ratio of the number of tokens of the shorter of the two \icontent{} documents to the number of tokens of the longer one. 
-\end{description}
+\paragraph{\texttt{category}}
 
-Now we have $3$ so-called ``meta-data'' features including \texttt{category}, \texttt{keyword} and \texttt{release time} which are generated from meta-data, $2$ ``extracted'' features including \texttt{number of terms} and \texttt{number of words} which are extracted from the \icontent{}, and $11$ ``STS'' features which are reported in table \ref{tab:select}. In order to describe the STS features simply, each such feature is denoted by a short symbol. The symbol is in the format of \texttt{\{n\}\{f\}-\{m\}}, where \texttt{\{n\}} refers to an n-gram model and the possible values are $1$, $2$ and $3$, \texttt{\{f\}} to a text field, and \texttt{\{m\}} to an STS method. The possible assignments of \texttt{\{f\}} are \textit{c}, \textit{t} and \textit{s}, which present \icontent{}, \ititle{} and \isummary{}, respectively. \texttt{\{m\}} can be assigned with \textit{j}, \textit{t} and \textit{l} as the abbreviations of method Jaccard, \tfidf{} and LSI, respectively. For example, \texttt{1c-t} means the feature of the similarity score of method \tfidf{} for \icontent{} over unigram.
+This feature indicates the category relevance between two articles. Each article belongs to a category. Let $c_i$ denote the category which query $i$ belongs to and $c_j$ the category which candidate $j$ belongs to. We say the number of all categories is $n$. For each query $i$, the distribution of related categories which true related articles belong to. The $n\times n$ matrix of related categories is computed by adding distributions for all queries. The matrix is marked as $\mathbf{M}$, where $\mathbf{M}_{\alpha,\beta}$ refers to the corresponding category relevance between a query which belongs to category $\alpha$ and a candidate which belongs to category $\beta$. Hence, feature \texttt{category} of an query-candidate pair, $\langle i, j \rangle$ , is $\mathbf{M}_{c_i, c_j}$.
+
+\paragraph{\texttt{keyword}}
+
+This feature indicates the keyword relevance between query $i$ and candidate $j$. First, the inverse-document-frequency (\textit{idf}) of keyword $k$ is computed with $$idf_k=log_2 \dfrac{\text{the number of all candidates}}{\text{the number of candidates containing keyword}~~k}$$ Assuming a series of keywords $\mathbf{K}={k_1, \cdots, k_m}$ which occur in both of query $i$ and candidate $j$, we compute feature \texttt{keyword} with $\sum_{i=1}^{m} idf_{k_i}$. One issue of this feature is normalization. In our case, the feature value is divided by the greatest value in all examples of the corresponding query. 
+
+\paragraph{\texttt{release time}} 
+
+This feature indicates the relevance of issue time between query $i$ and candidate $j$. Let $r_i$ denote the release time of query $i$ and $r_j$ the release time of candidate $j$. The time interval $\Delta_{i,j}=\text{days}~(|r_i - r_j|)$. \\ With normalization, feature $\mathtt{release~time} = \begin{cases} \Delta_{ij}~/~365, & \Delta_{ij} < 365 \\ 1, & \Delta_{ij} \ge \text{one year} \end{cases}$. 
+
+\paragraph{\texttt{term ratio}} 
+
+This feature indicates the term relevance between query $i$ and candidate $j$. Let $v_i$ denote the vocabulary of query $i$ which is extracted from \icontent{} and $v_j$ the vocabulary of candidate $j$. Feature \texttt{term ratio} equals the ratio of the size of the smaller of the two vocabulary to the size of the larger one. 
+
+\paragraph{\texttt{token ratio}} This feature indicates the length relevance between query $i$ and candidate $j$. Feature \texttt{token ratio} is the ratio of the number of tokens of the shorter of the two \icontent{} documents to the number of tokens of the longer one. 
+
+Now we have $3$ so-called ``meta-data'' features including \texttt{category}, \texttt{keyword} and \texttt{release time} which are generated from meta-data, $2$ ``extended'' features including \texttt{term ratio} and \texttt{token ratio} which are extracted from the \icontent{}, and $11$ ``STS'' features which are reported in table \ref{tab:select}. In order to describe the STS features simply, each such feature is denoted by a short symbol. The symbol is in the format of \texttt{\{n\}\{f\}-\{m\}}, where \texttt{\{n\}} refers to an n-gram model and the possible values are $1$, $2$ and $3$, \texttt{\{f\}} to a text field, and \texttt{\{m\}} to an STS method. The possible assignments of \texttt{\{f\}} are \textit{c}, \textit{t} and \textit{s}, which present \icontent{}, \ititle{} and \isummary{}, respectively. \texttt{\{m\}} can be assigned with \textit{j}, \textit{t} and \textit{l} as the abbreviations of method Jaccard, \tfidf{} and LSI, respectively. For example, \texttt{1c-t} means the feature of the similarity score of method \tfidf{} for \icontent{} over unigram.
 
 
 \subsection{Experimental Setup}
 \label{sec:6.3}
 
-The algorithms of learning to rank can be classified into the pointwise, pairwise and listwise approaches. First, in the pointwise approach, the algorithms are trained directly by the feature vector of each single candidate over the corresponding query, and the output is the relatedness degree. Therefore, the pointwise approach does not discriminate between different queries, and moreover, it can be treated as an approach of multiclass classification. Second, an example in the pairwise approach is a vector which is computed by comparing two candidates over the same query, and the output is assigned from $\{+1, -1\}$, where $+1$ refers to the first candidate is more related to the query than the second candidate and $-1$ refers to the contrary. Therefore, the pairwise approach also ignores the difference of queries, and it is a kind of binary classification. Third, the listwise approach applies the entire group of candidates for the identical query as a single example, and the output is a series of relatedness degree or the ranking of candidates. In the listwise approach, the algorithms operate directly on the level of queries but not of candidates. 
+The algorithms of learning to rank can be classified into the pointwise, pairwise and listwise approaches. First, in the pointwise approach, the algorithms are trained directly by the feature vector of each single candidate over the corresponding query, and the output is the relatedness degree. The pointwise approach hence does not distinguish different queries, and moreover, it can be treated as an application of the algorithms of binary or multiclass classification. Second, the input of an example in the pairwise approach is a feature vector which is computed by comparing the feature vectors of two query-candidate pairs with the same query, and the output is assigned from $\{0, 1\}$, where $1$ refers to the first candidate should be in the better position in the ranking than the second candidate for the mentioned query, and $-1$ refers to the contrary. The pairwise approach also ignores the difference of queries, and it can apply the algorithms of binary classification. The pairwise approach has the issue of computational complexity. There are $\frac{n(n-1)}{2}$ examples for an arbitrary query and a corpus of $n$ candidates. That is to say, the time cost of the learning and predicting phases increases quadratically. From this reason, the pairwise approach is discarded in the experiment. Third, the listwise approach uses a feature matrix as input of an example with combining the the feature vectors of all query-candidate pairs for an identical query. The output of the example is a series of relatedness degree or the ranking of candidates. In the listwise approach, the algorithms operate directly on the level of queries but not of candidates. 
 
-For pointwise, pairwise and listwise approach, logistic regression, Multiple Additive Regression Tree (MART) \citep{friedman2002stochastic} and ListNet \citep{cao2007learning} are selected respectively. 
+Logistic regression and Multiple Additive Regression Tree (MART) \citep{friedman2002stochastic}, which are the algorithms of the pointwise approach, are selected. An algorithm of the listwise approach, ListNet \citep{cao2007learning}, is selected to evaluate. 
 
-In logistic regression, the labels are assigned from $\{0, 1\}$ instead of relatedness degree. If the candidate is one of $3$-hop neighbors of the query in the related-graph, the candidate is related to the query and then the label is assigned with $1$, otherwise, with $0$. The output of logistic regression is the probabilities that the candidate is related to the query. The 2 candidates with the highest probability are selected as related articles. 
-
-In MART, SVM\textsuperscript{\textit{rank}} and ListNet, the label of each candidate $y = 10 - h$, where $h$ is the distance between the candidate and the query in the related-graph. 
-
-
+In logistic regression, the labels are assigned from $\{0, 1\}$ instead of relatedness degree. If the relatedness degree between the query and the candidate is greater than or equal to $3$, the candidate is related to the query and then the label is assigned with $1$, otherwise, with $0$. The output of logistic regression is the probabilities that the candidate is related to the query. The 2 candidates with the highest probability are selected as related articles. In MART and ListNet, the label of each example is the value of relatedness degree. 
 
 \subsection{Experimental Results}
 \label{sec:6.4}
 
 \begin{table}[!hbt]
 \centering
-\begin{tabularx}{0.9\textwidth}{lXrrr}
-\textbf{No.} & \textbf{Combination of Features} & \textbf{LogReg} & \textbf{MART} & \textbf{ListNet} \\ \hline
-\#00 & 1c-t (BASLINE) & 0.451 & 0.451 & 0.451 \\ \hline
-\#01 & 1c-t, 1c-l & 0.458 & 0.445 & 0.453 \\
-\#02 & 1c-t, 1c-l, 1t-t, 1s-t & 0.468 & 0.473 & 0.465 \\
-\#03 & 1c-t, 1c-l, 2c-t, 3c-j & 0.485 & 0.464 & 0.481 \\
-\#04 & all selected STS methods over text fields & 0.489 & 0.487 & 0.493 \\
-\#05 & category + \#01 & 0.467 & 0.445 & 0.460 \\
-\#06 & category + \#02 & 0.470 & 0.471 & 0.432 \\
-\#07 & category + \#04 & 0.492 & 0.487 & 0.460 \\
-\#08 & keyword + \#01 & 0.475 & 0.464 & 0.482 \\
-\#09 & keyword + \#02 & 0.494 & 0.476 & 0.480 \\
-\#10 & keyword + \#04 & 0.508 & 0.490 & 0.495 \\
-\#11 & release + \#01 & 0.617 & 0.590 & 0.628 \\
-\#12 & release + \#02 & 0.623 & 0.609 & 0.615 \\
-\#13 & release + \#04 & 0.630 & \textbf{0.622} & 0.588 \\
-\#14 & meta-data + \#01 & 0.629 & 0.593 & 0.598 \\
-\#15 & meta-data + \#02 & \textbf{0.640} & 0.599 & \textbf{0.637} \\
-\#16 & meta-data + \#04 & 0.635 & 0.619 & 0.633 \\
-\#17 & meta-data + extend-data + \#01 & 0.628 & 0.587 & 0.605 \\
-\#18 & meta-data + extend-data + \#02 & \textbf{0.640} & 0.605 & 0.608 \\
-\#19 & meta-data + extend-data + \#04 & 0.634 & 0.612 & 0.585 \\ \hline
+\resizebox{\textwidth}{!}{%
+\begin{tabularx}{1\textwidth}{lX|rr|rr|rr}
+\multirow{2}{*}{\textbf{No.}} & \multirow{2}{*}{\textbf{Feature Set}}  & \multicolumn{2}{c|}{\textbf{LogReg}} & \multicolumn{2}{c|}{\textbf{MART}} & \multicolumn{2}{c}{\textbf{ListNet}} \\
+\textbf{} & \textbf{} & \textbf{p@2@3} & \textbf{nDCG} & \textbf{p@2@3} & \textbf{nDCG} & \textbf{p@2@3} & \textbf{nDCG} \\ \hline
+\#00 & 1c-t (BASELINE) & 0.440 & 0.722 & 0.440 & 0.722 & 0.440 & 0.722 \\ \hline
+\#01 & 1c-t, 1c-l & 0.458 & 0.728 & 0.445 & 0.726 &  0.453 & 0.727\\
+\#02 & 1c-t, 1c-l, 1t-t, 1s-t & 0.468 & 0.731  & 0.473 & 0.732  & 0.465 & 0.731\\
+\#03 & 1c-t, 1c-l, 2c-t, 3c-j & 0.485 & 0.732 & 0.464 & 0.728 & 0.481 & 0.733\\
+\#04 & all features & 0.489 & 0.735 & 0.487 & 0.734 & 0.493 & 0.734\\
+\#05 & category + \#01 & 0.467 & 0.730 & 0.445 & 0.729 & 0.460 & 0.728\\
+\#06 & category + \#02 & 0.470 & 0.734 & 0.471 & 0.735 & 0.432 & 0.725\\
+\#07 & category + \#04 & 0.492 & 0.738 & 0.487 & 0.736 & 0.460 & 0.726\\
+\#08 & keyword + \#01 & 0.475 &  0.732 & 0.464 & 0.730 & 0.482 & 0.733\\
+\#09 & keyword + \#02 & 0.494 & 0.735 & 0.476 & 0.735 & 0.480 & 0.732\\
+\#10 & keyword + \#04 & 0.508 & 0.739 & 0.490 & 0.736 & 0.495 & 0.737\\
+\#11 & release + \#01 & 0.617 & 0.769 & 0.590 & 0.769 & 0.628 & 0.767\\
+\#12 & release + \#02 & 0.623 & 0.772 & 0.609 & 0.773 & 0.615 & 0.770\\
+\#13 & release + \#04 & 0.630 & 0.773 & \textbf{0.622} & 0.773 & 0.588 & 0.763\\
+\#14 & meta-data + \#01 & 0.629 & 0.774 & 0.593 & 0.775 & 0.598 & 0.763\\
+\#15 & meta-data + \#02 & \textbf{0.640} & \textbf{0.778} & 0.599 & 0.776 & \textbf{0.637} & \textbf{0.774} \\
+\#16 & meta-data + \#04 & 0.635 & 0.777 & 0.619 & \textbf{0.779} & 0.633 & 0.773\\
+\#17 & meta-data + extend-data + \#01 & 0.628 & 0.774 & 0.587 & 0.774 & 0.605 & 0.767\\
+\#18 & meta-data + extend-data + \#02 & \textbf{0.640} &  0.777 & 0.605 & 0.777 & 0.608 & 0.769\\
+\#19 & meta-data + extend-data + \#04 & 0.634 & 0.777 & 0.612 & \textbf{0.779} & 0.585 & 0.767 \\ \hline
 \end{tabularx}
-\caption{My caption}
-\label{my-label}
+}
+\caption[\textit{Precision@2@3} and \textit{nDCG} of logistic regression, MART and ListNet with the different selections of features in 5-fold cross validation]{\textit{Precision@2@3} of logistic regression (abbr. LogReg), MART and ListNet with the different selections of features. The baseline feature is the scores generated by the best system with method \tfidf{} for \icontent{} over unigram. Feature set ``meta-data'' includes features \texttt{category}, \texttt{keyword} and \texttt{release time} and ``extend-data'' includes \texttt{term ratio} and \texttt{token ratio}}
+\label{tab:supervised}
 \end{table}
 
-如何计算最终的precision
-对一个testing target，对每一篇在corpus中的文章生成一条数据，经过regressor之后得到一个probability of related article，然后选取概率最大的两条数据对应的文章作为最终的related articles. 然后计算平局precision与上个section方法一样。
 
-在实验中，采用了几种可以regression的方法，分别为logistic regression, Bayesian regression 和XX。 
+The supervised system is evaluated using 5-fold cross-validation. The final system with the average parameters or coefficients is available to compute the relatedness scores for testing query-candidate pairs and discover related articles for the corresponding query. We configures $19$ feature sets with different combination between meta-data, extend-data and STS features to train the three algorithms  respectively. In addition, we choose the effectiveness of the system using \tfidf{} in \icontent{} over unigram (1c-t) as the baseline, because the system has the best effectiveness in all unsupervised systems with single STS method. 
 
-给出不同组合的结论得到最好的组合，并将最优模型带入实验二中，检测在reality中的实验结果是否一致。 
+Table \ref{tab:supervised} reports the configuration of feature sets and the results that each algorithm performs with these feature sets. For logistic regression, the system using feature set \# 15 has both of the best \textit{precision@2@3} of $0.640$ and \textit{nDCG} of $0.778$. Feature sets, \# 18, \#16 and \#19, has slightly worse performance than \#15 and take separately the second place to the fifth place. ListNet, which uses a linear Neural Network model, has the similar results to logistic regression. For ListNet, \#15, \#16, \#11 take respectively the first, second and third place. For MART, which applies regression trees, feature set \#13 trains the best performed algorithm in \textit{precision@2@3} but the best result of \textit{nDCG} is obtained from \#16 and \#19. MART has the greatest different between \textit{precision@2@3} and \textit{nDCG} in the identical feature set. Hence, MART is the most unstable algorithm in the experiment. The one result of the experiment is that the system using logistic regression outweighs the systems using MART and ListNet.
+
+
+\begin{table}[!hbt]
+\centering
+\begin{tabularx}{0.8\textwidth}{lXrr}
+\textbf{Feature} & \textbf{Description}  & \textbf{Coef in \#15} & \textbf{Coef in \#19} \\ \hline
+1c-t & \tfidf{} in \icontent{} for unigram     & $+~3.036$  & $+~3.045$     \\
+release & release time relevance & $-~2.235$   &  $-~2.231$     \\
+keyword & keyword relevance  & $+~1.318$  & $+~1.322$ \\
+1c-l & LSI in \icontent{} for unigram     & $+~1.260$   & $+~1.264$    \\
+1t-t & \tfidf{} in \ititle{} for unigram     & $+~1.073$   & $+~1.073$      \\
+category & category relevance & $+~0.907$   & $+~0.918$     \\
+1s-t & \tfidf{} in \isummary{} for unigram      & $+~0.554$   & $~+0.554$     \\ \hline
+token ratio & - & - & $-~0.042$ \\ 
+term ratio & - & - & $-~0.025$ \\ \hline
+\end{tabularx}
+\caption[The feature coefficients for logistic regression in settings \#15 and \#19 which perform better than other combinations of algorithms and feature settings]{The feature coefficient for logistic regression in settings \#15 and \#19 which perform better than other combinations of algorithms and feature settings. The coefficients are ranked in descending order of the absolute value. }
+\label{tab:coef}
+\end{table}
+
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=\textwidth]{fig/precision_inc_supervised}
+    \caption[]{}
+    \label{fig:prec_supervised}
+\end{figure}
