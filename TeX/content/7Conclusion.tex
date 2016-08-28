@@ -11,19 +11,26 @@ All STS methods are unsupervised and document-based, and hence the labels of tra
 
 In this part, we summarize this work by way of answering the research questions which are raised in section \ref{sec:2.5}. 
 
-\paragraph{Can Semantic Text Similarity including string-based and vector space models methods be used to find related articles? How effective and efficient is the metrics of performance, such as precision and operational time?}
+\paragraph{Can Semantic Text Similarity including string-based and vector space models methods be used for finding related articles? How effective and efficient is the metrics of performance, such as precision and operational time?}
+
+The former sub-question can be answered positively in section \ref{sec:5.3}. The system using \tfidf{} in text field \icontent{} over unigram has the best effectiveness with \textit{precision@2@3} of $45.07\%$ (see figure \ref{fig:precision_2_3}) and the acceptable efficiency (figure \ref{fig:build_time} and \ref{fig:predict_time}). Finding related articles for one target costs on average $340ms$\footnote{}, if the time of system building is taken into account.  
+
+\paragraph{How do the methods work in the practical scenario that the corpus keeps increasing with time? How is the performance of the incremental system different from a constant system? }
+
+From the results of the second experiment which are reported in section \ref{sec:5.4}, the STS methods work also well in the increasing candidate corpus. The effectiveness is better than the so-called ``out-of-date'' controlled system which is never updated in running and meanwhile worse than the other so-called ``coverall'' controlled system which is trained by the historical articles and future articles. In terms of efficiency, the time cost of system updating and predicting also increases linearly during corpus increasing. 
 
 
+\paragraph{Is it useful to combine the STS methods? Does it yield to an improvement in performance?}
 
-\paragraph{How does the methods work in the practical scenario that the corpus keeps increasing with time? How is the performance of the incremental system different from a constant system? }
-
-\paragraph{Is it useful to combine the STS methods? Does it yield to an improvement in performance or to a significant decrease of runtime?}
+The question could be answered relative negatively due to the results in section \ref{sec:6.4}. The effectiveness of combinations (\#1, \#2, \#3 and \#4) of the STS methods is slightly higher than the system using the best single STS method. Therefore, combing the STS methods cannot lead to a significant improvement in performance. 
 
 \paragraph{The above introduced methods are unsupervised and ignore other meta-data. Does it lead to an improvement with utilizing supervised or semi-supervised algorithms which are proposed in the field of learning to rank?}
-通过逐一回答research question的方式总结整篇文章
+
+The question can be answered positively also in section \ref{sec:6.4}. Logistic regression with the feature set of meta-data and the best STS methods over unigram yields to the highest improvement in effectiveness. The \textit{precision@2@3} of this system is $64.0\%$ and improved by $20.0$ percent compared with the baseline in the static experiment. On the other hand, the final system has the average \textit{precision@2@3} of $53.38\%$ and outperforms the baseline by $15.86$ percent. 
 
 \subsection{Application in Reality}
 如果将系统实际使用，考虑到现在可以达到的准确率，无法实现完全自动化，可选取五个作为备选，然后人工选择，这一操作也可以大大提高准确率和减少工作量。
+
 
 \begin{figure}[!htb]
     \centering

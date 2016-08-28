@@ -207,8 +207,8 @@ The listwise approach uses all documents as the input data and the order of docu
 There is a nontrivial way from semantic text similarity to relatedness of documents. We attempt to find a systematic measure to discover related articles by one target article. The main task is to discover 2 candidates of related articles from the large corpora for a given target document automatically instead of manually. The most of researches have only discussed the degree of similarity between documents or the proportion of topics in each document and in the corpus. However, semantic text relatedness means means not only the semantic text similarity or the scale of a few common topics of documents. Four major questions have to be answered, so that achieving the relatedness degree of documents can be formulated more properly: 
 
 \begin{description}
-    \item[1.] \label{q:1} Can Semantic Text Similarity including string-based and vector space models methods be used to find related articles? How effective and efficient is the metrics of performance, such as precision and operational time?
-    \item[2.] \label{q:2} How does the methods work in the practical scenario that the corpus keeps increasing with time? How is the performance of the incremental system different from a constant system? 
-    \item[3.] \label{q:3} Is it useful to combine the STS methods? Does it yield to an improvement in performance or to a significant decrease of runtime?
+    \item[1.] \label{q:1} Can Semantic Text Similarity including string-based and vector space models methods be used for finding related articles? How effective and efficient is the metrics of performance, such as precision and operational time?
+    \item[2.] \label{q:2} How do the methods work in the practical scenario that the corpus keeps increasing with time? How is the performance of the incremental system different from a constant system? 
+    \item[3.] \label{q:3} Is it useful to combine the STS methods? Does it yield to an improvement in performance?
     \item[4.] \label{q:4} The above introduced methods are unsupervised and ignore other meta-data. Does it lead to an improvement with utilizing supervised or semi-supervised algorithms which are proposed in the field of learning to rank?
 \end{description}
