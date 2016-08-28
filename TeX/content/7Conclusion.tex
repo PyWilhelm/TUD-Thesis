@@ -1,10 +1,24 @@
 \section{Conclusion}
 
+The intention of this work is to design the system to discover related articles in a large corpus automatically and evaluate the performance and usability thereof. We use \textit{Semantic Textual Similarity} (STS) methods as the main methods to quantify the relatedness degree between two articles. After the algorithms being to evaluate are selected, the different text fields in articles are also to evaluate. Therefore, the basic configuration of the system is the combination of an algorithm and a (preprocessed over n-gram) text field. We evaluate the effectiveness and efficiency of systems. Effectiveness which includes \textit{precision@2@3} and \textit{nDCG} is the measure of the quality of the outputted results of systems. Efficiency is the measure of the cost of resource (e.g. operational time) during running of systems to discover related articles. 
+
+We setup the experiments to test the performance of static and dynamic systems using different combination of algorithms and text fields. ``Static'' means the corpus of articles is constant during the experiment. ``Dynamic'' means the corpus keeps increasing in running of systems, that is to say, once a target article have ``obtained'' related articles from systems, it is inserted immediately into the corpus as candidates of potential related article for future articles. The static experiment is used for comparing the performance of different STS methods in different text fields and the dynamic experiment focuses on the influence of the increasing corpus on the performance of systems. 
+
+All STS methods are unsupervised and document-based, and hence the labels of training data and the information in meta-data are not utilized. In the viewpoint of the supervised approach, it is regarded as an application of learning to rank in the field of Information Retrieval. Therefore, the algorithms on learning to rank, such as logistic regression and ListNet, are set up on the base of the existed system to make full use of all kinds of data including meta-data and STS scores as features and improve the usability of the system.
+
+
 \subsection{Answer of Research Question}
 
+In this part, we summarize this work by way of answering the research questions which are raised in section \ref{sec:2.5}. 
+
 \paragraph{Can Semantic Text Similarity including string-based and vector space models methods be used to find related articles? How effective and efficient is the metrics of performance, such as precision and operational time?}
+
+
+
 \paragraph{How does the methods work in the practical scenario that the corpus keeps increasing with time? How is the performance of the incremental system different from a constant system? }
+
 \paragraph{Is it useful to combine the STS methods? Does it yield to an improvement in performance or to a significant decrease of runtime?}
+
 \paragraph{The above introduced methods are unsupervised and ignore other meta-data. Does it lead to an improvement with utilizing supervised or semi-supervised algorithms which are proposed in the field of learning to rank?}
 通过逐一回答research question的方式总结整篇文章
 
